@@ -1,0 +1,369 @@
+/* ============================================================
+   POLICES — Jumper + Maison Neue (toutes les graisses)
+   ============================================================ */
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-Thin.ttf") format("truetype"); font-weight:100; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-ThinItalic.ttf") format("truetype"); font-weight:100; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-Light.ttf") format("truetype"); font-weight:300; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-LightItalic.ttf") format("truetype"); font-weight:300; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-Regular.ttf") format("truetype"); font-weight:400; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-RegularItalic.ttf") format("truetype"); font-weight:400; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-Bold.ttf") format("truetype"); font-weight:700; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-BoldItalic.ttf") format("truetype"); font-weight:700; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-Extra-Bold.ttf") format("truetype"); font-weight:800; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-Extra-BoldItalic.ttf") format("truetype"); font-weight:800; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-Black.ttf") format("truetype"); font-weight:900; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Jumper"; src:url("../fonts/JumperPERSONALUSEONLY-BlackItalic.ttf") format("truetype"); font-weight:900; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-ExtraLight.otf") format("opentype"); font-weight:200; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-ExtraLightItalic.otf") format("opentype"); font-weight:200; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-Light.otf") format("opentype"); font-weight:300; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-LightItalic.otf") format("opentype"); font-weight:300; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-SemiLight.otf") format("opentype"); font-weight:350; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-SemiLightItalic.otf") format("opentype"); font-weight:350; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-Regular.otf") format("opentype"); font-weight:400; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-Italic.otf") format("opentype"); font-weight:400; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-Medium.otf") format("opentype"); font-weight:500; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-MediumItalic.otf") format("opentype"); font-weight:500; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-SemiBold.otf") format("opentype"); font-weight:600; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-SemiBoldItalic.otf") format("opentype"); font-weight:600; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-Bold.otf") format("opentype"); font-weight:700; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-BoldItalic.otf") format("opentype"); font-weight:700; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-ExtraBold.otf") format("opentype"); font-weight:800; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-ExtraBoldItalic.otf") format("opentype"); font-weight:800; font-style:italic; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-Black.otf") format("opentype"); font-weight:900; font-style:normal; font-display:swap; }
+@font-face{ font-family:"Maison Neue"; src:url("../fonts/MaisonNeue-BlackItalic.otf") format("opentype"); font-weight:900; font-style:italic; font-display:swap; }
+
+/* ------------------------------------------------------------
+   Gotham Ultra Italic — utilisée uniquement pour les CHIFFRES
+   (droits Jumper absents sur les chiffres).
+   ⚠️ Fichier de police à fournir : déposer par ex.
+   "GothamUltraItalic.otf" dans assets/fonts/ puis décommenter.
+------------------------------------------------------------ */
+/*
+@font-face{
+  font-family:"Gotham Ultra";
+  src:url("../fonts/GothamUltraItalic.otf") format("opentype");
+  font-weight:900; font-style:italic; font-display:swap;
+}
+*/
+
+:root{
+  --cream:#FEFEF2;
+  --ink:#181818;
+  --red:#FF0000;
+  --frame:#242424;          /* cadre gris foncé */
+  --gap:14px;
+  --pad:48px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--cream);
+  color:var(--ink);
+  font-family:"Jumper",Arial,sans-serif;   /* Jumper partout par défaut */
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.35;
+}
+a{color:inherit;text-decoration:none;}
+
+/* ---------- Menu de navigation ---------- */
+.nav{
+  list-style:none;
+  text-align:right;
+  font-family:"Jumper",sans-serif;
+  font-weight:100;                 /* Jumper Thin */
+  font-size:15px;
+  line-height:1.2;                 /* interligne serré comme la maquette */
+}
+.nav a{display:inline-block;transition:font-weight .15s ease;}
+.nav a:hover{font-weight:400;}     /* Jumper Regular au survol (au lieu du rouge) */
+.nav .plus{opacity:.9;}
+.nav .current > a, .nav a.current, .nav .current-menu-item > a{font-weight:700;}
+
+/* ============================================================
+   PAGE D'ACCUEIL  (+ cadre gris foncé)
+   ============================================================ */
+body.home-page{
+  background:var(--frame);
+  /* cadre gris foncé tout autour ; bande en bas sur laquelle reposent les images */
+  padding:48px 48px 60px;
+  min-height:100vh;
+}
+.home{
+  position:relative;               /* ancre la grille en bas */
+  min-height:calc(100vh - 108px);  /* 48 (haut) + 60 (bande du bas) */
+  background:var(--cream);
+  padding:34px 44px 0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.home-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:40px;
+}
+.intro{
+  max-width:440px;
+  font-family:"Jumper",sans-serif;
+  font-weight:100;                 /* Jumper Thin */
+  font-size:15px;
+  line-height:1.25;                /* interligne resserré comme la maquette */
+}
+.intro strong{font-weight:400;}    /* la partie "grasse" = Jumper Regular */
+
+/* Bloc central + coordonnées à gauche */
+.hero-wrap{
+  position:relative;
+  margin:clamp(18px,3.5vh,44px) 0 clamp(6px,1.4vh,14px);
+}
+.hero{
+  text-align:center;
+  margin:0;
+}
+.hero h1{
+  font-family:"Jumper",sans-serif;
+  font-weight:900; font-style:normal;    /* JP AYIVI en droit (non italique) */
+  font-size:clamp(34px,2.8vw,60px);
+  letter-spacing:.01em;
+  line-height:1;
+}
+.hero .role{
+  font-family:"Jumper",sans-serif;
+  font-weight:700; font-style:italic;
+  font-size:clamp(23px,1.95vw,42px);     /* CRÉATEUR D'IMAGES */
+  letter-spacing:.01em;
+  margin-top:2px;
+}
+.hero .tags{
+  font-family:"Jumper",sans-serif;
+  font-weight:300; font-style:italic;    /* Jumper Light Italic = ligne la plus large */
+  font-size:clamp(20px,1.75vw,38px);
+  letter-spacing:-.005em;
+  margin-top:-2px;
+}
+
+/* Coordonnées rouges — à gauche, centrées verticalement sur le bloc JP AYIVI */
+.contact{
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--red);
+  text-align:left;
+  font-family:"Jumper",sans-serif;
+  font-weight:400; font-style:italic;
+  font-size:15px;
+  line-height:1.25;                /* interligne serré comme la maquette */
+}
+/* Chiffres uniquement : Gotham Ultra Italic (fallback lourd en attendant le fichier) */
+.contact .num{
+  font-family:"Gotham Ultra","Maison Neue",sans-serif;
+  font-weight:900; font-style:italic;
+}
+.contact a:hover{text-decoration:underline;}
+
+/* Grille de catégories (menu bas, repose sur le cadre) */
+.grid{
+  position:absolute;
+  left:44px; right:44px; bottom:0;   /* rangée collée au bas, sur le cadre */
+  display:flex;
+  gap:var(--gap);
+  align-items:flex-end;              /* les BAS des images s'alignent sur le cadre */
+  justify-content:center;
+}
+.card{
+  position:relative;
+  flex:1 1 0;
+  max-width:340px;
+  display:flex;
+  flex-direction:column;
+  /* la carte = l'image seule (le label est en absolu) => bas garantis alignés */
+}
+.card .label{
+  position:absolute;
+  bottom:100%;                     /* juste au-dessus de l'image */
+  left:0;
+  margin-bottom:9px;
+  white-space:nowrap;
+  font-family:"Jumper",sans-serif;
+  font-weight:100;                 /* Jumper Thin */
+  font-size:19px;
+  transition:font-weight .15s ease;
+}
+/* hauteurs décalées, bas alignés (comme la maquette) */
+.card--sport  .thumb,
+.card--studio .thumb{height:min(300px,33vh);}
+.card--food   .thumb,
+.card--motion .thumb{height:min(342px,37vh);}
+.card--fashion .thumb{height:min(400px,43vh);}
+
+.thumb{
+  position:relative;
+  width:100%;
+  flex-shrink:0;                 /* garde la hauteur, pas de compression */
+  overflow:hidden;
+  background:#e9e9dd;
+}
+.thumb img,.thumb video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+.thumb .gif{opacity:0;transition:opacity .35s ease;}
+.card:hover .thumb .gif{opacity:1;}
+.card:hover .label{font-weight:400;}   /* survol = Jumper Regular */
+
+/* ============================================================
+   PAGES INTÉRIEURES (galerie mosaïque)
+   ============================================================ */
+.site-header{
+  position:absolute;top:0;left:0;right:0;z-index:20;
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:26px var(--pad);
+  background:transparent;          /* plus de cache : la galerie ne passe plus sous le menu */
+}
+.brand{
+  font-family:"Jumper",sans-serif;
+  font-weight:900;font-style:italic;
+  line-height:1;
+  color:rgba(24,24,24,.32);
+}
+.brand .name{font-size:40px;letter-spacing:.02em;}   /* logo agrandi */
+.brand .sub{
+  font-family:"Jumper",sans-serif;
+  font-weight:100;font-style:normal;
+  font-size:20px;letter-spacing:.055em;
+  color:rgba(24,24,24,.62);            /* gris foncé */
+  margin-top:1px;
+}
+
+/* Galerie rétrécie : beige à gauche/droite, ne passe pas sous le menu */
+.gallery-wrap{
+  max-width:min(960px, calc(100vw - 480px));
+  margin:0 auto;
+  padding:112px 0 80px;                 /* le titre démarre au niveau de "About" */
+}
+.gallery-wrap:has(.reel){ max-width:min(760px, calc(100vw - 460px)); }
+.page-title{                            /* titre petit, aligné à gauche de la colonne de contenu */
+  font-family:"Jumper",sans-serif;
+  font-weight:900; font-style:italic;
+  font-size:clamp(22px,2.4vw,38px);
+  margin:0 0 20px;
+}
+.masonry{ overflow:hidden; }
+.masonry .col{ float:left; width:calc((100% - var(--gap)) / 2); }
+.masonry .col + .col{ margin-left:var(--gap); }
+.masonry .item{ margin-bottom:var(--gap); background:#e9e9dd; overflow:hidden; }
+.masonry .item img,
+.masonry .item video{ width:100%;display:block; }
+
+/* ============================================================
+   PAGE MOTION DESIGN — reel : vidéos en colonne + légende
+   ============================================================ */
+.reel{
+  max-width:none;
+  margin:0;
+  padding:0 0 90px;
+}
+.reel-item{ margin-bottom:54px; }
+.reel-media{ background:#e9e9dd; overflow:hidden; }
+.reel-media video,.reel-media img{ width:100%; display:block; }
+.reel-caption{
+  text-align:center;
+  margin-top:14px;
+  font-family:"Jumper",sans-serif;
+  line-height:1.3;
+}
+.reel-caption .client{ display:block; font-weight:700; font-style:italic; font-size:13px; letter-spacing:.02em; }
+.reel-caption .desc{ display:block; font-weight:100; font-size:12.5px; }
+@media(max-width:820px){
+  .reel{ max-width:none; padding:0 var(--pad) 60px; }
+}
+
+/* ============================================================
+   PAGE SHOWREEL — grande vidéo centrée
+   ============================================================ */
+.showreel-stage{
+  max-width:min(1280px, calc(100vw - 120px));
+  margin:0 auto;
+  padding:0 0 70px;
+}
+.showreel-stage video{ width:100%; display:block; background:#000; }
+.showreel-cap{
+  text-align:center; margin-top:16px;
+  font-family:"Jumper",sans-serif; font-weight:700; font-style:italic; font-size:15px;
+}
+@media(max-width:820px){ .showreel-stage{ max-width:none; padding:0 var(--pad) 50px; } }
+
+/* ============================================================
+   CURSEUR PASTILLE "SHOW REEEL" (desktop uniquement)
+   ============================================================ */
+.pastille-cursor{
+  position:fixed;top:0;left:0;
+  width:60px;height:60px;
+  border-radius:50%;
+  background:var(--frame);
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  pointer-events:none;
+  z-index:9999;
+  opacity:0;
+  transition:opacity .3s ease, width .18s ease, height .18s ease;
+  will-change:transform;
+}
+.pastille-cursor span{
+  font-family:"Jumper",sans-serif;
+  font-style:italic;                 /* texte en italique (retour client) */
+  font-weight:400;
+  text-transform:uppercase;
+  color:var(--cream);
+  font-size:12px;line-height:1.02;letter-spacing:.03em;
+}
+.pastille-cursor.is-link{width:74px;height:74px;}
+.pastille-cursor.is-link span{font-size:14px;}
+.pastille-cursor.over-menu{opacity:0 !important;}   /* curseur normal sur les menus */
+
+@media (hover:hover) and (pointer:fine){
+  html.has-pastille,
+  html.has-pastille *{cursor:none !important;}
+  /* Curseur normal sur : menus, images+catégories, contacts */
+  html.has-pastille .nav, html.has-pastille .nav *,
+  html.has-pastille .grid, html.has-pastille .grid *,
+  html.has-pastille .contact, html.has-pastille .contact *{cursor:auto !important;}
+  /* Les éléments cliquables de ces zones -> main */
+  html.has-pastille .nav a, html.has-pastille .nav a *,
+  html.has-pastille .grid a, html.has-pastille .grid a *,
+  html.has-pastille .contact a{cursor:pointer !important;}
+  /* Sur le cadre gris autour, curseur normal (évite la pastille coupée au bord) */
+  html.has-pastille body.home-page{cursor:auto !important;}
+}
+@media (hover:none),(pointer:coarse){
+  .pastille-cursor{display:none !important;}
+}
+
+/* ---------- Responsive ---------- */
+@media(max-width:820px){
+  :root{--pad:22px;}
+  body.home-page{padding:12px 12px 16px;}
+  .home{padding:22px 20px 0;}
+  .home-top{flex-direction:column;gap:20px;}
+  .nav{text-align:left;}
+  .intro{max-width:none;}
+  .hero-wrap{margin:24px 0;}
+  .contact{position:static;transform:none;text-align:left;margin-top:14px;}
+  .grid{position:static;flex-wrap:wrap;gap:10px;}
+  .card{flex:1 1 44%;max-width:none;}
+  .card--sport .thumb,.card--studio .thumb,
+  .card--food .thumb,.card--motion .thumb,
+  .card--fashion .thumb{height:32vw;min-height:150px;}
+  .site-header{position:static;}
+  .gallery-wrap, .gallery-wrap:has(.reel){max-width:none;padding:12px var(--pad) 60px;}
+  .masonry .col{float:none;width:100%;}
+  .masonry .col + .col{margin-left:0;}
+  .brand .name{font-size:30px;}
+}
