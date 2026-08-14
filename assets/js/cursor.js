@@ -48,3 +48,40 @@
     requestAnimationFrame(loop);
   })();
 })();
+
+/* ============================================================
+   Modale Showreel — un clic sur l'accueil (hors liens/menus/images/vidéos)
+   ouvre le showreel dans une fenêtre. Fermeture : croix, clic dehors, Échap.
+   ============================================================ */
+(function () {
+  if (!document.body.classList.contains('home-page')) return;
+  var modal = document.getElementById('reelModal');
+  if (!modal) return;
+  var vid = modal.querySelector('video');
+  var closeBtn = modal.querySelector('.reel-close');
+
+  function openReel() {
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    if (vid) { try { vid.currentTime = 0; } catch (e) {} var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
+  }
+  function closeReel() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    if (vid) vid.pause();
+  }
+
+  document.addEventListener('click', function (e) {
+    if (modal.classList.contains('open')) return;
+    if (e.target.closest('.reel-modal')) return;
+    // on ignore tout élément interactif / média / menus / contacts
+    if (e.target.closest('a, button, input, textarea, select, video, img, .nav, .grid, .contact, .pastille-cursor')) return;
+    // uniquement dans la zone d'accueil (comme la pastille)
+    if (!e.target.closest('.home')) return;
+    openReel();
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeReel);
+  modal.addEventListener('click', function (e) { if (e.target === modal) closeReel(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeReel(); });
+})();
