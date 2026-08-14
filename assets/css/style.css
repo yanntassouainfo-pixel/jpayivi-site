@@ -349,7 +349,7 @@ body.home-page{
 .menu-toggle{ display:none; background:none; border:0; font-family:"Jumper",sans-serif; font-weight:400; font-size:15px; color:var(--ink); cursor:pointer; padding:0; }
 
 /* ---------- TABLETTE : on garde la mise en page bureau, sur un seul écran (pas de scroll) ---------- */
-@media(max-width:1024px) and (min-width:761px){
+@media(max-width:1024px) and (min-width:601px){
   :root{--pad:26px;}
   .gallery-wrap{ max-width:none; padding:118px 40px 40px; }
   .gallery-wrap:has(.reel){ max-width:min(680px, calc(100vw - 200px)); }
@@ -357,7 +357,7 @@ body.home-page{
 }
 
 /* ---------- MOBILE : menu +, titre centré, cartes en éventail, contacts en bas (sans scroll) ---------- */
-@media(max-width:760px){
+@media(max-width:600px){
   :root{--pad:20px;}
 
   /* ===== ACCUEIL ===== */
