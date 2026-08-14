@@ -344,38 +344,64 @@ body.home-page{
   .pastille-cursor{display:none !important;}
 }
 
-/* ---------- Responsive : disposition empilée et défilable (jamais de superposition) ---------- */
-@media(max-width:1024px){
-  :root{--pad:22px;}
-  /* Accueil : on repasse en colonne, tout dans le flux, rien en absolu -> aucun chevauchement */
-  body.home-page{padding:14px;}
-  .home{min-height:auto;overflow:visible;padding:24px 22px 26px;}
-  .home-top{flex-direction:column;gap:20px;}
-  .nav{text-align:left;}
-  .intro{max-width:none;}
-  .hero-wrap{margin:26px 0 6px;}
-  .contact{position:static;transform:none;text-align:left;margin-top:14px;}
-  .grid{position:static;margin-top:26px;flex-wrap:wrap;gap:12px;justify-content:center;align-items:flex-start;}
-  .card{flex:1 1 44%;max-width:none;}
-  .card .label{position:static;bottom:auto;left:auto;margin:0 0 6px;white-space:normal;}
-  .card--sport .thumb,.card--studio .thumb,
-  .card--food .thumb,.card--motion .thumb,
-  .card--fashion .thumb{height:auto;aspect-ratio:3/4;min-height:0;}
-  /* Pages intérieures : header non fixe sur petit écran (évite un menu géant), colonnes empilées */
-  .site-header{position:static;}
-  .gallery-wrap, .gallery-wrap:has(.reel){max-width:none;padding:12px var(--pad) 60px;}
-  .masonry .col{float:none;width:100%;}
-  .masonry .col + .col{margin-left:0;}
-  .rs-band{flex-wrap:wrap;}
-  .rs-row{flex-wrap:wrap;}
-  .rs-row > *{width:46% !important;}
-  .rs-row--sport > *{width:82% !important;}
-  .brand .name{font-size:30px;}
+/* ---------- Éléments responsive (base) ---------- */
+.c-item{ display:block; }                 /* contacts empilés (bureau) */
+.menu-toggle{ display:none; background:none; border:0; font-family:"Jumper",sans-serif; font-weight:400; font-size:15px; color:var(--ink); cursor:pointer; padding:0; }
+
+/* ---------- TABLETTE : on garde la mise en page bureau, sur un seul écran (pas de scroll) ---------- */
+@media(max-width:1024px) and (min-width:761px){
+  :root{--pad:26px;}
+  .gallery-wrap{ max-width:none; padding:118px 40px 40px; }
+  .gallery-wrap:has(.reel){ max-width:min(680px, calc(100vw - 200px)); }
+  .brand .name{ font-size:34px; }
 }
-@media(max-width:560px){
-  .card{flex:1 1 100%;}
-  .rs-band .rs-post--sm,.rs-band .rs-post--lg{width:100%;}
-  .rs-row > *{width:100% !important;}
+
+/* ---------- MOBILE : menu +, titre centré, cartes en éventail, contacts en bas (sans scroll) ---------- */
+@media(max-width:760px){
+  :root{--pad:20px;}
+
+  /* ===== ACCUEIL ===== */
+  body.home-page{ padding:12px; }
+  .home{ position:relative; min-height:calc(100vh - 24px); overflow:hidden; padding:20px 18px 0; display:flex; flex-direction:column; }
+  .home-top{ flex-direction:row; align-items:flex-start; justify-content:space-between; gap:14px; }
+  .intro{ max-width:66%; font-size:12.5px; line-height:1.3; }
+  .menu-toggle{ display:inline-block; font-size:18px; }
+  .site-nav{ display:none; }
+  .site-nav.open{ display:flex; position:fixed; inset:0; z-index:300; background:var(--cream); flex-direction:column; justify-content:center; padding:40px 30px; }
+  .site-nav.open .nav{ text-align:left; font-size:30px; line-height:1.75; font-weight:400; }
+  body.nav-open .menu-toggle{ position:fixed; top:22px; right:24px; z-index:301; }
+  .hero-wrap{ margin:16px 0 0; }
+  .hero{ text-align:center; }
+  .hero h1{ font-size:clamp(30px,9vw,44px); }
+  .hero .role{ font-size:clamp(19px,6vw,30px); }
+  .hero .tags{ font-size:clamp(15px,4.4vw,22px); }
+
+  /* cartes empilées en éventail, en bas */
+  .grid{ position:static; margin:auto 0 62px; display:flex; flex-direction:column; gap:0; align-items:stretch; justify-content:flex-end; }
+  .card{ position:relative; width:100%; max-width:none; height:15.5vh; min-height:92px; margin-top:-6.5vh; border-radius:20px 20px 0 0; overflow:hidden; box-shadow:0 -7px 18px rgba(0,0,0,.18); }
+  .card--fashion{ order:1; z-index:1; margin-top:0; }
+  .card--motion{ order:2; z-index:2; }
+  .card--sport{ order:3; z-index:3; }
+  .card--food{ order:4; z-index:4; }
+  .card--studio{ order:5; z-index:5; }
+  .card .thumb{ height:100% !important; }
+  .card .label{ position:absolute; top:9px; left:16px; bottom:auto; margin:0; z-index:2; font-size:20px; font-weight:400; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.55); }
+
+  /* contacts : barre noire pleine largeur en bas */
+  .contact{ position:fixed; left:0; right:0; bottom:0; top:auto; transform:none; background:var(--ink); z-index:150; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 18px; padding:11px 14px; font-size:12px; line-height:1.2; }
+  .contact .c-item{ display:inline-block; }
+  .contact, .contact a, .contact .num{ color:#fff; }
+
+  /* ===== PAGES INTÉRIEURES ===== */
+  .site-header{ position:absolute; }
+  .site-header::before{ display:none; }
+  .gallery-wrap, .gallery-wrap:has(.reel){ max-width:none; padding:92px var(--pad) 40px; }
+  .masonry{ --gap-col:6px; --gap-row:10px; }
+  .masonry .col{ float:none; width:100%; }
+  .masonry .col + .col{ margin-left:0; }
+  .rs-band{ flex-wrap:wrap; } .rs-band .rs-post--sm,.rs-band .rs-post--lg{ width:100%; }
+  .rs-row{ flex-wrap:wrap; } .rs-row > *{ width:100% !important; }
+  .brand .name{ font-size:28px; }
 }
 
 /* ============================================================

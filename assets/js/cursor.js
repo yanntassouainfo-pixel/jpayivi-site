@@ -115,3 +115,24 @@
     document.querySelectorAll('video').forEach(function (v) { io.observe(v); });
   }
 })();
+
+/* ============================================================
+   Menu mobile "+Menu" (accueil) : ouvre/ferme la liste en plein écran
+   ============================================================ */
+(function () {
+  var toggle = document.querySelector('.menu-toggle');
+  var nav = document.querySelector('.site-nav');
+  if (!toggle || !nav) return;
+  function closeMenu() {
+    nav.classList.remove('open');
+    document.body.classList.remove('nav-open');
+    toggle.textContent = '+Menu';
+  }
+  toggle.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    document.body.classList.toggle('nav-open', open);
+    toggle.textContent = open ? '+Fermer' : '+Menu';
+  });
+  var links = nav.querySelectorAll('a');
+  for (var i = 0; i < links.length; i++) links[i].addEventListener('click', closeMenu);
+})();
