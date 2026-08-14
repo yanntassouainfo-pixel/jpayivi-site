@@ -97,19 +97,21 @@
   // Une seule vidéo en lecture : quand une démarre, on met les autres en pause
   document.addEventListener('play', function (e) {
     if (!e.target || e.target.tagName !== 'VIDEO') return;
+    if (e.target.hasAttribute('loop')) return;              // gif en boucle : ne coupe pas les autres
     var all = document.querySelectorAll('video');
     for (var i = 0; i < all.length; i++) {
-      if (all[i] !== e.target) all[i].pause();
+      if (all[i] !== e.target && !all[i].hasAttribute('loop')) all[i].pause();
     }
   }, true);
 
-  // Pause quand la vidéo n'est plus (assez) visible : scroll / disparition sous le menu fixe
+  // Hors champ : pause. Les gifs (loop) reprennent quand ils reviennent en vue.
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (!en.isIntersecting && !en.target.paused) en.target.pause();
+        if (!en.isIntersecting) { if (!en.target.paused) en.target.pause(); }
+        else if (en.target.hasAttribute('loop')) { var p = en.target.play(); if (p && p.catch) p.catch(function () {}); }
       });
-    }, { rootMargin: '-96px 0px -6% 0px', threshold: 0.25 });
+    }, { rootMargin: '-96px 0px -6% 0px', threshold: 0.2 });
     document.querySelectorAll('video').forEach(function (v) { io.observe(v); });
   }
 })();

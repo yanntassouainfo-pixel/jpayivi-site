@@ -254,7 +254,7 @@ body.home-page{
   font-size:clamp(22px,2.4vw,38px);
   margin:0 0 20px;
 }
-.masonry{ overflow:hidden; --gap-col:10px; --gap-row:4px; }   /* vertical très fin, horizontal un peu plus large (maquette) */
+.masonry{ overflow:hidden; --gap-col:6px; --gap-row:16px; }   /* vertical très fin, horizontal un peu plus large (maquette) */
 .masonry .col{ float:left; width:calc((100% - var(--gap-col)) / 2); }
 .masonry .col + .col{ margin-left:var(--gap-col); }
 .masonry .item{ margin-bottom:var(--gap-row); background:#e9e9dd; overflow:hidden; }
