@@ -348,11 +348,32 @@ body.home-page{
 .c-item{ display:block; }                 /* contacts empilés (bureau) */
 .menu-toggle{ display:none; background:none; border:0; font-family:"Jumper",sans-serif; font-weight:400; font-size:15px; color:var(--ink); cursor:pointer; padding:0; }
 
-/* ---------- TABLETTE : on garde la mise en page bureau, sur un seul écran (pas de scroll) ---------- */
-@media(max-width:1024px) and (min-width:601px){
-  :root{--pad:26px;}
+/* ---------- TABLETTE (≤1200px) : accueil en 3 colonnes (Food+Sport | Fashion | Motion+Studio) ---------- */
+@media(max-width:1200px) and (min-width:601px){
+  :root{--pad:30px;}
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1.25fr 1fr;
+    grid-template-rows:24vh 30vh;
+    grid-template-areas:
+      "food fashion motion"
+      "sport fashion studio";
+    column-gap:clamp(20px,3vw,40px);
+    row-gap:38px;
+    align-items:stretch;
+    justify-content:center;
+    margin-top:auto;
+  }
+  .card{ flex:none; max-width:none; margin:0; }
+  .card--food{ grid-area:food; }
+  .card--sport{ grid-area:sport; }
+  .card--fashion{ grid-area:fashion; }
+  .card--motion{ grid-area:motion; }
+  .card--studio{ grid-area:studio; }
+  .card .thumb{ height:100% !important; }
+  /* Pages intérieures : colonnes élargies */
   .gallery-wrap{ max-width:none; padding:118px 40px 40px; }
-  .gallery-wrap:has(.reel){ max-width:min(680px, calc(100vw - 200px)); }
+  .gallery-wrap:has(.reel){ max-width:min(700px, calc(100vw - 180px)); }
   .brand .name{ font-size:34px; }
 }
 
