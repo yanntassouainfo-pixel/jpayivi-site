@@ -62,11 +62,13 @@
 
   function openReel() {
     modal.classList.add('open');
+    document.body.classList.add('reel-open');   /* rétablit le curseur dans la fenêtre */
     modal.setAttribute('aria-hidden', 'false');
     if (vid) { try { vid.currentTime = 0; } catch (e) {} var p = vid.play(); if (p && p.catch) p.catch(function () {}); }
   }
   function closeReel() {
     modal.classList.remove('open');
+    document.body.classList.remove('reel-open');
     modal.setAttribute('aria-hidden', 'true');
     if (vid) vid.pause();
   }
@@ -84,4 +86,30 @@
   if (closeBtn) closeBtn.addEventListener('click', closeReel);
   modal.addEventListener('click', function (e) { if (e.target === modal) closeReel(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeReel(); });
+})();
+
+/* ============================================================
+   Gestion des vidéos (pages intérieures)
+   - une seule vidéo à la fois (la précédente s'arrête)
+   - pause automatique quand la vidéo sort du champ / passe sous le menu
+   ============================================================ */
+(function () {
+  // Une seule vidéo en lecture : quand une démarre, on met les autres en pause
+  document.addEventListener('play', function (e) {
+    if (!e.target || e.target.tagName !== 'VIDEO') return;
+    var all = document.querySelectorAll('video');
+    for (var i = 0; i < all.length; i++) {
+      if (all[i] !== e.target) all[i].pause();
+    }
+  }, true);
+
+  // Pause quand la vidéo n'est plus (assez) visible : scroll / disparition sous le menu fixe
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting && !en.target.paused) en.target.pause();
+      });
+    }, { rootMargin: '-96px 0px -6% 0px', threshold: 0.25 });
+    document.querySelectorAll('video').forEach(function (v) { io.observe(v); });
+  }
 })();

@@ -151,8 +151,7 @@ body.home-page{
 .contact{
   position:absolute;
   left:0;
-  top:50%;
-  transform:translateY(-50%);
+  bottom:2px;                      /* calé en bas du bloc, au niveau de la ligne "Réalisation…" */
   color:var(--red);
   text-align:left;
   font-family:"Jumper",sans-serif;
@@ -438,7 +437,7 @@ body.home-page{
 body.about-page{ background:var(--frame); padding:40px; min-height:100vh; }
 .about-inner{ position:relative; background:var(--cream); min-height:calc(100vh - 80px); padding:26px 48px 56px; overflow:hidden; }
 .about{ min-height:calc(100vh - 220px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:clamp(26px,4vh,44px); }
-.about-text{ max-width:880px; font-family:"Maison Neue",sans-serif; font-weight:400; font-size:clamp(15px,1.15vw,19px); line-height:1.5; color:var(--ink); }
+.about-text{ max-width:880px; font-family:"Jumper",sans-serif; font-weight:400; font-size:clamp(15px,1.2vw,20px); line-height:1.5; color:var(--ink); }
 .about-text p{ margin:0 0 18px; }
 .about-text p:last-child{ margin:0; }
 .about-text b,.about-text strong{ font-weight:700; }
@@ -463,3 +462,23 @@ body.about-page{ background:var(--frame); padding:40px; min-height:100vh; }
 .reel-modal video{ width:100%; display:block; background:#000; }
 .reel-close{ position:absolute; top:16px; right:22px; width:46px; height:46px; border:0; background:none; color:var(--cream); font-family:"Jumper",sans-serif; font-weight:400; font-size:34px; line-height:1; cursor:pointer; }
 .reel-close:hover{ opacity:.7; }
+
+/* ============================================================
+   CORRECTIFS LOT 2 (retours client)
+   ============================================================ */
+/* Fondu crème sous le menu fixe : les vidéos s'effacent en haut au lieu d'être coupées net */
+.site-header::after{
+  content:""; position:absolute; left:0; right:0; top:100%; height:48px;
+  background:linear-gradient(var(--cream), rgba(254,254,242,0));
+  pointer-events:none;
+}
+/* About : le header reste DANS le cadre (pas fixe) -> plus de bug de cadre */
+body.about-page .site-header{ position:absolute; background:transparent; }
+body.about-page .site-header::after{ display:none; }
+
+/* Modale Showreel : croix fine + curseur rétabli dans la fenêtre */
+.reel-close{ padding:0; display:flex; align-items:center; justify-content:center; }
+.reel-close svg{ width:32px; height:32px; stroke:var(--cream); stroke-width:1; fill:none; }
+body.reel-open .pastille-cursor{ opacity:0 !important; }
+html.has-pastille body.reel-open, html.has-pastille body.reel-open *{ cursor:auto !important; }
+html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .reel-close *{ cursor:pointer !important; }
