@@ -349,28 +349,42 @@ body.home-page{
 .menu-toggle{ display:none; background:none; border:0; font-family:"Jumper",sans-serif; font-weight:400; font-size:15px; color:var(--ink); cursor:pointer; padding:0; }
 
 /* ---------- TABLETTE (≤1200px) : accueil en 3 colonnes (Food+Sport | Fashion | Motion+Studio) ---------- */
-@media(max-width:1200px) and (min-width:601px){
+@media(max-width:950px) and (min-width:601px){
   :root{--pad:30px;}
+  .home{ padding:24px 20px 0; }
+  /* Bloc titre : taille fluide -> ne chevauche jamais les contacts, même en réduisant */
+  .hero h1{ font-size:clamp(22px,3.9vw,34px); }
+  .hero .role{ font-size:clamp(14px,2.4vw,20px); }
+  .hero .tags{ font-size:clamp(10px,1.7vw,16px); }
+  .contact{ font-size:13px; }
+  /* Accueil : 3 colonnes (Food+Sport | Fashion | Motion+Studio), paires juxtaposées, bas alignées */
   .grid{
     display:grid;
-    grid-template-columns:1fr 1.25fr 1fr;
-    grid-template-rows:24vh 30vh;
+    grid-template-columns:27% 36% 27%;
+    column-gap:2.5%;
+    row-gap:0;                     /* paires collées (juxtaposées) */
     grid-template-areas:
       "food fashion motion"
       "sport fashion studio";
-    column-gap:clamp(20px,3vw,40px);
-    row-gap:38px;
-    align-items:stretch;
+    align-items:end;
     justify-content:center;
-    margin-top:auto;
+    margin-top:0;
   }
+  .hero-wrap{ margin:auto 0; }        /* centre verticalement titre+contacts entre le menu et les cartes */
   .card{ flex:none; max-width:none; margin:0; }
-  .card--food{ grid-area:food; }
-  .card--sport{ grid-area:sport; }
-  .card--fashion{ grid-area:fashion; }
-  .card--motion{ grid-area:motion; }
-  .card--studio{ grid-area:studio; }
+  /* Sport/Studio plus grandes que Food/Motion (comme la maquette) */
+  .card--food{ grid-area:food; height:11vh; }
+  .card--motion{ grid-area:motion; height:11vh; }
+  .card--sport{ grid-area:sport; height:18vh; }
+  .card--studio{ grid-area:studio; height:18vh; }
+  .card--fashion{ grid-area:fashion; height:33vh; }
   .card .thumb{ height:100% !important; }
+  /* Labels ÉCRITS SUR l'image : Food/Motion blanc, Sport/Studio noir (Fashion reste au-dessus) */
+  .card--food .label,.card--sport .label,.card--motion .label,.card--studio .label{
+    position:absolute; top:9px; left:14px; bottom:auto; margin:0; z-index:3; font-size:19px; font-weight:400;
+  }
+  .card--food .label,.card--motion .label{ color:#fff; }
+  .card--sport .label,.card--studio .label{ color:var(--ink); }
   /* Pages intérieures : colonnes élargies */
   .gallery-wrap{ max-width:none; padding:118px 40px 40px; }
   .gallery-wrap:has(.reel){ max-width:min(700px, calc(100vw - 180px)); }
@@ -530,3 +544,17 @@ body.about-page .site-header::before{ display:none; }
 body.reel-open .pastille-cursor{ opacity:0 !important; }
 html.has-pastille body.reel-open, html.has-pastille body.reel-open *{ cursor:auto !important; }
 html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .reel-close *{ cursor:pointer !important; }
+
+/* ============================================================
+   Bouton PLAY personnalisé (pastille) sur les vidéos cliquables
+   ============================================================ */
+.reel-media{ position:relative; }
+.reel-media.has-play, .rs-media.has-play{ cursor:pointer; }
+.reel-media.has-play::after, .rs-media.has-play::after{
+  content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:72px; height:66px; background:url("../img/play.png") center/contain no-repeat;
+  pointer-events:none; z-index:3; transition:opacity .18s ease, transform .18s ease;
+  filter:drop-shadow(0 3px 10px rgba(0,0,0,.35));
+}
+.reel-media.has-play:hover::after, .rs-media.has-play:hover::after{ transform:translate(-50%,-50%) scale(1.06); }
+.reel-media.is-playing::after, .rs-media.is-playing::after{ opacity:0; }

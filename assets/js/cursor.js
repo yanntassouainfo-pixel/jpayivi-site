@@ -136,3 +136,23 @@
   var links = nav.querySelectorAll('a');
   for (var i = 0; i < links.length; i++) links[i].addEventListener('click', closeMenu);
 })();
+
+/* Bouton play custom : clic sur la vidéo = lecture/pause, la pastille s'efface pendant la lecture */
+(function () {
+  var vids = document.querySelectorAll('.reel-media > video:not([loop]), .rs-media > video:not([loop])');
+  for (var i = 0; i < vids.length; i++) {
+    (function (v) {
+      var box = v.parentNode;
+      box.classList.add('has-play');
+      function sync() { box.classList.toggle('is-playing', !v.paused && !v.ended); }
+      v.addEventListener('play', sync);
+      v.addEventListener('playing', sync);
+      v.addEventListener('pause', sync);
+      v.addEventListener('ended', sync);
+      box.addEventListener('click', function () {
+        if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+        else { v.pause(); }
+      });
+    })(vids[i]);
+  }
+})();
