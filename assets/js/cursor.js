@@ -108,10 +108,10 @@
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (!en.isIntersecting) { if (!en.target.paused) en.target.pause(); }
+        if (en.intersectionRatio === 0) { if (!en.target.paused) en.target.pause(); }   // pause seulement hors champ complet
         else if (en.target.hasAttribute('loop')) { var p = en.target.play(); if (p && p.catch) p.catch(function () {}); }
       });
-    }, { rootMargin: '-96px 0px -6% 0px', threshold: 0.2 });
+    }, { threshold: [0, 0.01] });
     document.querySelectorAll('video').forEach(function (v) { io.observe(v); });
   }
 })();
