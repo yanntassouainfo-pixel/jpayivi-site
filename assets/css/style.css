@@ -291,6 +291,9 @@ body.home-page{
 .reel-tri .reel-media video,.reel-tri .reel-media img,
 .reel-duo .reel-media video,.reel-duo .reel-media img{ width:100%; height:100%; object-fit:cover; }
 @media(max-width:600px){ .reel-tri,.reel-duo{ grid-template-columns:1fr; } }
+/* Food — variantes portrait (cocktails 4:5, triptyque 2:3) */
+.reel-duo--portrait .reel-media{ aspect-ratio:4/5; }
+.reel-tri--portrait .reel-media{ aspect-ratio:2/3; }
 @media(max-width:820px){
   .reel{ max-width:none; padding:0 var(--pad) 60px; }
 }
