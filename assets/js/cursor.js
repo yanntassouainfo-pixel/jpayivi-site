@@ -156,3 +156,32 @@
     })(vids[i]);
   }
 })();
+
+/* ============================================================
+   Logo : « Créateur d'images » justifié sur la largeur de « JP AYIVI »
+   (interlettrage calculé, recalculé au redimensionnement / chargement des polices)
+   ============================================================ */
+(function () {
+  function fitBrand() {
+    var brands = document.querySelectorAll('.brand');
+    for (var i = 0; i < brands.length; i++) {
+      var name = brands[i].querySelector('.name');
+      var sub = brands[i].querySelector('.sub');
+      if (!name || !sub) continue;
+      var chars = (sub.textContent || '').length;
+      if (chars < 2) continue;
+      sub.style.letterSpacing = 'normal';
+      sub.style.marginRight = '';
+      var nameW = name.getBoundingClientRect().width;
+      var subW = sub.getBoundingClientRect().width;
+      if (!nameW || !subW) continue;
+      var ls = (nameW - subW) / chars;          /* chaque caractère porte l'écart */
+      sub.style.letterSpacing = ls + 'px';
+      sub.style.marginRight = (-ls) + 'px';     /* neutralise l'écart après le dernier caractère */
+    }
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitBrand);
+  window.addEventListener('load', fitBrand);
+  var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(fitBrand, 120); });
+  fitBrand();
+})();

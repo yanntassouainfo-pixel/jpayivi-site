@@ -236,16 +236,20 @@ body.home-page{
   background:transparent;           /* transparent : le titre de section reste visible dessous */
 }
 .brand{
+  display:inline-block;                /* le bloc prend la largeur de « JP AYIVI » */
   font-family:"Jumper",sans-serif;
   font-weight:900;font-style:normal;   /* droit comme le PSD */
   line-height:1;
   color:rgba(24,24,24,.22);            /* JP AYIVI pâle (ghost) */
 }
-.brand .name{font-size:40px;letter-spacing:.02em;}   /* logo agrandi */
+.brand .name{display:block;white-space:nowrap;font-size:40px;letter-spacing:.02em;}   /* logo agrandi */
 .brand .sub{
+  display:block;white-space:nowrap;
   font-family:"Jumper",sans-serif;
   font-weight:300;font-style:normal;
-  font-size:20px;letter-spacing:.045em;
+  font-size:20px;
+  /* justifié sur la largeur de « JP AYIVI » (interlettrage ajusté en JS) */
+  letter-spacing:.045em;
   color:rgba(24,24,24,.82);            /* Créateur d'images soutenu */
   margin-top:2px;
 }
