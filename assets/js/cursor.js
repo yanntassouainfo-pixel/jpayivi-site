@@ -170,14 +170,22 @@
       if (!name || !sub) continue;
       var chars = (sub.textContent || '').length;
       if (chars < 2) continue;
+
+      /* largeur RÉELLE de « JP AYIVI » : on retire l'espacement ajouté après sa dernière lettre */
+      var nameLS = parseFloat(getComputedStyle(name).letterSpacing);
+      if (isNaN(nameLS)) nameLS = 0;
+      var target = name.getBoundingClientRect().width - nameLS;
+
+      /* largeur naturelle du sous-titre, sans interlettrage */
       sub.style.letterSpacing = 'normal';
       sub.style.marginRight = '';
-      var nameW = name.getBoundingClientRect().width;
-      var subW = sub.getBoundingClientRect().width;
-      if (!nameW || !subW) continue;
-      var ls = (nameW - subW) / chars;          /* chaque caractère porte l'écart */
+      var natural = sub.getBoundingClientRect().width;
+      if (!target || !natural) continue;
+
+      /* l'écart se répartit entre les lettres : n-1 intervalles visibles */
+      var ls = (target - natural) / (chars - 1);
       sub.style.letterSpacing = ls + 'px';
-      sub.style.marginRight = (-ls) + 'px';     /* neutralise l'écart après le dernier caractère */
+      sub.style.marginRight = (-ls) + 'px';     /* neutralise l'espacement après la dernière lettre */
     }
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitBrand);

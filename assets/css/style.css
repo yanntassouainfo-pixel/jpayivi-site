@@ -249,7 +249,7 @@ body.home-page{
   font-weight:300;font-style:normal;
   font-size:20px;
   /* justifié sur la largeur de « JP AYIVI » (interlettrage ajusté en JS) */
-  letter-spacing:.045em;
+  letter-spacing:normal;
   color:rgba(24,24,24,.82);            /* Créateur d'images soutenu */
   margin-top:2px;
 }
