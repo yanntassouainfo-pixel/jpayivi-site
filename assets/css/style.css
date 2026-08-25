@@ -492,40 +492,20 @@ body.home-page{
 }
 
 /* Ratios natifs des médias (hauteur / largeur) */
-.rs-row--duoA .rs-media,
-.rs-post--bandsm .rs-media{ aspect-ratio:1080 / 1518; }   /* 1.406 */
-.rs-post--bandcard .rs-media{ aspect-ratio:1049 / 1376; } /* 1.312 */
+.rs-row--duoA .rs-media{ aspect-ratio:1080 / 1518; }      /* 1.406 */
 .rs-row--duoB .rs-media,
 .rs-row--solo .rs-media,
 .rs-row--trio .rs-media{ aspect-ratio:1080 / 1920; }      /* 9:16  */
 .rs-row--obs .rs-media{ aspect-ratio:680 / 998; }         /* carte L'OBS incluse */
 .rs-row--wide .rs-media{ aspect-ratio:16 / 9; }
 
-/* R1 — bandeau noir à chevrons jaunes */
+/* R1 — bandeau « Les Recettes ASMR » : le visuel Behance d'origine, tel quel */
 .rs-band{
-  position:relative;
-  background:#000;
-  aspect-ratio:3223 / 1816;
-  display:flex; align-items:center; justify-content:center;
-  gap:2.5%;
   margin:0 0 var(--v);
-  overflow:hidden;
+  background:#000;
+  line-height:0;
 }
-.rs-band::before,
-.rs-band::after{
-  content:""; position:absolute; top:-6%; bottom:-6%; width:8%;
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='34' viewBox='0 0 26 34'%3E%3Cpath d='M3 0 L23 17 L3 34' fill='none' stroke='%23FFE500' stroke-width='3.4'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='34' viewBox='0 0 26 34'%3E%3Cpath d='M3 0 L23 17 L3 34' fill='none' stroke='%23FFE500' stroke-width='3.4'/%3E%3C/svg%3E");
-  background-repeat:repeat-y, repeat-y;
-  background-size:26px 34px, 26px 34px;
-  background-position:left top, right top;
-  pointer-events:none;
-}
-.rs-band::before{ left:3.2%; }
-.rs-band::after { right:3.2%; transform:scaleX(-1); }
-.rs-post--bandsm{ width:20.5%; }
-.rs-post--bandcard{ width:32.5%; }
+.rs-band img{ width:100%; height:auto; display:block; }
 
 /* Rangées : largeurs et écarts de la maquette */
 .rs-row{ display:flex; justify-content:center; align-items:flex-start; }
