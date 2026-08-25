@@ -53,6 +53,12 @@
   --frame:#242424;          /* cadre gris foncé */
   --gap:14px;
   --pad:48px;
+  /* Cadre : ratios mesurés sur la maquette (côtés 4.48%L, haut 6.15%H, bas 9.85%H) */
+  --frame-x:clamp(22px, 4.48vw, 86px);
+  --frame-t:clamp(24px, 6.15vh, 64px);
+  --frame-b:clamp(34px, 9.85vh, 104px);
+  --panel-w:calc(100vw - (2 * var(--frame-x)));
+  --panel-h:calc(100vh - var(--frame-t) - var(--frame-b));
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -88,14 +94,14 @@ a{color:inherit;text-decoration:none;}
 body.home-page{
   background:var(--frame);
   /* cadre gris foncé tout autour ; bande en bas sur laquelle reposent les images */
-  padding:48px 48px 60px;
+  padding:var(--frame-t) var(--frame-x) var(--frame-b);
   min-height:100vh;
 }
 .home{
   position:relative;               /* ancre la grille en bas */
-  min-height:calc(100vh - 108px);  /* 48 (haut) + 60 (bande du bas) */
+  min-height:var(--panel-h);       /* hauteur du panneau crème = référence des proportions */
   background:var(--cream);
-  padding:34px 44px 0;
+  padding:3.1vh 3.12% 0;           /* inset horizontal = celui de la grille sur la maquette */
   display:flex;
   flex-direction:column;
   overflow:hidden;
@@ -128,21 +134,21 @@ body.home-page{
 .hero h1{
   font-family:"Jumper",sans-serif;
   font-weight:900; font-style:normal;    /* JP AYIVI en droit (non italique) */
-  font-size:clamp(34px,2.8vw,60px);
+  font-size:clamp(24px, min(calc(var(--panel-w) * .0277), calc(var(--panel-h) * .0444)), 60px);
   letter-spacing:.01em;
   line-height:1;
 }
 .hero .role{
   font-family:"Jumper",sans-serif;
   font-weight:700; font-style:italic;
-  font-size:clamp(23px,1.95vw,42px);     /* CRÉATEUR D'IMAGES */
+  font-size:clamp(17px, min(calc(var(--panel-w) * .0196), calc(var(--panel-h) * .0314)), 42px);   /* CRÉATEUR D'IMAGES */
   letter-spacing:.01em;
   margin-top:2px;
 }
 .hero .tags{
   font-family:"Jumper",sans-serif;
   font-weight:300; font-style:italic;    /* Jumper Light Italic = ligne la plus large */
-  font-size:clamp(20px,1.75vw,38px);
+  font-size:clamp(15px, min(calc(var(--panel-w) * .0176), calc(var(--panel-h) * .0282)), 38px);
   letter-spacing:-.005em;
   margin-top:-2px;
 }
@@ -170,35 +176,38 @@ body.home-page{
 .grid{
   margin-top:auto;                   /* pousse la rangée tout en bas, SOUS le bloc titre (plus de chevauchement) */
   display:flex;
-  gap:var(--gap);
+  gap:1.07%;                         /* écart relevé sur la maquette (1% de la largeur du panneau) */
   align-items:flex-end;              /* les BAS des images s'alignent sur le cadre */
   justify-content:center;
 }
 .card{
   position:relative;
-  flex:1 1 0;
-  max-width:340px;
+  flex:0 0 auto;                    /* largeurs proportionnelles (maquette), pas d'égalisation */
   display:flex;
   flex-direction:column;
   /* la carte = l'image seule (le label est en absolu) => bas garantis alignés */
 }
+/* Largeurs relevées sur la maquette (% de la largeur du panneau crème) */
+.card--sport,.card--studio{ width:17.02%; }
+.card--food,.card--motion{ width:19.15%; }
+.card--fashion{ width:23.37%; }
 .card .label{
   position:absolute;
   bottom:100%;                     /* juste au-dessus de l'image */
   left:0;
-  margin-bottom:9px;
+  margin-bottom:calc(var(--panel-h) * .0133);   /* écart label→image de la maquette */
   white-space:nowrap;
   font-family:"Jumper",sans-serif;
   font-weight:100;                 /* Jumper Thin */
-  font-size:19px;
+  font-size:clamp(13px, min(calc(var(--panel-w) * .018), calc(var(--panel-h) * .034)), 24px);
   transition:font-weight .15s ease;
 }
-/* hauteurs décalées, bas alignés (comme la maquette) */
+/* hauteurs décalées, bas alignés — % de la hauteur du panneau, relevés sur la maquette */
 .card--sport  .thumb,
-.card--studio .thumb{height:min(272px,29vh);}
+.card--studio .thumb{height:calc(var(--panel-h) * .2257);}
 .card--food   .thumb,
-.card--motion .thumb{height:min(312px,33vh);}
-.card--fashion .thumb{height:min(362px,38vh);}
+.card--motion .thumb{height:calc(var(--panel-h) * .2825);}
+.card--fashion .thumb{height:calc(var(--panel-h) * .3745);}
 
 .thumb{
   position:relative;
@@ -364,25 +373,11 @@ body.home-page{
 .menu-toggle{ display:none; background:none; border:0; font-family:"Jumper",sans-serif; font-weight:400; font-size:15px; color:var(--ink); cursor:pointer; padding:0; }
 
 /* ---------- TABLETTE (≤1200px) : accueil en 3 colonnes (Food+Sport | Fashion | Motion+Studio) ---------- */
-/* Fenêtre desktop COURTE (hauteur réduite) : empêche le chevauchement bloc central / labels / cartes */
-@media (min-width:951px) and (max-height:860px){
-  .home-top{ gap:26px; }
-  .hero h1{ font-size:clamp(26px,4.3vh,56px); }
-  .hero .role{ font-size:clamp(18px,3vh,36px); }
-  .hero .tags{ font-size:clamp(15px,2.5vh,30px); }
-  .card--sport .thumb,.card--studio .thumb{ height:min(272px,17vh); }
-  .card--food .thumb,.card--motion .thumb{ height:min(312px,21vh); }
-  .card--fashion .thumb{ height:min(362px,26vh); }
-  .card .label{ font-size:16px; margin-bottom:6px; }
-}
-@media (min-width:951px) and (max-height:640px){
-  .hero h1{ font-size:clamp(22px,4vh,40px); }
-  .hero .role{ font-size:clamp(15px,2.8vh,26px); }
-  .hero .tags{ font-size:clamp(13px,2.3vh,22px); }
-  .card--sport .thumb,.card--studio .thumb{ height:14vh; }
-  .card--food .thumb,.card--motion .thumb{ height:17vh; }
-  .card--fashion .thumb{ height:21vh; }
-  .card .label{ font-size:14px; margin-bottom:4px; }
+/* Fenêtre desktop courte : l'intro et les contacts suivent aussi l'échelle du panneau */
+@media (min-width:951px) and (max-height:820px){
+  .intro{ font-size:clamp(11px, calc(var(--panel-h) * .019), 15px); }
+  .contact{ font-size:clamp(11px, calc(var(--panel-h) * .019), 15px); }
+  .nav{ font-size:clamp(11px, calc(var(--panel-h) * .019), 16px); }
 }
 @media(max-width:950px) and (min-width:601px){
   :root{--pad:30px;}
@@ -406,7 +401,7 @@ body.home-page{
     margin-top:0;
   }
   .hero-wrap{ margin:auto 0; }        /* centre verticalement titre+contacts entre le menu et les cartes */
-  .card{ flex:none; max-width:none; margin:0; }
+  .card{ flex:none; max-width:none; margin:0; width:auto; }   /* annule les largeurs desktop proportionnelles */
   /* Sport/Studio plus grandes que Food/Motion (comme la maquette) */
   .card--food{ grid-area:food; height:11vh; }
   .card--motion{ grid-area:motion; height:11vh; }
