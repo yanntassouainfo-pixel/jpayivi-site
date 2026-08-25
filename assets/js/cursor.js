@@ -162,6 +162,21 @@
    (interlettrage calculé, recalculé au redimensionnement / chargement des polices)
    ============================================================ */
 (function () {
+  /* Largeur du TEXTE (et non du bloc qui le contient) : indispensable, car .name
+     est un bloc qui s'etire a la largeur du plus large des deux elements. */
+  function textWidth(el) {
+    if (!el.firstChild) return 0;
+    try {
+      var r = document.createRange();
+      r.selectNodeContents(el);
+      var w = r.getBoundingClientRect().width;
+      r.detach && r.detach();
+      return w;
+    } catch (e) {
+      return el.getBoundingClientRect().width;
+    }
+  }
+
   function fitBrand() {
     var brands = document.querySelectorAll('.brand');
     for (var i = 0; i < brands.length; i++) {
@@ -171,25 +186,46 @@
       var chars = (sub.textContent || '').length;
       if (chars < 2) continue;
 
-      /* largeur RÉELLE de « JP AYIVI » : on retire l'espacement ajouté après sa dernière lettre */
+      /* largeur reelle du texte « JP AYIVI », espacement final deduit */
       var nameLS = parseFloat(getComputedStyle(name).letterSpacing);
       if (isNaN(nameLS)) nameLS = 0;
-      var target = name.getBoundingClientRect().width - nameLS;
+      var target = textWidth(name) - nameLS;
 
-      /* largeur naturelle du sous-titre, sans interlettrage */
+      /* largeur naturelle du sous-titre, interlettrage neutralise */
       sub.style.letterSpacing = 'normal';
       sub.style.marginRight = '';
-      var natural = sub.getBoundingClientRect().width;
-      if (!target || !natural) continue;
+      var natural = textWidth(sub);
+      if (target <= 0 || natural <= 0) continue;
 
-      /* l'écart se répartit entre les lettres : n-1 intervalles visibles */
+      /* l'ecart se repartit sur les n-1 intervalles visibles */
       var ls = (target - natural) / (chars - 1);
       sub.style.letterSpacing = ls + 'px';
-      sub.style.marginRight = (-ls) + 'px';     /* neutralise l'espacement après la dernière lettre */
+      sub.style.marginRight = (-ls) + 'px';   /* annule l'espacement apres la derniere lettre */
     }
   }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitBrand);
-  window.addEventListener('load', fitBrand);
-  var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(fitBrand, 120); });
-  fitBrand();
+
+  /* On recalcule a chaque etape ou la police peut changer (evite le decalage
+     entre la police de secours et Jumper une fois chargee). */
+  function schedule() {
+    fitBrand();
+    requestAnimationFrame(fitBrand);
+  }
+
+  if (document.fonts) {
+    /* on attend explicitement les deux graisses utilisees par le logo */
+    var wanted = ['900 40px Jumper', '300 20px Jumper'];
+    for (var k = 0; k < wanted.length; k++) {
+      try { document.fonts.load(wanted[k]).then(schedule); } catch (e) {}
+    }
+    if (document.fonts.ready) document.fonts.ready.then(schedule);
+    if (document.fonts.addEventListener) {
+      document.fonts.addEventListener('loadingdone', schedule);
+    }
+  }
+  window.addEventListener('load', schedule);
+  var t;
+  window.addEventListener('resize', function () {
+    clearTimeout(t); t = setTimeout(fitBrand, 120);
+  });
+  schedule();
 })();
