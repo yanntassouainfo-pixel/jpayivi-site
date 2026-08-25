@@ -234,7 +234,15 @@ body.home-page{
   display:flex;justify-content:space-between;align-items:flex-start;
   padding:26px var(--pad);
   background:transparent;           /* transparent : le titre de section reste visible dessous */
+  transition:opacity .28s ease;
 }
+/* Quand une image/vidéo passe derrière le logo ou le menu, ils s'estompent */
+.site-header .brand,
+.site-header nav{ transition:opacity .28s ease; }
+.site-header.brand-dim .brand{ opacity:.16; }
+.site-header.nav-dim   nav   { opacity:.16; }
+.site-header .brand:hover,
+.site-header nav:hover{ opacity:1; }   /* on les récupère au survol */
 .brand{
   display:inline-block;                /* le bloc prend la largeur de « JP AYIVI » */
   font-family:"Jumper",sans-serif;
@@ -246,21 +254,22 @@ body.home-page{
 .brand .sub{
   display:block;white-space:nowrap;
   font-family:"Jumper",sans-serif;
-  font-weight:300;font-style:normal;
-  font-size:20px;
+  font-weight:100;font-style:normal;   /* Thin */
+  font-size:17px;                      /* réduit : plus de lettres qui se chevauchent */
   /* justifié sur la largeur de « JP AYIVI » (interlettrage ajusté en JS) */
   letter-spacing:normal;
   color:rgba(24,24,24,.82);            /* Créateur d'images soutenu */
-  margin-top:2px;
+  margin-top:3px;
 }
 
-/* Galerie rétrécie : beige à gauche/droite, ne passe pas sous le menu */
+/* Galerie : largeur d'origine (le contenu peut passer sous le menu,
+   qui s'estompe alors automatiquement — voir .site-header.is-dim) */
 .gallery-wrap{
-  max-width:min(960px, calc(100vw - 480px));
+  max-width:960px;
   margin:0 auto;
-  padding:112px 0 80px;                 /* le titre démarre au niveau de "About" */
+  padding:112px 0 80px;
 }
-.gallery-wrap:has(.reel){ max-width:min(760px, calc(100vw - 460px)); }
+.gallery-wrap:has(.reel){ max-width:760px; }
 .page-title{                            /* titre petit, aligné à gauche de la colonne de contenu */
   font-family:"Jumper",sans-serif;
   font-weight:900; font-style:italic;

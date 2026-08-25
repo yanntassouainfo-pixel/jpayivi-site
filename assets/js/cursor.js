@@ -158,6 +158,48 @@
 })();
 
 /* ============================================================
+   Logo + menu : ils s'estompent quand une image ou une vidéo
+   passe derrière eux (pages intérieures, barre fixe).
+   ============================================================ */
+(function () {
+  var header = document.querySelector('.site-header');
+  if (!header || getComputedStyle(header).position !== 'fixed') return;
+  var brand = header.querySelector('.brand');
+  var nav = header.querySelector('nav');
+  var medias = document.querySelectorAll('.gallery-wrap img, .gallery-wrap video');
+  if (!medias.length) return;
+
+  function hits(zone) {
+    if (!zone) return false;
+    var z = zone.getBoundingClientRect();
+    if (z.width === 0) return false;
+    for (var i = 0; i < medias.length; i++) {
+      var m = medias[i].getBoundingClientRect();
+      if (m.bottom < 0 || m.top > window.innerHeight) continue;   /* hors écran */
+      if (m.top < z.bottom && m.bottom > z.top &&
+          m.left < z.right && m.right > z.left) return true;
+    }
+    return false;
+  }
+
+  var busy = false;
+  function update() {
+    busy = false;
+    header.classList.toggle('brand-dim', hits(brand));
+    header.classList.toggle('nav-dim', hits(nav));
+  }
+  function onScroll() {
+    if (busy) return;
+    busy = true;
+    requestAnimationFrame(update);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('load', update);
+  update();
+})();
+
+/* ============================================================
    Logo : « Créateur d'images » justifié sur la largeur de « JP AYIVI »
    (interlettrage calculé, recalculé au redimensionnement / chargement des polices)
    ============================================================ */
