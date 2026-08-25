@@ -476,54 +476,95 @@ body.home-page{
 /* ============================================================
    PAGE RÉSEAUX SOCIAUX — grille façon Instagram
    ============================================================ */
-.rs{ padding:4px 0 90px; }
-.rs-post{ margin:0; }
-.rs-media{ position:relative; aspect-ratio:9/16; background:#e9e9dd; overflow:hidden; }
-.rs-media > video,.rs-media > img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
-
-/* Bandeau noir (rangée 1 — ASMR) */
-.rs-band{
-  background:#0d0d0d;
-  display:flex; gap:20px; justify-content:center; align-items:center;
-  padding:32px clamp(18px,3.5vw,54px);
-  margin:0 0 42px;
+/* Largeurs, écarts et ratios relevés au pixel sur site_ordi_rs_int.png.
+   Les habillages Instagram (barres d'actions, carte L'OBS) sont INCRUSTÉS
+   dans les vidéos : aucun élément décoratif n'est ajouté en CSS. */
+.rs{
+  padding:4px 0 90px;
+  --v:8.1%;      /* écart vertical courant   (261 / 3227) */
+  --vL:16.4%;    /* écart vertical large     (530 / 3227) */
 }
-.rs-band .rs-post--sm{ width:25%; }
-.rs-band .rs-post--lg{ width:33%; }
+.rs-post{ margin:0; }
+.rs-media{ position:relative; background:#e9e9dd; overflow:hidden; }
+.rs-media > video,.rs-media > img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; display:block;
+}
 
-/* Rangées standard */
-.rs-row{ display:flex; gap:24px; justify-content:center; align-items:flex-start; margin:0 0 42px; }
-.rs-row--2 > *{ width:42%; }
-.rs-row--3 > *{ width:30%; }
-.rs-row--1 > *{ width:34%; }
+/* Ratios natifs des médias (hauteur / largeur) */
+.rs-row--duoA .rs-media,
+.rs-post--bandsm .rs-media{ aspect-ratio:1080 / 1518; }   /* 1.406 */
+.rs-post--bandcard .rs-media{ aspect-ratio:1049 / 1376; } /* 1.312 */
+.rs-row--duoB .rs-media,
+.rs-row--solo .rs-media,
+.rs-row--trio .rs-media{ aspect-ratio:1080 / 1920; }      /* 9:16  */
+.rs-row--obs .rs-media{ aspect-ratio:680 / 998; }         /* carte L'OBS incluse */
+.rs-row--wide .rs-media{ aspect-ratio:16 / 9; }
 
-/* Barre d'actions façon Instagram */
-.rs-bar{ display:flex; align-items:center; justify-content:space-between; padding:9px 12px; background:var(--ig,#f5d400); }
-.rs-acts{ display:flex; gap:12px; }
-.ig{ width:18px; height:18px; display:block; fill:none; stroke:#181818; stroke-width:1.7; }
-.rs-bar--dark{ background:#141414; } .rs-bar--dark .ig{ stroke:#fff; }
-.rs-bar--pink{ background:#e7d7f3; }
+/* R1 — bandeau noir à chevrons jaunes */
+.rs-band{
+  position:relative;
+  background:#000;
+  aspect-ratio:3223 / 1816;
+  display:flex; align-items:center; justify-content:center;
+  gap:2.5%;
+  margin:0 0 var(--v);
+  overflow:hidden;
+}
+.rs-band::before,
+.rs-band::after{
+  content:""; position:absolute; top:-6%; bottom:-6%; width:8%;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='34' viewBox='0 0 26 34'%3E%3Cpath d='M3 0 L23 17 L3 34' fill='none' stroke='%23FFE500' stroke-width='3.4'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='34' viewBox='0 0 26 34'%3E%3Cpath d='M3 0 L23 17 L3 34' fill='none' stroke='%23FFE500' stroke-width='3.4'/%3E%3C/svg%3E");
+  background-repeat:repeat-y, repeat-y;
+  background-size:26px 34px, 26px 34px;
+  background-position:left top, right top;
+  pointer-events:none;
+}
+.rs-band::before{ left:3.2%; }
+.rs-band::after { right:3.2%; transform:scaleX(-1); }
+.rs-post--bandsm{ width:20.5%; }
+.rs-post--bandcard{ width:32.5%; }
 
-/* Cartes L'OBS (rangée 4) */
-.rs-post--obs .rs-card{ background:#fff; padding:13px 13px 15px; box-shadow:0 1px 12px rgba(0,0,0,.07); }
-.rs-obs-head{ text-align:center; margin-bottom:10px; }
-.rs-obs-head .lobs{ display:block; color:#c8102e; font-family:Georgia,"Times New Roman",serif; font-weight:700; font-style:italic; font-size:17px; }
-.rs-obs-head .toyota{ display:block; font-size:8px; letter-spacing:.34em; margin-top:3px; }
-.rs-post--obs .rs-media{ aspect-ratio:3/4; background:#000; }
-.rs-obs-foot{ text-align:center; margin-top:10px; font-family:"Jumper",sans-serif; font-weight:100; font-size:10.5px; letter-spacing:.06em; }
-.rs-obs-foot b{ font-weight:700; }
+/* Rangées : largeurs et écarts de la maquette */
+.rs-row{ display:flex; justify-content:center; align-items:flex-start; }
+.rs-row--duoA{ gap:17%;   margin:0 0 var(--v);  }
+.rs-row--duoA > *{ width:38.2%; }
+.rs-row--duoB{ gap:17%;   margin:0 0 var(--vL); }
+.rs-row--duoB > *{ width:32.4%; }
+.rs-row--obs { gap:4.15%; margin:0 0 var(--vL); }
+.rs-row--obs > *{ width:30.6%; }
+.rs-row--solo{ margin:0 0 var(--v); }
+.rs-row--solo > *{ width:33.4%; }
+.rs-row--trio{ gap:4.6%;  margin:0 0 var(--v); }
+.rs-row--trio > *{ width:30.3%; }
+.rs-row--wide{ margin:0; }
+.rs-row--wide > *{ width:71%; }
 
-/* Posts plein cadre (Afflelou, Sport) */
-.rs-row--sport{ margin-bottom:0; }
-.rs-row--sport > *{ width:38%; }
-.rs-row--sport .rs-media{ aspect-ratio:16/10; }
+/* ---- Tablette : on garde la structure, écarts resserrés ---- */
+@media(max-width:950px){
+  .rs{ --v:6%; --vL:11%; }
+  .rs-row--duoA{ gap:10%; }  .rs-row--duoA > *{ width:43%; }
+  .rs-row--duoB{ gap:10%; }  .rs-row--duoB > *{ width:38%; }
+  .rs-row--solo > *{ width:44%; }
+  .rs-row--wide > *{ width:88%; }
+  .rs-band{ gap:2%; }
+  .rs-band::before{ left:1.5%; } .rs-band::after{ right:1.5%; }
+}
 
-@media(max-width:820px){
-  .rs-band{ flex-wrap:wrap; }
-  .rs-band .rs-post--sm,.rs-band .rs-post--lg{ width:46%; }
-  .rs-row{ flex-wrap:wrap; }
-  .rs-row > *{ width:46% !important; }
-  .rs-row--sport > *{ width:80% !important; }
+/* ---- Mobile : une colonne, le bandeau devient une pile ---- */
+@media(max-width:600px){
+  .rs{ --v:26px; --vL:34px; padding-bottom:60px; }
+  .rs-band{
+    aspect-ratio:auto; flex-direction:column; gap:18px;
+    padding:26px 16%;
+  }
+  .rs-band::before{ left:2%; width:11%; }
+  .rs-band::after { right:2%; width:11%; }
+  .rs-post--bandsm,.rs-post--bandcard{ width:100%; }
+  .rs-row{ flex-direction:column; align-items:center; gap:18px !important; }
+  .rs-row > *{ width:100% !important; }
 }
 
 /* ============================================================
