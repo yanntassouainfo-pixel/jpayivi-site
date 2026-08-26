@@ -243,7 +243,30 @@
       var ls = (target - natural) / (chars - 1);
       sub.style.letterSpacing = ls + 'px';
       sub.style.marginRight = (-ls) + 'px';   /* annule l'espacement apres la derniere lettre */
+
+      markLogoR(sub);
     }
+  }
+
+  /* Position horizontale du « r » final de « Créateu-r » : sert de bord gauche
+     a la galerie Reseaux Sociaux (retrait identique a droite). */
+  function markLogoR(sub) {
+    var txt = sub.textContent || '';
+    var i = txt.indexOf(' ');                 /* fin du mot « Créateur » */
+    if (i < 1) i = 8;
+    var node = sub.firstChild;
+    if (!node || node.nodeType !== 3) return;
+    try {
+      var r = document.createRange();
+      r.setStart(node, 0);
+      r.setEnd(node, i - 1);                  /* jusqu'au debut du « r » final */
+      var w = r.getBoundingClientRect().width;
+      r.detach && r.detach();
+      var left = sub.getBoundingClientRect().left + w;
+      if (left > 0) {
+        document.documentElement.style.setProperty('--logo-r', Math.round(left) + 'px');
+      }
+    } catch (e) {}
   }
 
   /* On recalcule a chaque etape ou la police peut changer (evite le decalage

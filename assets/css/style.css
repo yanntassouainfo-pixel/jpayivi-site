@@ -262,14 +262,27 @@ body.home-page{
   margin-top:3px;
 }
 
-/* Galerie : largeur d'origine (le contenu peut passer sous le menu,
-   qui s'estompe alors automatiquement — voir .site-header.is-dim) */
+/* Largeur de contenu = celle des maquettes, en % de la fenêtre (relevé au pixel) :
+   Studio 63,0 % · Réseaux Sociaux 62,8 % · Food 62,9 % · Sport 66,9 %
+   Motion 44,3 % · Événement 44,6 % · Fashion 44,6 %
+   Le contenu peut passer sous le menu : celui-ci s'estompe (voir .site-header.brand-dim). */
 .gallery-wrap{
-  max-width:960px;
+  width:62.8%;
+  max-width:1500px;
   margin:0 auto;
   padding:112px 0 80px;
 }
-.gallery-wrap:has(.reel){ max-width:760px; }
+.gallery-wrap:has(.reel){ width:44.6%; max-width:1060px; }        /* Motion · Événement · Communication · Fashion */
+.gallery-wrap:has(.reel--large){ width:64%; max-width:1520px; }   /* Food */
+.gallery-wrap:has(.reel--xl){ width:66.9%; max-width:1590px; }    /* Sport */
+
+/* Réseaux Sociaux : bord gauche aligné sur le « r » final de « Créateu-r »,
+   et retrait identique à droite (galerie centrée).
+   --logo-r est calculé en JS ; la valeur de repli couvre le cas sans JS. */
+.gallery-wrap:has(.rs){
+  width:calc(100% - (2 * var(--logo-r, 130px)));
+  max-width:none;
+}
 .page-title{                            /* titre petit, aligné à gauche de la colonne de contenu */
   font-family:"Jumper",sans-serif;
   font-weight:900; font-style:italic;
@@ -431,6 +444,7 @@ body.home-page{
   /* Pages intérieures : colonnes élargies */
   .gallery-wrap{ max-width:none; padding:118px 40px 40px; }
   .gallery-wrap:has(.reel){ max-width:min(700px, calc(100vw - 180px)); }
+  .gallery-wrap:has(.rs){ width:auto; }   /* le calage sur le « r » ne vaut qu'en bureau */
   .brand .name{ font-size:34px; }
 }
 
@@ -474,6 +488,7 @@ body.home-page{
   .site-header{ position:absolute; }
   .site-header::before{ display:none; }
   .gallery-wrap, .gallery-wrap:has(.reel){ max-width:none; padding:92px var(--pad) 40px; }
+  .gallery-wrap:has(.rs){ width:auto; }
   .masonry{ --gap-col:6px; --gap-row:10px; }
   .masonry .col{ float:none; width:100%; }
   .masonry .col + .col{ margin-left:0; }
