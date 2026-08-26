@@ -176,8 +176,12 @@
     var bottom = nav.getBoundingClientRect().bottom;          /* barre fixe : constant au scroll */
     if (brand) bottom = Math.max(bottom, brand.getBoundingClientRect().bottom);
 
-    var gap = Math.min(Math.max(window.innerWidth * 0.0119, 10), 26);   /* 1,19 % (maquette) */
-    var top = bottom + gap;
+    /* Maquette : la galerie commence à 8,880 % de la largeur de la page (456 px sur 5135).
+       Sur un écran étroit, le menu — maintenu à une taille lisible — descend plus bas que
+       ça : on prend alors le bas du menu + une petite marge, pour ne jamais le recouvrir.
+       Au-delà d'environ 1750 px, c'est la valeur de la maquette qui s'applique telle quelle. */
+    var maquette = window.innerWidth * 0.0888;
+    var top = Math.max(maquette, bottom + 6);
 
     var title = wrap.querySelector('.page-title');
     if (title) {

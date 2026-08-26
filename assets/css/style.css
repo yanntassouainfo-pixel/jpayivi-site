@@ -229,11 +229,16 @@ body.home-page{
 /* ============================================================
    PAGES INTÉRIEURES (galerie mosaïque)
    ============================================================ */
+/* Relevé au pixel sur site_ordi_rs_int.png (page de 5135 px), repères du client compris :
+   retrait latéral 754 px = 14,684 %   ·   haut du glyphe « JP AYIVI » 189 px = 3,677 %
+   bas de « Créateur d'images » 343 px = 6,672 %  ·  bas du menu 392 px = 7,634 %
+   haut de la galerie 456 px = 8,880 %  ·  largeur de galerie 3220 px = 62,7 %
+   Tailles typo de la maquette : logo 2,175 vw · sous-titre 0,998 vw · menu 0,572 vw.
+   Les trois sont posées en clamp() : ratios exacts sur grand écran, plancher lisible en dessous. */
 .site-header{
   position:fixed;top:0;left:0;right:0;z-index:50;   /* barre fixe : reste en place au scroll */
   display:flex;justify-content:space-between;align-items:flex-start;
-  /* Maquettes : logo à 3,70 % du haut, logo et menu rentrés de 14,7 % sur les côtés */
-  padding:clamp(30px, 3.7vw, 72px) 14.7% 0;
+  padding:clamp(26px, 3.6vw, 92px) 14.684% 0;
   background:transparent;           /* transparent : le titre de section reste visible dessous */
   transition:opacity .28s ease;
 }
@@ -251,16 +256,29 @@ body.home-page{
   line-height:1;
   color:rgba(24,24,24,.22);            /* JP AYIVI pâle (ghost) */
 }
-.brand .name{display:block;white-space:nowrap;font-size:40px;letter-spacing:.02em;}   /* logo agrandi */
+/* 2,175 vw = les 486 px de large de « JP AYIVI » sur la maquette (9,47 % de la page).
+   Pas d'interlettrage : la maquette n'en a pas. */
+.brand .name{
+  display:block;white-space:nowrap;
+  font-size:clamp(26px, 2.175vw, 56px);
+  letter-spacing:0;
+}
 .brand .sub{
   display:block;white-space:nowrap;
   font-family:"Jumper",sans-serif;
   font-weight:100;font-style:normal;   /* Thin */
-  font-size:17px;                      /* réduit : plus de lettres qui se chevauchent */
-  /* justifié sur la largeur de « JP AYIVI » (interlettrage ajusté en JS) */
+  /* 0,998 vw = 45,9 % du logo : « Créateur d'images » tombe alors naturellement
+     à la largeur de « JP AYIVI », l'ajustement JS n'a presque plus rien à corriger. */
+  font-size:clamp(12px, 0.998vw, 26px);
   letter-spacing:normal;
   color:rgba(24,24,24,.82);            /* Créateur d'images soutenu */
-  margin-top:3px;
+  margin-top:0;                        /* maquette : les deux lignes se touchent */
+}
+/* Menu : 0,572 vw sur la maquette (8 px à 1440 — illisible), plancher à 12 px.
+   Interligne 1,05 comme le PSB. */
+.site-header .nav{
+  font-size:clamp(12px, 0.572vw, 18px);
+  line-height:1.05;
 }
 
 /* Largeur de contenu = celle des maquettes, en % de la fenêtre (relevé au pixel) :
@@ -277,14 +295,14 @@ body.home-page{
   padding:var(--gallery-top, 150px) 0 80px;
 }
 .gallery-wrap:has(.reel){ width:44.6%; max-width:1060px; }        /* Motion · Événement · Communication · Fashion */
-.gallery-wrap:has(.reel--large){ width:64%; max-width:1520px; }   /* Food */
+.gallery-wrap:has(.reel--large){ width:62.91%; max-width:none; } /* Food (relevé maquette) */
 .gallery-wrap:has(.reel--xl){ width:66.9%; max-width:1590px; }    /* Sport */
 
 /* Réseaux Sociaux : bord gauche aligné sur le « r » final de « Créateu-r »,
    et retrait identique à droite (galerie centrée).
    --logo-r est calculé en JS ; la valeur de repli couvre le cas sans JS. */
 .gallery-wrap:has(.rs){
-  width:calc(100% - (2 * var(--logo-r, 130px)));
+  width:calc(100% - (2 * var(--logo-r, 19.37%)));
   max-width:none;
 }
 .page-title{                            /* titre petit, aligné à gauche de la colonne de contenu */
@@ -333,6 +351,94 @@ body.home-page{
 /* Food — variantes portrait (cocktails 4:5, triptyque 2:3) */
 .reel-duo--portrait .reel-media{ aspect-ratio:4/5; }
 .reel-tri--portrait .reel-media{ aspect-ratio:2/3; }
+
+/* ------------------------------------------------------------------
+   PAGE FOOD — proportions relevées au pixel sur site_ordi_food_int.png
+   (page 5247 px de large, colonne de contenu 3301 px = 62,91 %).
+   Tous les pourcentages ci-dessous sont exprimés par rapport à cette
+   colonne, donc la page tient ses proportions à n'importe quelle taille.
+   ------------------------------------------------------------------ */
+.reel--large{ padding:0 0 9%; }
+
+/* Rythme vertical : blocs à légende 2,97 % après le trait ; les blocs
+   sans légende suivent l'écart exact de la maquette. */
+.reel--large .reel-item{ margin-bottom:2.97%; }
+.reel--large .reel-item:last-child{ margin-bottom:0; }
+.reel--large .reel-item--banner{ margin-bottom:3.45%; }   /* bandeau -> PIZZE : 114 px */
+.reel--large .reel-item--flush{ margin-bottom:0.55%; }    /* PIZZE/PIQUANTE/ASMR : 18 px */
+
+/* Légende + petit trait noir centré (6,48 % de la colonne, 4 px sur la maquette) */
+.reel--large .reel-caption{ margin-top:3%; }
+.reel--large .reel-caption::after{
+  content:""; display:block;
+  width:6.48%; height:3px;
+  background:var(--ink);
+  margin:2.24% auto 0;
+}
+
+/* B1 — duo cocktails GEORGIA : ensemble 71,1 %, centré */
+.reel--large .reel-duo--portrait{
+  display:flex; justify-content:center; gap:6.09%;
+}
+.reel--large .reel-duo--portrait > .reel-media{
+  flex:0 0 32.51%; aspect-ratio:1073 / 1384;
+}
+
+/* B2 — bandeau GEORGIA : 50,59 %, centré, image entière (choix client) */
+.reel--large .reel-item--banner .reel-media{ width:50.59%; margin:0 auto; }
+
+/* B6 — triptyque : 3 x 32,96 %, écarts de 0,45 % */
+.reel--large .reel-tri--portrait{
+  display:flex; justify-content:center; gap:0.45%;
+}
+.reel--large .reel-tri--portrait > .reel-media{ flex:0 0 32.96%; aspect-ratio:2/3; }
+
+/* B7 — MIZNON : 70,86 %, centré */
+.reel--large .reel-item--miznon .reel-media{
+  width:70.86%; margin:0 auto; aspect-ratio:16/9;
+}
+
+/* B8 — TOMATOO : ensemble 58,16 %, les deux photos à leur cadrage d'origine */
+.reel--large .reel-duo--tomatoo{
+  display:flex; justify-content:center; align-items:flex-start; gap:0.42%;
+}
+/* ratios repris tels quels sur la maquette : les deux photos ont exactement la même hauteur */
+.reel--large .reel-duo--tomatoo > .reel-media:first-child{ flex:0 0 31.35%; aspect-ratio:1035 / 1083; }
+.reel--large .reel-duo--tomatoo > .reel-media:last-child { flex:0 0 26.38%; aspect-ratio: 871 / 1083; }
+
+/* Recadrage propre dans tous les cadres à ratio imposé */
+.reel--large .reel-media{ position:relative; overflow:hidden; }
+.reel--large .reel-duo--portrait .reel-media > *,
+.reel--large .reel-tri--portrait .reel-media > *,
+.reel--large .reel-duo--tomatoo .reel-media > *,
+.reel--large .reel-item--miznon .reel-media > *{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+}
+
+@media(max-width:950px){
+  .reel--large .reel-item--banner .reel-media,
+  .reel--large .reel-item--miznon .reel-media{ width:100%; }
+  .reel--large .reel-duo--portrait{ gap:3%; }
+  .reel--large .reel-duo--portrait > .reel-media{ flex:0 0 45%; }
+  .reel--large .reel-duo--tomatoo > .reel-media:first-child{ flex:0 0 46%; }
+  .reel--large .reel-duo--tomatoo > .reel-media:last-child { flex:0 0 39%; }
+}
+@media(max-width:600px){
+  .reel--large .reel-item{ margin-bottom:26px; }
+  .reel--large .reel-item--banner{ margin-bottom:14px; }
+  .reel--large .reel-item--flush{ margin-bottom:4px; }
+  .reel--large .reel-caption{ margin-top:12px; }
+  .reel--large .reel-caption::after{ margin-top:10px; width:56px; }
+  .reel--large .reel-duo--portrait,
+  .reel--large .reel-tri--portrait,
+  .reel--large .reel-duo--tomatoo{ flex-direction:column; gap:12px; }
+  .reel--large .reel-duo--portrait > .reel-media,
+  .reel--large .reel-tri--portrait > .reel-media,
+  .reel--large .reel-duo--tomatoo > .reel-media{ flex:0 0 auto; width:100%; aspect-ratio:auto; }
+  .reel--large .reel-duo--tomatoo > .reel-media > *,
+  .reel--large .reel-duo--portrait .reel-media > *,
+  .reel--large .reel-tri--portrait .reel-media > *{ position:static; height:auto; }
+}
 
 /* ------------------------------------------------------------------
    PAGE SPORT — proportions relevées au pixel sur site_ordi_sport_int.png
@@ -495,7 +601,9 @@ body.home-page{
   .gallery-wrap{ max-width:none; padding:var(--gallery-top, 130px) 40px 40px; }
   .gallery-wrap:has(.reel){ max-width:min(700px, calc(100vw - 180px)); }
   .gallery-wrap:has(.rs){ width:auto; }   /* le calage sur le « r » ne vaut qu'en bureau */
-  .brand .name{ font-size:34px; }
+  .brand .name{ font-size:30px; }
+  .brand .sub{ font-size:13.5px; }
+  .site-header .nav{ font-size:12.5px; line-height:1.15; }
 }
 
 /* ---------- MOBILE : menu +, titre centré, cartes en éventail, contacts en bas (sans scroll) ---------- */
@@ -545,7 +653,9 @@ body.home-page{
   .masonry .col + .col{ margin-left:0; }
   .rs-band{ flex-wrap:wrap; } .rs-band .rs-post--sm,.rs-band .rs-post--lg{ width:100%; }
   .rs-row{ flex-wrap:wrap; } .rs-row > *{ width:100% !important; }
-  .brand .name{ font-size:28px; }
+  .brand .name{ font-size:26px; }
+  .brand .sub{ font-size:12px; }
+  .site-header .nav{ font-size:12px; line-height:1.2; }
 }
 
 /* ============================================================
