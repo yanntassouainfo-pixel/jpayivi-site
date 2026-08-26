@@ -329,6 +329,51 @@ body.home-page{
 /* Food — variantes portrait (cocktails 4:5, triptyque 2:3) */
 .reel-duo--portrait .reel-media{ aspect-ratio:4/5; }
 .reel-tri--portrait .reel-media{ aspect-ratio:2/3; }
+
+/* ------------------------------------------------------------------
+   PAGE SPORT — proportions relevées au pixel sur site_ordi_sport_int.png
+   (en % de la largeur de contenu : blocs simples 52,4 %, duo 65,4 %,
+   triptyque pleine largeur ; écarts 5,75 % et 6,6 %).
+------------------------------------------------------------------ */
+.reel--xl .reel-item{ margin-bottom:3.8%; }
+.reel--xl .reel-item:last-child{ margin-bottom:0; }
+.reel--xl .reel-caption{ margin-top:2.4%; }
+
+/* blocs simples : 52,4 % de la largeur, centrés */
+.reel--xl .reel-item--solo .reel-media{
+  width:52.4%; margin:0 auto; aspect-ratio:16/9;
+}
+.reel--xl .reel-item--32 .reel-media{ aspect-ratio:3/2; }   /* Bleu & Ocre */
+
+/* triptyque : 3 carrés sur toute la largeur */
+.reel--xl .reel-tri{ display:flex; gap:5.75%; justify-content:center; }
+.reel--xl .reel-tri .reel-media{ flex:0 0 29.5%; aspect-ratio:1/1; }
+
+/* duo : 2 carrés, ensemble centré (65,4 %) */
+.reel--xl .reel-duo{ display:flex; gap:6.6%; justify-content:center; }
+.reel--xl .reel-duo .reel-media{ flex:0 0 29.4%; aspect-ratio:1/1; }
+
+/* recadrage propre dans les cadres à ratio imposé */
+.reel--xl .reel-media{ position:relative; overflow:hidden; }
+.reel--xl .reel-media > video,
+.reel--xl .reel-media > img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; display:block;
+}
+
+@media(max-width:950px){
+  .reel--xl .reel-item--solo .reel-media{ width:72%; }
+  .reel--xl .reel-duo .reel-media{ flex:0 0 38%; }
+}
+@media(max-width:600px){
+  .reel--xl .reel-item{ margin-bottom:34px; }
+  .reel--xl .reel-caption{ margin-top:14px; }
+  .reel--xl .reel-item--solo .reel-media{ width:100%; }
+  .reel--xl .reel-tri,
+  .reel--xl .reel-duo{ flex-direction:column; gap:14px; }
+  .reel--xl .reel-tri .reel-media,
+  .reel--xl .reel-duo .reel-media{ flex:0 0 auto; width:100%; }
+}
 @media(max-width:820px){
   .reel{ max-width:none; padding:0 var(--pad) 60px; }
 }
