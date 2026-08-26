@@ -356,15 +356,16 @@ body.home-page{
 /* Bloc AFFLELOU : cadre rose 47,69 % et vidéo 52,15 %, jointifs et de même
    hauteur (les deux ratios sont ceux relevés sur la maquette). */
 .fashion-afflelou{ display:flex; gap:0; align-items:flex-start; }
+/* valeurs relevées sur la vignette officielle afflelou_collection.png */
 .fashion-afflelou .fa-portrait{
-  flex:0 0 47.69%;
+  flex:0 0 47.80%;
   box-sizing:border-box;
-  aspect-ratio:1549 / 1701;
-  background:#E9A09F;                       /* rose relevé sur la maquette */
-  padding:16.85% 12.33% 16.98% 11.56%;      /* marges du portrait, en % de la largeur du cadre */
+  aspect-ratio:1674 / 1837;
+  background:#E9A09F;                       /* rose exact de l'export */
+  padding:16.85% 12.49% 16.97% 11.59%;      /* marges du portrait, en % de la largeur du cadre */
 }
 .fashion-afflelou .fa-portrait img{ width:100%; height:100%; object-fit:cover; display:block; }
-.fashion-afflelou > .reel-media{ flex:0 0 52.15%; aspect-ratio:1694 / 1701; position:relative; overflow:hidden; }
+.fashion-afflelou > .reel-media{ flex:0 0 52.20%; aspect-ratio:1828 / 1837; position:relative; overflow:hidden; }
 .fashion-afflelou > .reel-media > video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
 
 /* Rythme vertical de la maquette Fashion (13,9 % de la colonne entre deux blocs) */
@@ -387,6 +388,10 @@ body.home-page{
 .reel-tri .reel-media video,.reel-tri .reel-media img,
 .reel-duo .reel-media video,.reel-duo .reel-media img{ width:100%; height:100%; object-fit:cover; }
 @media(max-width:600px){ .reel-tri,.reel-duo{ grid-template-columns:1fr; } }
+/* Motion — bloc « Website » : la maquette le recadre en 1,54 (la vidéo est en 16:9) */
+.reel-item--crop154 .reel-media{ aspect-ratio:1540 / 1000; position:relative; overflow:hidden; }
+.reel-item--crop154 .reel-media > video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+
 /* Food — variantes portrait (cocktails 4:5, triptyque 2:3) */
 .reel-duo--portrait .reel-media{ aspect-ratio:4/5; }
 .reel-tri--portrait .reel-media{ aspect-ratio:2/3; }
