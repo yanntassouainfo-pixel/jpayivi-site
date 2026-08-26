@@ -311,10 +311,17 @@ body.home-page{
   font-size:clamp(22px,2.4vw,38px);
   margin:0 0 20px;
 }
-.masonry{ overflow:hidden; --gap-col:3px; --gap-row:16px; }   /* colonne encore plus fine (retour client) */
-.masonry .col{ float:left; width:calc((100% - var(--gap-col)) / 2); }
-.masonry .col + .col{ margin-left:var(--gap-col); }
-.masonry .item{ margin-bottom:var(--gap-row); background:#e9e9dd; overflow:hidden; }
+/* Relevé au pixel sur site_ordi_studio_int.png (page 2258 px, contenu 1422 px) :
+   colonne gauche 771 px = 54,22 % · colonne droite 642 px = 45,15 %
+   trait vertical 10 px = 0,70 %  ·  écart horizontal 40 px = 2,81 % */
+.masonry{ overflow:hidden; --gap-col:0.70%; }
+.masonry .col{ float:left; }
+.masonry .col:first-child{ width:54.22%; }
+.masonry .col + .col{ width:45.08%; margin-left:var(--gap-col); }
+/* Chaque image porte son propre ratio et sa propre marge basse, relevés
+   image par image sur la maquette (attribut style dans studio.html).
+   Résultat : les deux colonnes retombent au pixel sur la hauteur du PSD. */
+.masonry .item{ background:#e9e9dd; overflow:hidden; }
 .masonry .item img,
 .masonry .item video{ width:100%;display:block; }
 
@@ -740,9 +747,13 @@ body.home-page{
   .site-header{ padding:22px var(--pad) 0; }
   .gallery-wrap, .gallery-wrap:has(.reel){ max-width:none; padding:92px var(--pad) 40px; }
   .gallery-wrap:has(.rs){ width:auto; }
-  .masonry{ --gap-col:6px; --gap-row:10px; }
-  .masonry .col{ float:none; width:100%; }
-  .masonry .col + .col{ margin-left:0; }
+  /* mobile : une seule colonne */
+  .masonry{ --gap-col:0; }
+  .masonry .col,
+  .masonry .col:first-child,
+  .masonry .col + .col{ float:none; width:100%; margin-left:0; }
+  .masonry .col:first-child .item,
+  .masonry .col + .col .item{ margin-bottom:10px; }
   .rs-band{ flex-wrap:wrap; } .rs-band .rs-post--sm,.rs-band .rs-post--lg{ width:100%; }
   .rs-row{ flex-wrap:wrap; } .rs-row > *{ width:100% !important; }
   .brand .name{ font-size:26px; }
@@ -889,6 +900,10 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
 .reel-media.is-playing::after, .rs-media.is-playing::after{ opacity:0; }
 
 /* Recadrage plein (supprime l'espace vide) — photos studio signalées */
-.masonry .item--crop{ aspect-ratio:3/4; overflow:hidden; }
-.masonry .item--crop img{ width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
+/* Le ratio est imposé image par image (voir studio.html) : le média remplit
+   exactement le cadre de la maquette, recadré au centre. */
+.masonry .item img,
+.masonry .item video{
+  width:100%; height:100%; object-fit:cover; object-position:center; display:block;
+}
 .masonry .item--crop-bottom img{ object-position:center bottom; }
