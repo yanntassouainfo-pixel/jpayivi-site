@@ -388,9 +388,62 @@ body.home-page{
 .reel-tri .reel-media video,.reel-tri .reel-media img,
 .reel-duo .reel-media video,.reel-duo .reel-media img{ width:100%; height:100%; object-fit:cover; }
 @media(max-width:600px){ .reel-tri,.reel-duo{ grid-template-columns:1fr; } }
-/* Motion — bloc « Website » : la maquette le recadre en 1,54 (la vidéo est en 16:9) */
-.reel-item--crop154 .reel-media{ aspect-ratio:1540 / 1000; position:relative; overflow:hidden; }
+/* ------------------------------------------------------------------
+   PAGE MOTION DESIGN — relevé au pixel sur site_ordi_motion_int.png
+   (page 2538 px). La maquette est en DEUX parties :
+     · haut : colonne étroite de 1128 px = 44,44 % de la fenêtre, blocs légendés ;
+     · bas  : colonne large de 1602 px = 63,12 %, 4 rangées appariées sans légende.
+   Le conteneur prend la largeur large ; la colonne du haut vaut
+   1128 / 1602 = 70,41 % de ce conteneur.
+   ------------------------------------------------------------------ */
+.gallery-wrap:has(.reel--motion){ width:63.12%; max-width:none; }
+.reel--motion{ --rule-w:9.40%; --rule-gap:3.10%; }
+
+/* Colonne étroite (11 blocs) */
+.md-col{ width:70.41%; margin:0 auto; }
+.md-col .reel-item{ margin-bottom:2.48%; }
+.md-col .reel-caption{ margin-top:3.81%; }
+/* Bloc 7 — Processus créatif : 77,28 % de la colonne, centré */
+.md-col .reel-item--narrow .reel-media{ width:77.28%; margin:0 auto; }
+/* Bloc 11 — Website : la maquette le recadre en 1,535 (la vidéo est en 16:9) */
+.reel-item--crop154 .reel-media{ aspect-ratio:1535 / 1000; position:relative; overflow:hidden; }
 .reel-item--crop154 .reel-media > video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Grille large du bas — pourcentages relevés sur la maquette */
+.md-pairs{ margin-top:9.2%; }
+.md-row{ display:flex; gap:0; margin-bottom:9.5%; }
+.md-row:last-child{ margin-bottom:0; }
+.md-row .reel-media{ position:relative; overflow:hidden; }
+.md-row .reel-media > video,
+.md-row .reel-media > img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+
+.md-row--a{ justify-content:space-between; align-items:flex-start; }
+.md-row--a > *:first-child{ width:40.51%; aspect-ratio:649 / 886; }
+.md-row--a > *:last-child { width:55.56%; aspect-ratio:890 / 886; }
+
+.md-row--b{ justify-content:space-between; align-items:center; }
+.md-row--b > *:first-child{ width:54.12%; aspect-ratio:16 / 9; }
+.md-row--b > *:last-child { width:41.64%; aspect-ratio:2 / 1; }
+
+.md-row--c > *{ width:100%; aspect-ratio:1602 / 514; }
+
+.md-row--d{ justify-content:space-between; align-items:flex-start; }
+.md-row--d > *:first-child{ width:38.39%; aspect-ratio:1 / 1; }
+.md-row--d > *:last-child { width:57.37%; aspect-ratio:919 / 614; }
+
+@media(max-width:950px){
+  .md-col{ width:88%; }
+  .md-pairs{ margin-top:9%; }
+}
+@media(max-width:600px){
+  .md-col{ width:100%; }
+  .md-col .reel-item{ margin-bottom:26px; }
+  .md-col .reel-caption{ margin-top:14px; }
+  .md-col .reel-item--narrow .reel-media{ width:100%; }
+  .md-pairs{ margin-top:34px; }
+  .md-row{ flex-direction:column; gap:14px; margin-bottom:34px; }
+  .md-row > *{ width:100% !important; }
+}
 
 /* Food — variantes portrait (cocktails 4:5, triptyque 2:3) */
 .reel-duo--portrait .reel-media{ aspect-ratio:4/5; }
