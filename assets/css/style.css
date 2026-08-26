@@ -232,7 +232,8 @@ body.home-page{
 .site-header{
   position:fixed;top:0;left:0;right:0;z-index:50;   /* barre fixe : reste en place au scroll */
   display:flex;justify-content:space-between;align-items:flex-start;
-  padding:26px var(--pad);
+  /* Maquettes : logo à 3,70 % du haut, logo et menu rentrés de 14,7 % sur les côtés */
+  padding:clamp(30px, 3.7vw, 72px) 14.7% 0;
   background:transparent;           /* transparent : le titre de section reste visible dessous */
   transition:opacity .28s ease;
 }
@@ -270,7 +271,10 @@ body.home-page{
   width:62.8%;
   max-width:1500px;
   margin:0 auto;
-  padding:112px 0 80px;
+  /* --gallery-top est calculé en JS : bas de la ligne « About » + 1,19 % (maquette).
+     Sur les pages avec titre, la hauteur du titre est déduite pour que les images
+     démarrent elles aussi au niveau de « About ». */
+  padding:var(--gallery-top, 150px) 0 80px;
 }
 .gallery-wrap:has(.reel){ width:44.6%; max-width:1060px; }        /* Motion · Événement · Communication · Fashion */
 .gallery-wrap:has(.reel--large){ width:64%; max-width:1520px; }   /* Food */
@@ -487,7 +491,8 @@ body.home-page{
   .card--food .label,.card--motion .label{ color:#fff; }
   .card--sport .label,.card--studio .label{ color:var(--ink); }
   /* Pages intérieures : colonnes élargies */
-  .gallery-wrap{ max-width:none; padding:118px 40px 40px; }
+  .site-header{ padding:clamp(24px,3.4vw,44px) 5% 0; }
+  .gallery-wrap{ max-width:none; padding:var(--gallery-top, 130px) 40px 40px; }
   .gallery-wrap:has(.reel){ max-width:min(700px, calc(100vw - 180px)); }
   .gallery-wrap:has(.rs){ width:auto; }   /* le calage sur le « r » ne vaut qu'en bureau */
   .brand .name{ font-size:34px; }
@@ -532,6 +537,7 @@ body.home-page{
   /* ===== PAGES INTÉRIEURES ===== */
   .site-header{ position:absolute; }
   .site-header::before{ display:none; }
+  .site-header{ padding:22px var(--pad) 0; }
   .gallery-wrap, .gallery-wrap:has(.reel){ max-width:none; padding:92px var(--pad) 40px; }
   .gallery-wrap:has(.rs){ width:auto; }
   .masonry{ --gap-col:6px; --gap-row:10px; }

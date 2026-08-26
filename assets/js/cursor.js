@@ -158,6 +158,44 @@
 })();
 
 /* ============================================================
+   Rythme vertical des maquettes : la galerie démarre juste sous
+   la ligne « About » du menu (bas du menu + 1,19 % de la largeur).
+   Sur les pages avec titre, on déduit la hauteur du titre pour que
+   les IMAGES tombent elles aussi au niveau de « About ».
+   ============================================================ */
+(function () {
+  var header = document.querySelector('.site-header');
+  var wrap = document.querySelector('.gallery-wrap');
+  if (!header || !wrap) return;
+  if (getComputedStyle(header).position !== 'fixed') return;
+
+  function place() {
+    var nav = header.querySelector('nav');
+    var brand = header.querySelector('.brand');
+    if (!nav) return;
+    var bottom = nav.getBoundingClientRect().bottom;          /* barre fixe : constant au scroll */
+    if (brand) bottom = Math.max(bottom, brand.getBoundingClientRect().bottom);
+
+    var gap = Math.min(Math.max(window.innerWidth * 0.0119, 10), 26);   /* 1,19 % (maquette) */
+    var top = bottom + gap;
+
+    var title = wrap.querySelector('.page-title');
+    if (title) {
+      var cs = getComputedStyle(title);
+      top -= title.offsetHeight + (parseFloat(cs.marginBottom) || 0);
+    }
+    document.documentElement.style.setProperty('--gallery-top', Math.max(24, Math.round(top)) + 'px');
+  }
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  window.addEventListener('load', place);
+  var t;
+  window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(place, 120); });
+  place();
+  requestAnimationFrame(place);
+})();
+
+/* ============================================================
    Logo + menu : ils s'estompent quand une image ou une vidéo
    passe derrière eux (pages intérieures, barre fixe).
    ============================================================ */
