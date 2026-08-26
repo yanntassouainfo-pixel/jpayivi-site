@@ -314,14 +314,15 @@ body.home-page{
 /* Relevé au pixel sur site_ordi_studio_int.png (page 2258 px, contenu 1422 px) :
    colonne gauche 771 px = 54,22 % · colonne droite 642 px = 45,15 %
    trait vertical 10 px = 0,70 %  ·  écart horizontal 40 px = 2,81 % */
-.masonry{ overflow:hidden; --gap-col:0.70%; }
-.masonry .col{ float:left; }
-.masonry .col:first-child{ width:54.22%; }
-.masonry .col + .col{ width:45.08%; margin-left:var(--gap-col); }
-/* Chaque image porte son propre ratio et sa propre marge basse, relevés
-   image par image sur la maquette (attribut style dans studio.html).
-   Résultat : les deux colonnes retombent au pixel sur la hauteur du PSD. */
-.masonry .item{ background:#e9e9dd; overflow:hidden; }
+/* La mosaïque de la maquette n'est pas une grille régulière : la largeur de
+   chaque image varie (le trait de séparation se décale d'environ 32 px à
+   mi-page). Chaque image porte donc sa position et sa largeur exactes,
+   relevées au pixel sur le PSD (attributs style dans studio.html).
+   Le conteneur est positionné et sa hauteur vient du padding-bas :
+   13 864 / 1 422 = 974,96 % de sa propre largeur. Tout reste proportionnel. */
+.masonry{ position:relative; width:100%; padding-bottom:974.96%; }
+.masonry .col{ display:contents; }
+.masonry .item{ position:absolute; background:#e9e9dd; overflow:hidden; }
 .masonry .item img,
 .masonry .item video{ width:100%;display:block; }
 
@@ -747,13 +748,10 @@ body.home-page{
   .site-header{ padding:22px var(--pad) 0; }
   .gallery-wrap, .gallery-wrap:has(.reel){ max-width:none; padding:92px var(--pad) 40px; }
   .gallery-wrap:has(.rs){ width:auto; }
-  /* mobile : une seule colonne */
-  .masonry{ --gap-col:0; }
-  .masonry .col,
-  .masonry .col:first-child,
-  .masonry .col + .col{ float:none; width:100%; margin-left:0; }
-  .masonry .col:first-child .item,
-  .masonry .col + .col .item{ margin-bottom:10px; }
+  /* mobile : une seule colonne, on abandonne le positionnement de la maquette */
+  .masonry{ position:static; padding-bottom:0; }
+  .masonry .col{ display:block; }
+  .masonry .item{ position:static !important; width:100% !important; left:auto !important; top:auto !important; margin-bottom:10px; }
   .rs-band{ flex-wrap:wrap; } .rs-band .rs-post--sm,.rs-band .rs-post--lg{ width:100%; }
   .rs-row{ flex-wrap:wrap; } .rs-row > *{ width:100% !important; }
   .brand .name{ font-size:26px; }
