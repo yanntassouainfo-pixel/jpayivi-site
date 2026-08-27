@@ -332,7 +332,7 @@ body.home-page{
 }
 .gallery-wrap:has(.reel){ width:44.6%; max-width:1060px; }        /* Motion · Événement · Communication · Fashion */
 .gallery-wrap:has(.reel--large){ width:62.91%; max-width:none; } /* Food (relevé maquette) */
-.gallery-wrap:has(.reel--xl){ width:82%; max-width:none; }        /* Sport — élargi (maquette : 66,9 %) */
+.gallery-wrap:has(.reel--xl){ width:84%; max-width:none; }        /* Sport — élargi (maquette : 66,9 %) */
 /* Sport élargi : logo et menu rentrés de 4 %. Ils ne suivent PLUS les
    réglages de largeur de la galerie (choix client) : ils dépassent donc
    légèrement les images, de 0,5 % de chaque côté. */
@@ -413,7 +413,7 @@ body:has(.reel--xl) .brand .sub{
 }
 .reel{ --rule-w:9.16%; }        /* Fashion · Motion · Événement · Communication */
 .reel--large{ --rule-w:6.48%; } /* Food */
-.reel--xl{ --rule-w:5.30%; }    /* Sport : 4,35 % de la fenêtre, inchangé malgré l'élargissement */
+.reel--xl{ --rule-w:5.18%; }    /* Sport : 4,35 % de la fenêtre, inchangé malgré l'élargissement */
 
 /* ------------------------------------------------------------------
    PAGE FASHION — relevé au pixel sur site_ordi_fashion_int.png
