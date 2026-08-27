@@ -53,13 +53,15 @@
   --frame:#242424;          /* cadre gris foncé */
   --gap:14px;
   --pad:48px;
-  /* Cadre : ratios mesurés sur la maquette (côtés 4.48%L, haut 6.15%H, bas 9.85%H) */
-  /* Cadre relevé sur site_ordi_1.png (page 3840x2600) : 169 px sur les côtés
-     = 4,40 % de la largeur ; 159 px en haut et 160 px en bas = 6,12 / 6,15 %
-     de la hauteur. Le cadre est donc symétrique. */
-  --frame-x:clamp(20px, 4.40vw, 100px);
-  --frame-t:clamp(20px, 6.12vh, 84px);
-  --frame-b:clamp(20px, 6.15vh, 84px);
+  /* Cadre d'épaisseur UNIQUE sur les quatre côtés. Sur la maquette il mesure
+     169 px sur les côtés et 159 px en haut et en bas, soit 4,40 % de la largeur
+     et 6,13 % de la hauteur : le PSD visait bien un cadre uniforme, à 6 % près.
+     On retient la plus petite des deux mesures pour que l'épaisseur reste
+     identique partout sans jamais manger la hauteur sur un écran bas. */
+  --frame-w:clamp(18px, min(4.40vw, 6.13vh), 96px);
+  --frame-x:var(--frame-w);
+  --frame-t:var(--frame-w);
+  --frame-b:var(--frame-w);
   --panel-w:calc(100vw - (2 * var(--frame-x)));
   --panel-h:calc(100vh - var(--frame-t) - var(--frame-b));
 }
@@ -852,7 +854,7 @@ body.home-page{
 /* ============================================================
    PAGE ABOUT — cadre gris foncé + bio centrée
    ============================================================ */
-body.about-page{ background:var(--frame); padding:40px; min-height:100vh; }
+body.about-page{ background:var(--frame); padding:var(--frame-w); min-height:100vh; }
 .about-inner{ position:relative; background:var(--cream); min-height:calc(100vh - 80px); padding:26px 48px 56px; overflow:hidden; }
 .about{ min-height:calc(100vh - 220px); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:clamp(26px,4vh,44px); }
 .about-text{ max-width:880px; font-family:"Jumper",sans-serif; font-weight:100; font-size:clamp(15px,1.2vw,20px); line-height:1.5; color:var(--ink); }
