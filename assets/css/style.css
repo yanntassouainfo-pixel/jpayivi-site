@@ -1035,9 +1035,9 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
   text-align:center;
   font-family:"Jumper",sans-serif;
   color:var(--ink);
-  /* La maquette laisse 14,63 % de la colonne au-dessus du pied de page, soit
-     188 px à 1920 : trop détaché. Ramené de moitié (choix client). */
-  padding:4.90vw 0 8.00vw;
+  /* Espaces égaux avant et après le pied de page (choix client). La maquette
+     donnait 14,63 % au-dessus et 19,79 % en dessous : déséquilibre de 63 %. */
+  padding:3.50vw 0;
 }
 /* Ligne de contact — Gotham Medium demandée. Le fichier Gotham n'est pas encore
    fourni : Maison Neue Medium, déjà installée, prend le relais. Le jour où le
@@ -1048,7 +1048,7 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
   gap:clamp(14px, 2.69vw, 62px);   /* écarts relevés : 4,02 % et 3,51 % */
   font-family:"Gotham","Maison Neue",sans-serif;
   font-weight:500;                 /* Medium */
-  font-size:13px;                  /* calé sur les légendes des vidéos */
+  font-size:15px;                  /* un cran au-dessus des légendes (13 px) */
   white-space:nowrap;
 }
 .foot-contact .sep,
@@ -1061,7 +1061,7 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
 .foot-social a{ display:inline-flex; }
 .foot-social svg{
   /* même rapport à la ligne de texte que sur la maquette (icône ≈ 1,38 x le texte) */
-  width:18px; height:auto; fill:var(--ink); display:block;
+  width:21px; height:auto; fill:var(--ink); display:block;
   transition:opacity .18s ease;
 }
 .foot-social a:hover svg{ opacity:.6; }
@@ -1072,12 +1072,12 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
   margin-top:clamp(10px, 1.42vw, 34px);
   font-family:"Jumper",sans-serif;
   font-weight:400;                 /* Regular */
-  font-size:13px;                  /* calé sur les légendes des vidéos */
+  font-size:15px;                  /* même corps que la ligne de contact */
 }
 .foot-nav a{ transition:opacity .18s ease; }
 .foot-nav a:hover, .foot-contact a:hover{ opacity:.6; }
 @media(max-width:600px){
-  .site-footer{ padding:40px var(--pad) 52px; }
+  .site-footer{ padding:44px var(--pad); }
   .foot-contact{ flex-wrap:wrap; gap:10px; }
   .foot-contact .sep{ display:none; }
   .foot-social{ gap:26px; margin-top:20px; }
