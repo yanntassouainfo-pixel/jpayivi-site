@@ -245,9 +245,11 @@ body.home-page{
   object-fit:cover;
   display:block;
 }
-/* Fashion : le sommet du crâne se trouve dans les 50 premiers pixels du fichier.
-   Un cadrage centré les coupait ; on ancre donc l'image en haut. */
-.card--fashion .thumb img{ object-position:50% 0%; }
+/* Fashion : la photo comme l'animation de survol sont plus hautes que le cadre.
+   Un recadrage centré coupait le sommet du crâne (50 px sur la photo, 217 px sur
+   la vidéo). On ancre les deux en haut du cadre : le surplus part vers le bas. */
+.card--fashion .thumb img,
+.card--fashion .thumb video{ object-position:50% 0%; }
 .thumb .gif{opacity:0;transition:opacity .35s ease;}
 .card:hover .thumb .gif{opacity:1;}
 .card:hover .label{font-weight:400;}   /* survol = Jumper Regular */
