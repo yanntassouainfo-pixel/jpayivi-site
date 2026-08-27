@@ -54,9 +54,12 @@
   --gap:14px;
   --pad:48px;
   /* Cadre : ratios mesurés sur la maquette (côtés 4.48%L, haut 6.15%H, bas 9.85%H) */
-  --frame-x:clamp(22px, 4.48vw, 86px);
-  --frame-t:clamp(24px, 6.15vh, 64px);
-  --frame-b:clamp(34px, 9.85vh, 104px);
+  /* Cadre relevé sur site_ordi_1.png (page 3840x2600) : 169 px sur les côtés
+     = 4,40 % de la largeur ; 159 px en haut et 160 px en bas = 6,12 / 6,15 %
+     de la hauteur. Le cadre est donc symétrique. */
+  --frame-x:clamp(20px, 4.40vw, 100px);
+  --frame-t:clamp(20px, 6.12vh, 84px);
+  --frame-b:clamp(20px, 6.15vh, 84px);
   --panel-w:calc(100vw - (2 * var(--frame-x)));
   --panel-h:calc(100vh - var(--frame-t) - var(--frame-b));
 }
@@ -101,7 +104,9 @@ body.home-page{
   position:relative;               /* ancre la grille en bas */
   min-height:var(--panel-h);       /* hauteur du panneau crème = référence des proportions */
   background:var(--cream);
-  padding:3.1vh 3.12% 0;           /* inset horizontal = celui de la grille sur la maquette */
+  /* maquette : haut du texte à 5,66 % de la hauteur du panneau,
+     retrait de la grille à 3,20 % de sa largeur */
+  padding:calc(var(--panel-h) * .0566) 3.20% 0;
   display:flex;
   flex-direction:column;
   overflow:hidden;
@@ -113,19 +118,26 @@ body.home-page{
   align-items:flex-start;
   gap:40px;
 }
+/* Retraits relevés un par un : l'intro est rentrée de 4,20 % du panneau,
+   le menu de 3,77 %, la grille de 3,20 % (padding de .home). */
 .intro{
-  max-width:440px;
+  margin-left:1.07%;   /* 4,20 % du panneau, moins le retrait de 3,20 % */
+  max-width:31.9%;      /* 29,81 % du panneau */
   font-family:"Jumper",sans-serif;
   font-weight:100;                 /* Jumper Thin */
-  font-size:15px;
+  font-size:clamp(12px, calc(var(--panel-w) * .01223), 30px);
   line-height:1.25;                /* interligne resserré comme la maquette */
 }
+.home-top nav{ margin-right:0.61%; }   /* menu à 3,77 % du bord du panneau */
+.home .nav{ font-size:clamp(11px, calc(var(--panel-w) * .0113), 28px); }   /* relevé maquette */
 .intro strong{font-weight:400;}    /* la partie "grasse" = Jumper Regular */
 
 /* Bloc central + coordonnées à gauche */
+/* maquette : le haut de « JP AYIVI » tombe à 31,13 % de la hauteur du panneau,
+   le bas du bloc intro/menu à 19,29 % -> 11,84 % d'écart */
 .hero-wrap{
   position:relative;
-  margin:clamp(12px,2.4vh,32px) 0 0;
+  margin:calc(var(--panel-h) * .1184) 0 0;
 }
 .hero{
   text-align:center;
@@ -134,21 +146,21 @@ body.home-page{
 .hero h1{
   font-family:"Jumper",sans-serif;
   font-weight:900; font-style:normal;    /* JP AYIVI en droit (non italique) */
-  font-size:clamp(24px, min(calc(var(--panel-w) * .0277), calc(var(--panel-h) * .0444)), 60px);
+  font-size:clamp(22px, calc(var(--panel-w) * .03059), 74px);   /* relevé maquette */
   letter-spacing:.01em;
   line-height:1;
 }
 .hero .role{
   font-family:"Jumper",sans-serif;
   font-weight:700; font-style:italic;
-  font-size:clamp(17px, min(calc(var(--panel-w) * .0196), calc(var(--panel-h) * .0314)), 42px);   /* CRÉATEUR D'IMAGES */
+  font-size:clamp(14px, calc(var(--panel-w) * .01822), 44px);   /* CRÉATEUR D'IMAGES — relevé maquette */
   letter-spacing:.01em;
   margin-top:2px;
 }
 .hero .tags{
   font-family:"Jumper",sans-serif;
   font-weight:300; font-style:italic;    /* Jumper Light Italic = ligne la plus large */
-  font-size:clamp(15px, min(calc(var(--panel-w) * .0176), calc(var(--panel-h) * .0282)), 38px);
+  font-size:clamp(13px, calc(var(--panel-w) * .01809), 44px);   /* relevé maquette */
   letter-spacing:-.005em;
   margin-top:-2px;
 }
@@ -157,12 +169,12 @@ body.home-page{
 .contact{
   position:absolute;
   left:0;
-  bottom:2px;                      /* calé en bas du bloc, au niveau de la ligne "Réalisation…" */
+  bottom:calc(var(--panel-h) * .0412);   /* relevé maquette : le bloc rouge s'arrête au-dessus de la ligne « Réalisation… » */
   color:var(--red);
   text-align:left;
   font-family:"Jumper",sans-serif;
   font-weight:400; font-style:italic;
-  font-size:15px;
+  font-size:clamp(9px, calc(var(--panel-w) * .00851), 22px);   /* relevé maquette */
   line-height:1.25;                /* interligne serré comme la maquette */
 }
 /* Chiffres uniquement : Gotham Ultra Italic (fallback lourd en attendant le fichier) */
@@ -195,19 +207,24 @@ body.home-page{
   position:absolute;
   bottom:100%;                     /* juste au-dessus de l'image */
   left:0;
-  margin-bottom:calc(var(--panel-h) * .0133);   /* écart label→image de la maquette */
+  margin-bottom:calc(var(--panel-w) * .0094);   /* 33 px sur la maquette */
   white-space:nowrap;
   font-family:"Jumper",sans-serif;
   font-weight:100;                 /* Jumper Thin */
-  font-size:clamp(13px, min(calc(var(--panel-w) * .018), calc(var(--panel-h) * .034)), 24px);
+  font-size:clamp(12px, calc(var(--panel-w) * .0151), 34px);   /* relevé maquette */
   transition:font-weight .15s ease;
 }
-/* hauteurs décalées, bas alignés — % de la hauteur du panneau, relevés sur la maquette */
+/* Hauteurs décalées, bas alignés. La maquette est dessinée sur un format 1,477,
+   bien plus haut qu'un écran réel : si on reprenait ses hauteurs en % du panneau,
+   les vignettes deviendraient carrées. On verrouille donc leur FORME, relevée au
+   pixel : Sport/Studio 558x589, Food/Motion 628x713, Fashion 766x849. */
 .card--sport  .thumb,
-.card--studio .thumb{height:calc(var(--panel-h) * .2257);}
+.card--studio .thumb{ height:min(calc(var(--panel-w) * .16816), calc(var(--panel-h) * .3468)); }
 .card--food   .thumb,
-.card--motion .thumb{height:calc(var(--panel-h) * .2825);}
-.card--fashion .thumb{height:calc(var(--panel-h) * .3745);}
+.card--motion .thumb{ height:min(calc(var(--panel-w) * .20350), calc(var(--panel-h) * .4197)); }
+.card--fashion .thumb{ height:min(calc(var(--panel-w) * .24244), calc(var(--panel-h) * .5000)); }
+/* La première valeur donne la forme exacte de la maquette ; la seconde n'agit
+   que sur une fenêtre inhabituellement basse, pour que la rangée ne déborde jamais. */
 
 .thumb{
   position:relative;
