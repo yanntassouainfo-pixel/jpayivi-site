@@ -173,8 +173,16 @@ body.home-page{
 /* Coordonnées rouges — à gauche, centrées verticalement sur le bloc JP AYIVI */
 .contact{
   position:absolute;
-  left:0;
-  bottom:0;                        /* demande client : les contacts descendent au niveau de la ligne « Réalisation • Montage • Motion Design » */
+  /* aligné sur le bord gauche du bloc d'intro (4,20 % du panneau) */
+  left:1.07%;
+  /* Calage sur le BAS DES LETTRES, pas sur la boîte de texte : sous chaque ligne
+     subsiste un blanc technique = (interligne - hauteur de police)/2 + descendante.
+     Jumper : ascendante 0,750 em, descendante 0,290 em.
+       « Réalisation… » : (1,35 - 1,04)/2 + 0,29 = 0,445 em x 1,809 % = 0,805 %
+       contacts         : (1,25 - 1,04)/2 + 0,29 = 0,395 em x 0,851 % = 0,336 %
+     Différence 0,469 % : les contacts descendent d'autant pour que la ligne de
+     base de « Mail : … » tombe sur celle de « Réalisation • Montage • Motion Design ». */
+  bottom:calc(var(--panel-w) * -0.00469);
   color:var(--red);
   text-align:left;
   font-family:"Jumper",sans-serif;
