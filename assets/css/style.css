@@ -1059,34 +1059,45 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
    et de remplacer "Maison Neue" par "Gotham" ci-dessous. */
 .foot-contact{
   display:flex; justify-content:center; align-items:baseline;
-  gap:clamp(14px, 2.69vw, 62px);   /* écarts relevés : 4,02 % et 3,51 % */
+  gap:clamp(15px, 2.80vw, 64px);   /* écarts relevés : 4,02 % et 3,51 %, + 4 % */
   font-family:"Gotham","Maison Neue",sans-serif;
   font-weight:500;                 /* Medium */
-  font-size:15px;                  /* un cran au-dessus des légendes (13 px) */
+  font-size:15.6px;                /* 15 px + 4 % (demande client) */
   white-space:nowrap;
 }
 .foot-contact .sep,
 .foot-nav .sep{ opacity:.55; }
 .foot-social{
-  display:flex; justify-content:center; align-items:center;
-  gap:clamp(22px, 4.27vw, 96px);   /* 6,39 % de la colonne d'origine */
-  margin-top:clamp(10px, 1.88vw, 44px);
+  /* Alignement sur le PIED des trois signes : le « Bē » n'a ni point ni carré,
+     un centrage optique le ferait flotter au-dessus des deux autres. */
+  display:flex; justify-content:center; align-items:flex-end;
+  gap:clamp(23px, 4.44vw, 100px);  /* 6,39 % de la colonne d'origine, + 4 % */
+  margin-top:clamp(10px, 1.96vw, 46px);
+  /* Pictos fournis par le client (SVG vectorisés depuis ses PNG). Ils n'ont pas
+     tous le même format : « in » 101 x 101, « Bē » 110 x 68, Instagram 103 x 103.
+     On applique donc UNE SEULE échelle à leurs dimensions d'origine : les hauteurs
+     de lettres et le carré Instagram se retrouvent alors optiquement au même
+     niveau (corps de lettre 69 px pour « in », 68 px pour « Bē »).
+     0,2120 px par pixel d'origine => Instagram 21,84 px = 21 px + 4 %. */
+  --ic-u:0.2120px;
 }
 .foot-social a{ display:inline-flex; }
-.foot-social svg{
-  /* même rapport à la ligne de texte que sur la maquette (icône ≈ 1,38 x le texte) */
-  width:21px; height:auto; fill:var(--ink); display:block;
+.foot-social .ic{
+  height:auto; display:block;
   transition:opacity .18s ease;
 }
-.foot-social a:hover svg{ opacity:.6; }
+.foot-social .ic--linkedin { width:calc(101 * var(--ic-u)); }
+.foot-social .ic--behance  { width:calc(110 * var(--ic-u)); }
+.foot-social .ic--instagram{ width:calc(103 * var(--ic-u)); }
+.foot-social a:hover .ic{ opacity:.6; }
 /* Ligne de catégories — Jumper Regular */
 .foot-nav{
   display:flex; justify-content:center; align-items:baseline; flex-wrap:wrap;
-  gap:clamp(12px, 2.64vw, 60px);   /* 3,95 % de la colonne d'origine */
-  margin-top:clamp(10px, 1.42vw, 34px);
+  gap:clamp(12px, 2.75vw, 62px);   /* 3,95 % de la colonne d'origine, + 4 % */
+  margin-top:clamp(10px, 1.48vw, 35px);
   font-family:"Jumper",sans-serif;
   font-weight:400;                 /* Regular */
-  font-size:15px;                  /* même corps que la ligne de contact */
+  font-size:15.6px;                /* même corps que la ligne de contact */
 }
 .foot-nav a{ transition:opacity .18s ease; }
 .foot-nav a:hover, .foot-contact a:hover{ opacity:.6; }
@@ -1094,6 +1105,6 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
   .site-footer{ padding:88px var(--pad); }
   .foot-contact{ flex-wrap:wrap; gap:10px; }
   .foot-contact .sep{ display:none; }
-  .foot-social{ gap:26px; margin-top:20px; }
+  .foot-social{ gap:26px; margin-top:20px; --ic-u:0.2120px; }
   .foot-nav{ gap:10px 18px; margin-top:20px; }
 }
