@@ -332,10 +332,10 @@ body.home-page{
 }
 .gallery-wrap:has(.reel){ width:44.6%; max-width:1060px; }        /* Motion · Événement · Communication · Fashion */
 .gallery-wrap:has(.reel--large){ width:62.91%; max-width:none; } /* Food (relevé maquette) */
-.gallery-wrap:has(.reel--xl){ width:80%; max-width:none; }        /* Sport — élargi (maquette : 66,9 %) */
+.gallery-wrap:has(.reel--xl){ width:92%; max-width:none; }        /* Sport — élargi (maquette : 66,9 %) */
 /* Sport élargi : le logo et le menu se rapprochent des bords pour rester
-   dans l'axe des images (retrait 10 % au lieu de 14,684 %). */
-body:has(.reel--xl) .site-header{ padding-left:10%; padding-right:10%; }
+   dans l'axe des images (retrait 4 % au lieu de 14,684 %). */
+body:has(.reel--xl) .site-header{ padding-left:4%; padding-right:4%; }
 
 /* Réseaux Sociaux : bord gauche aligné sur le « r » final de « Créateu-r »,
    et retrait identique à droite (galerie centrée).
@@ -398,7 +398,7 @@ body:has(.reel--xl) .site-header{ padding-left:10%; padding-right:10%; }
 }
 .reel{ --rule-w:9.16%; }        /* Fashion · Motion · Événement · Communication */
 .reel--large{ --rule-w:6.48%; } /* Food */
-.reel--xl{ --rule-w:5.44%; }    /* Sport : 4,35 % de la fenêtre, inchangé malgré l'élargissement */
+.reel--xl{ --rule-w:4.73%; }    /* Sport : 4,35 % de la fenêtre, inchangé malgré l'élargissement */
 
 /* ------------------------------------------------------------------
    PAGE FASHION — relevé au pixel sur site_ordi_fashion_int.png
