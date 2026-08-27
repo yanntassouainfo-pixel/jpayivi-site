@@ -200,6 +200,61 @@
 })();
 
 /* ============================================================
+   ACCUEIL — équilibre vertical de la maquette.
+   Sur site_ordi_1.png, l'espace libre entre les trois blocs se
+   répartit ainsi : 39,65 % au-dessus du bloc « JP AYIVI » et
+   60,35 % en dessous (270 px et 411 px sur 2281 px de panneau).
+   On applique ce même partage quelle que soit la fenêtre : le bloc
+   titre reste à sa place relative et ne peut plus toucher la rangée
+   d'images, même sur un écran beaucoup plus large que la maquette.
+   ============================================================ */
+(function () {
+  var home = document.querySelector('.home');
+  if (!home) return;
+  var top = home.querySelector('.home-top');
+  var hero = home.querySelector('.hero-wrap');
+  var grid = home.querySelector('.grid');
+  if (!top || !hero || !grid) return;
+
+  var PART_HAUT = 0.3965;   /* 270 / (270 + 411) sur la maquette */
+
+  function place() {
+    if (window.innerWidth <= 950) {          /* tablette et mobile : mise en page dédiée */
+      home.style.removeProperty('--hero-gap');
+      home.style.removeProperty('--card-cap');
+      return;
+    }
+    home.style.setProperty('--hero-gap', '0px');
+    var cs = getComputedStyle(home);
+    var dispo = home.clientHeight
+              - parseFloat(cs.paddingTop || 0)
+              - parseFloat(cs.paddingBottom || 0);
+
+    /* Plafond de sécurité : sur une fenêtre très basse, la rangée d'images
+       ne doit jamais pousser le bloc titre. On calcule la place réellement
+       disponible et on la donne au CSS ; tant qu'il y en a assez, c'est la
+       forme relevée sur la maquette qui l'emporte. */
+    var big = grid.querySelector('.card--fashion .thumb');
+    if (big) {
+      var horsImage = grid.offsetHeight - big.offsetHeight;   /* étiquette + écart */
+      var place = dispo - top.offsetHeight - hero.offsetHeight - horsImage - dispo * 0.03;
+      home.style.setProperty('--card-cap', Math.max(80, Math.round(place)) + 'px');
+    }
+
+    var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight;
+    var gap = Math.max(0, Math.round(libre * PART_HAUT));
+    home.style.setProperty('--hero-gap', gap + 'px');
+  }
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  window.addEventListener('load', place);
+  var t;
+  window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(place, 100); });
+  place();
+  requestAnimationFrame(place);
+})();
+
+/* ============================================================
    Logo + menu : ils s'estompent quand une image ou une vidéo
    passe derrière eux (pages intérieures, barre fixe).
    ============================================================ */
