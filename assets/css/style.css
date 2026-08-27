@@ -332,7 +332,10 @@ body.home-page{
 }
 .gallery-wrap:has(.reel){ width:44.6%; max-width:1060px; }        /* Motion · Événement · Communication · Fashion */
 .gallery-wrap:has(.reel--large){ width:62.91%; max-width:none; } /* Food (relevé maquette) */
-.gallery-wrap:has(.reel--xl){ width:66.9%; max-width:1590px; }    /* Sport */
+.gallery-wrap:has(.reel--xl){ width:80%; max-width:none; }        /* Sport — élargi (maquette : 66,9 %) */
+/* Sport élargi : le logo et le menu se rapprochent des bords pour rester
+   dans l'axe des images (retrait 10 % au lieu de 14,684 %). */
+body:has(.reel--xl) .site-header{ padding-left:10%; padding-right:10%; }
 
 /* Réseaux Sociaux : bord gauche aligné sur le « r » final de « Créateu-r »,
    et retrait identique à droite (galerie centrée).
@@ -356,7 +359,7 @@ body.home-page{
    relevées au pixel sur le PSD (attributs style dans studio.html).
    Le conteneur est positionné et sa hauteur vient du padding-bas :
    13 864 / 1 422 = 974,96 % de sa propre largeur. Tout reste proportionnel. */
-.masonry{ position:relative; width:100%; padding-bottom:974.96%; }
+.masonry{ position:relative; width:100%; padding-bottom:969.29%; }
 .masonry .col{ display:contents; }
 .masonry .item{ position:absolute; background:#e9e9dd; overflow:hidden; }
 .masonry .item img,
@@ -395,7 +398,7 @@ body.home-page{
 }
 .reel{ --rule-w:9.16%; }        /* Fashion · Motion · Événement · Communication */
 .reel--large{ --rule-w:6.48%; } /* Food */
-.reel--xl{ --rule-w:6.5%; }     /* Sport */
+.reel--xl{ --rule-w:5.44%; }    /* Sport : 4,35 % de la fenêtre, inchangé malgré l'élargissement */
 
 /* ------------------------------------------------------------------
    PAGE FASHION — relevé au pixel sur site_ordi_fashion_int.png
@@ -1007,3 +1010,51 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
   width:100%; height:100%; object-fit:cover; object-position:center; display:block;
 }
 .masonry .item--crop-bottom img{ object-position:center bottom; }
+
+/* ------------------------------------------------------------------
+   PIED DE PAGE — relevé sur site_ordi_sport_int.png (page 7878 px,
+   colonne de contenu 5271 px). Les tailles sont exprimées en % de la
+   FENÊTRE pour qu'elles ne suivent pas l'élargissement de la galerie.
+   ------------------------------------------------------------------ */
+.site-footer{
+  text-align:center;
+  font-family:"Jumper",sans-serif;
+  color:var(--ink);
+  padding:9.79vw 0 13.24vw;        /* 14,63 % et 19,79 % de la colonne d'origine */
+}
+.foot-contact{
+  display:flex; justify-content:center; align-items:baseline;
+  gap:clamp(14px, 2.69vw, 62px);   /* écarts relevés : 4,02 % et 3,51 % */
+  font-weight:400;
+  font-size:clamp(11px, 0.93vw, 26px);
+  white-space:nowrap;
+}
+.foot-contact .sep,
+.foot-nav .sep{ opacity:.55; }
+.foot-social{
+  display:flex; justify-content:center; align-items:center;
+  gap:clamp(22px, 4.27vw, 96px);   /* 6,39 % de la colonne d'origine */
+  margin-top:clamp(10px, 1.88vw, 44px);
+}
+.foot-social a{ display:inline-flex; }
+.foot-social svg{
+  width:clamp(16px, 1.32vw, 36px); height:auto; fill:var(--ink); display:block;
+  transition:opacity .18s ease;
+}
+.foot-social a:hover svg{ opacity:.6; }
+.foot-nav{
+  display:flex; justify-content:center; align-items:baseline; flex-wrap:wrap;
+  gap:clamp(12px, 2.64vw, 60px);   /* 3,95 % de la colonne d'origine */
+  margin-top:clamp(10px, 1.42vw, 34px);
+  font-weight:700;
+  font-size:clamp(11px, 0.94vw, 26px);
+}
+.foot-nav a{ transition:opacity .18s ease; }
+.foot-nav a:hover, .foot-contact a:hover{ opacity:.6; }
+@media(max-width:600px){
+  .site-footer{ padding:56px var(--pad) 64px; }
+  .foot-contact{ flex-wrap:wrap; gap:10px; font-size:13px; }
+  .foot-contact .sep{ display:none; }
+  .foot-social{ gap:26px; margin-top:22px; }
+  .foot-nav{ gap:10px 18px; margin-top:22px; font-size:13px; }
+}
