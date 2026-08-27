@@ -338,6 +338,20 @@ body.home-page{
    légèrement les images, de 0,5 % de chaque côté. */
 body:has(.reel--xl) .site-header{ padding-left:4%; padding-right:4%; }
 
+/* Sport : logo calé sur le menu — le haut de « JP AYIVI » au niveau du haut de
+   « +Home », le bas de « Créateur d'images » (descendante du g comprise) au
+   niveau du bas de « +Communication ».
+   Métriques Jumper : la hauteur visée vaut 4,914 corps de menu, le bloc logo
+   1,429 corps de nom -> corps du nom = 3.4383 x corps du menu.
+   On le calcule à partir du corps RÉEL du menu (plancher de 12 px compris),
+   pour que le calage tienne à toutes les tailles d'écran. */
+body:has(.reel--xl) .brand .name{
+  font-size:calc(3.4383 * clamp(12px, 0.572vw, 18px));
+}
+body:has(.reel--xl) .brand .sub{
+  font-size:calc(1.5771 * clamp(12px, 0.572vw, 18px));
+}
+
 /* Réseaux Sociaux : bord gauche aligné sur le « r » final de « Créateu-r »,
    et retrait identique à droite (galerie centrée).
    --logo-r est calculé en JS ; la valeur de repli couvre le cas sans JS. */
