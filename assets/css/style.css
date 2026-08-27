@@ -174,7 +174,7 @@ body.home-page{
 .contact{
   position:absolute;
   left:0;
-  bottom:calc(var(--panel-h) * .0412);   /* relevé maquette : le bloc rouge s'arrête au-dessus de la ligne « Réalisation… » */
+  bottom:0;                        /* demande client : les contacts descendent au niveau de la ligne « Réalisation • Montage • Motion Design » */
   color:var(--red);
   text-align:left;
   font-family:"Jumper",sans-serif;
@@ -245,6 +245,9 @@ body.home-page{
   object-fit:cover;
   display:block;
 }
+/* Fashion : le sommet du crâne se trouve dans les 50 premiers pixels du fichier.
+   Un cadrage centré les coupait ; on ancre donc l'image en haut. */
+.card--fashion .thumb img{ object-position:50% 0%; }
 .thumb .gif{opacity:0;transition:opacity .35s ease;}
 .card:hover .thumb .gif{opacity:1;}
 .card:hover .label{font-weight:400;}   /* survol = Jumper Regular */
