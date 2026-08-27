@@ -278,13 +278,18 @@ body.home-page{
   background:transparent;           /* transparent : le titre de section reste visible dessous */
   transition:opacity .28s ease;
 }
-/* Quand une image/vidéo passe derrière le logo ou le menu, ils s'estompent */
+/* Quand une image ou une vidéo passe derrière le logo, il ne s'estompe plus :
+   il devient simplement OPAQUE dans sa teinte grise habituelle. Les valeurs
+   ci-dessous sont l'exact équivalent solide de rgba(24,24,24,.22) et
+   rgba(24,24,24,.82) rendus sur le fond crème : l'aspect ne change donc pas
+   sur fond uni, et reste identique par-dessus n'importe quelle image.
+   Le menu, lui, continue de s'estomper. */
 .site-header .brand,
-.site-header nav{ transition:opacity .28s ease; }
-.site-header.brand-dim .brand{ opacity:.16; }
+.site-header nav{ transition:opacity .28s ease, color .28s ease; }
+.site-header.brand-dim .brand      { opacity:1; color:#CBCBC2; }
+.site-header.brand-dim .brand .sub { color:#41413F; }
 .site-header.nav-dim   nav   { opacity:.16; }
-.site-header .brand:hover,
-.site-header nav:hover{ opacity:1; }   /* on les récupère au survol */
+.site-header nav:hover{ opacity:1; }   /* on le récupère au survol */
 .brand{
   display:inline-block;                /* le bloc prend la largeur de « JP AYIVI » */
   font-family:"Jumper",sans-serif;
@@ -1042,9 +1047,11 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
   text-align:center;
   font-family:"Jumper",sans-serif;
   color:var(--ink);
-  /* Espaces égaux avant et après le pied de page (choix client). La maquette
-     donnait 14,63 % au-dessus et 19,79 % en dessous : déséquilibre de 63 %. */
-  padding:3.50vw 0;
+  /* Espaces égaux avant et après le pied de page (choix client), doublés.
+     La maquette donnait 14,63 % au-dessus et 19,79 % en dessous : déséquilibre
+     de 63 %. Les 170 px hérités des conteneurs sont neutralisés plus haut,
+     l'écart n'est donc donné que par ce padding. */
+  padding:7.00vw 0;
 }
 /* Ligne de contact — Gotham Medium demandée. Le fichier Gotham n'est pas encore
    fourni : Maison Neue Medium, déjà installée, prend le relais. Le jour où le
@@ -1084,7 +1091,7 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
 .foot-nav a{ transition:opacity .18s ease; }
 .foot-nav a:hover, .foot-contact a:hover{ opacity:.6; }
 @media(max-width:600px){
-  .site-footer{ padding:44px var(--pad); }
+  .site-footer{ padding:88px var(--pad); }
   .foot-contact{ flex-wrap:wrap; gap:10px; }
   .foot-contact .sep{ display:none; }
   .foot-social{ gap:26px; margin-top:20px; }
