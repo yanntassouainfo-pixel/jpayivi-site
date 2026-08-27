@@ -338,6 +338,13 @@ body.home-page{
    légèrement les images, de 0,5 % de chaque côté. */
 body:has(.reel--xl) .site-header{ padding-left:4%; padding-right:4%; }
 
+/* Sport : la page se termine par un pied de page. Les 90 px du bas de .reel et
+   les 80 px du bas de .gallery-wrap s'ajoutaient à son écart supérieur, ce qui
+   faisait 237 px au-dessus contre 67 px en dessous. On neutralise les deux,
+   l'écart n'est plus donné que par le pied de page lui-même. */
+body:has(.reel--xl) .reel{ padding-bottom:0; }
+body:has(.reel--xl) .gallery-wrap{ padding-bottom:0; }
+
 /* Sport : logo calé sur le menu — le haut de « JP AYIVI » au niveau du haut de
    « +Home », le bas de « Créateur d'images » (descendante du g comprise) au
    niveau du bas de « +Communication ».
