@@ -774,9 +774,17 @@ body.home-page{
    Les habillages Instagram (barres d'actions, carte L'OBS) sont INCRUSTÉS
    dans les vidéos : aucun élément décoratif n'est ajouté en CSS. */
 .rs{
-  padding:4px 0 90px;
-  --v:8.1%;      /* écart vertical courant   (261 / 3227) */
-  --vL:16.4%;    /* écart vertical large     (530 / 3227) */
+  padding:4px 0 9%;
+  /* Écarts verticaux relevés un par un sur la maquette, en % de la largeur
+     de la galerie (3222 px). Ils sont quasi constants : le PSD ne prévoit
+     AUCUN espace élargi autour des cartes L'OBS — c'est le fond blanc de la
+     carte, incrusté dans la vidéo, qui donne l'impression de respiration. */
+  --v1:8.10%;   /* bandeau  -> ASMR        261 px */
+  --v2:8.10%;   /* ASMR     -> Miko        261 px */
+  --v3:7.98%;   /* Miko     -> L'OBS       257 px */
+  --v4:7.42%;   /* L'OBS    -> Bonotte     239 px */
+  --v5:8.26%;   /* Bonotte  -> Magic       266 px */
+  --v6:8.75%;   /* Magic    -> photographe 282 px */
 }
 .rs-post{ margin:0; }
 .rs-media{ position:relative; background:#e9e9dd; overflow:hidden; }
@@ -795,7 +803,7 @@ body.home-page{
 
 /* R1 — bandeau « Les Recettes ASMR » : le visuel Behance d'origine, tel quel */
 .rs-band{
-  margin:0 0 var(--v);
+  margin:0 0 var(--v1);
   background:#000;
   line-height:0;
 }
@@ -803,22 +811,22 @@ body.home-page{
 
 /* Rangées : largeurs et écarts de la maquette */
 .rs-row{ display:flex; justify-content:center; align-items:flex-start; }
-.rs-row--duoA{ gap:17%;   margin:0 0 var(--v);  }
+.rs-row--duoA{ gap:17%;   margin:0 0 var(--v2); }
 .rs-row--duoA > *{ width:38.2%; }
-.rs-row--duoB{ gap:17%;   margin:0 0 var(--vL); }
+.rs-row--duoB{ gap:17%;   margin:0 0 var(--v3); }
 .rs-row--duoB > *{ width:32.4%; }
-.rs-row--obs { gap:4.15%; margin:0 0 var(--vL); }
+.rs-row--obs { gap:4.15%; margin:0 0 var(--v4); }
 .rs-row--obs > *{ width:30.6%; }
-.rs-row--solo{ margin:0 0 var(--v); }
+.rs-row--solo{ margin:0 0 var(--v5); }
 .rs-row--solo > *{ width:33.4%; }
-.rs-row--trio{ gap:4.6%;  margin:0 0 var(--v); }
+.rs-row--trio{ gap:4.6%;  margin:0 0 var(--v6); }
 .rs-row--trio > *{ width:30.3%; }
 .rs-row--wide{ margin:0; }
 .rs-row--wide > *{ width:71%; }
 
 /* ---- Tablette : on garde la structure, écarts resserrés ---- */
 @media(max-width:950px){
-  .rs{ --v:6%; --vL:11%; }
+  .rs{ --v1:6%; --v2:6%; --v3:5.9%; --v4:5.5%; --v5:6.1%; --v6:6.5%; }
   .rs-row--duoA{ gap:10%; }  .rs-row--duoA > *{ width:43%; }
   .rs-row--duoB{ gap:10%; }  .rs-row--duoB > *{ width:38%; }
   .rs-row--solo > *{ width:44%; }
@@ -829,7 +837,7 @@ body.home-page{
 
 /* ---- Mobile : une colonne, le bandeau devient une pile ---- */
 @media(max-width:600px){
-  .rs{ --v:26px; --vL:34px; padding-bottom:60px; }
+  .rs{ --v1:26px; --v2:26px; --v3:26px; --v4:24px; --v5:26px; --v6:28px; padding-bottom:60px; }
   .rs-band{
     aspect-ratio:auto; flex-direction:column; gap:18px;
     padding:26px 16%;
