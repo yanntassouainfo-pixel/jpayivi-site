@@ -1068,9 +1068,9 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
 .foot-contact .sep,
 .foot-nav .sep{ opacity:.55; }
 .foot-social{
-  /* Alignement sur le PIED des trois signes : le « Bē » n'a ni point ni carré,
-     un centrage optique le ferait flotter au-dessus des deux autres. */
-  display:flex; justify-content:center; align-items:flex-end;
+  /* Centrage strict : les trois pictos partagent le même axe horizontal, calculé
+     sur leur forme complète (le point du « i » de LinkedIn compris). */
+  display:flex; justify-content:center; align-items:center;
   gap:clamp(23px, 4.44vw, 100px);  /* 6,39 % de la colonne d'origine, + 4 % */
   margin-top:clamp(10px, 1.96vw, 46px);
   /* Pictos fournis par le client (SVG vectorisés depuis ses PNG). Ils n'ont pas
