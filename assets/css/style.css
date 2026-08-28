@@ -961,12 +961,13 @@ body:has(.gallery-wrap) .brand .sub{
    exprimés en % de la RANGÉE, ils se réduisent donc tous dans la même proportion.
    Les écarts VERTICAUX, eux, se calculent sur la colonne et ne bougent pas — le
    rythme vertical de la page reste régulier avec les rangées non réduites.
-   Le bandeau du haut, Bonotte, le trio Afflelou et Jimmy gardent leur largeur
-   (choix client). À placer APRÈS les règles ci-dessus, dont le raccourci
-   « margin » remet les marges latérales à zéro. */
+   Le bandeau du haut, Bonotte et Jimmy gardent leur largeur (choix client).
+   À placer APRÈS les règles ci-dessus, dont le raccourci « margin » remet les
+   marges latérales à zéro. */
 .rs-row--duoA,
 .rs-row--duoB,
-.rs-row--obs{
+.rs-row--obs,
+.rs-row--trio{        /* Alain Afflelou « Magic Clip » — ajouté au même titre */
   width:70.41%;
   margin-left:auto; margin-right:auto;
 }
@@ -974,8 +975,8 @@ body:has(.gallery-wrap) .brand .sub{
 /* ---- Tablette : on garde la structure, écarts resserrés ---- */
 @media(max-width:950px){
   .rs{ --v1:6%; --v2:6%; --v3:5.9%; --v4:5.5%; --v5:6.1%; --v6:6.5%; }
-  /* le rétrécissement des trois rangées ne vaut qu'en bureau */
-  .rs-row--duoA, .rs-row--duoB, .rs-row--obs{ width:auto; }
+  /* le rétrécissement de ces rangées ne vaut qu'en bureau */
+  .rs-row--duoA, .rs-row--duoB, .rs-row--obs, .rs-row--trio{ width:auto; }
   .rs-row--duoA{ gap:10%; }  .rs-row--duoA > *{ width:43%; }
   .rs-row--duoB{ gap:10%; }  .rs-row--duoB > *{ width:38%; }
   .rs-row--solo > *{ width:44%; }
