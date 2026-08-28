@@ -600,7 +600,9 @@ body:has(.gallery-wrap) .brand .sub{
 
 .md-row--d{ justify-content:space-between; align-items:flex-start; }
 .md-row--d > *:first-child{ width:38.39%; aspect-ratio:1 / 1; }
-.md-row--d > *:last-child { width:57.37%; aspect-ratio:919 / 614; }
+/* 3/2 = le format exact de l'animation fournie (1620 x 1080), aucun recadrage.
+   La maquette donnait 919 x 614, soit 1,4967 contre 1,5 — 0,2 % d'écart. */
+.md-row--d > *:last-child { width:57.37%; aspect-ratio:3 / 2; }
 
 @media(max-width:950px){
   .md-col{ width:88%; }
