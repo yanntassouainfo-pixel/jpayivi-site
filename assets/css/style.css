@@ -953,9 +953,29 @@ body:has(.gallery-wrap) .brand .sub{
 .rs-row--wide{ margin:0; }
 .rs-row--wide > *{ width:71%; }
 
+/* Trois rangées ramenées à la largeur des vidéos de Motion (retour client) :
+   « Les Recettes ASMR », « Miko + masterclass » et le trio « L'OBS × Toyota ».
+   70,41 % de la colonne des Réseaux Sociaux (elle-même à 83 % de la fenêtre)
+   = 58,44 % de la fenêtre, soit exactement la colonne à légendes de Motion.
+   La réduction est homothétique : largeurs de posts et écarts horizontaux sont
+   exprimés en % de la RANGÉE, ils se réduisent donc tous dans la même proportion.
+   Les écarts VERTICAUX, eux, se calculent sur la colonne et ne bougent pas — le
+   rythme vertical de la page reste régulier avec les rangées non réduites.
+   Le bandeau du haut, Bonotte, le trio Afflelou et Jimmy gardent leur largeur
+   (choix client). À placer APRÈS les règles ci-dessus, dont le raccourci
+   « margin » remet les marges latérales à zéro. */
+.rs-row--duoA,
+.rs-row--duoB,
+.rs-row--obs{
+  width:70.41%;
+  margin-left:auto; margin-right:auto;
+}
+
 /* ---- Tablette : on garde la structure, écarts resserrés ---- */
 @media(max-width:950px){
   .rs{ --v1:6%; --v2:6%; --v3:5.9%; --v4:5.5%; --v5:6.1%; --v6:6.5%; }
+  /* le rétrécissement des trois rangées ne vaut qu'en bureau */
+  .rs-row--duoA, .rs-row--duoB, .rs-row--obs{ width:auto; }
   .rs-row--duoA{ gap:10%; }  .rs-row--duoA > *{ width:43%; }
   .rs-row--duoB{ gap:10%; }  .rs-row--duoB > *{ width:38%; }
   .rs-row--solo > *{ width:44%; }
