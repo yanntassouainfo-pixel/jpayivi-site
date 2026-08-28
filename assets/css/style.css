@@ -960,23 +960,32 @@ body:has(.gallery-wrap) .brand .sub{
    La réduction est homothétique : largeurs de posts et écarts horizontaux sont
    exprimés en % de la RANGÉE, ils se réduisent donc tous dans la même proportion.
    Les écarts VERTICAUX, eux, se calculent sur la colonne et ne bougent pas — le
-   rythme vertical de la page reste régulier avec les rangées non réduites.
-   Le bandeau du haut, Bonotte et Jimmy gardent leur largeur (choix client).
+   rythme vertical de la page reste régulier — les écarts se calculent sur la
+   colonne, pas sur les rangées.
+   Seul le bandeau du haut garde sa pleine largeur (choix client) : c'est une
+   image fixe dont le texte incrusté doit rester lisible.
    À placer APRÈS les règles ci-dessus, dont le raccourci « margin » remet les
    marges latérales à zéro. */
 .rs-row--duoA,
 .rs-row--duoB,
 .rs-row--obs,
-.rs-row--trio{        /* Alain Afflelou « Magic Clip » — ajouté au même titre */
+.rs-row--trio,        /* Alain Afflelou « Magic Clip » */
+.rs-row--solo,        /* Bonotte */
+.rs-row--wide{        /* Jimmy & Dyclo */
   width:70.41%;
   margin-left:auto; margin-right:auto;
 }
+/* Jimmy occupe toute sa rangée : il faisait 71 % de la colonne, soit 1131 px à
+   1920 — 9 px de plus que la largeur de Motion. En le passant à 100 % de la
+   rangée réduite, il tombe au pixel près sur les 1122 px des autres. */
+.rs-row--wide > *{ width:100%; }
 
 /* ---- Tablette : on garde la structure, écarts resserrés ---- */
 @media(max-width:950px){
   .rs{ --v1:6%; --v2:6%; --v3:5.9%; --v4:5.5%; --v5:6.1%; --v6:6.5%; }
   /* le rétrécissement de ces rangées ne vaut qu'en bureau */
-  .rs-row--duoA, .rs-row--duoB, .rs-row--obs, .rs-row--trio{ width:auto; }
+  .rs-row--duoA, .rs-row--duoB, .rs-row--obs,
+  .rs-row--trio, .rs-row--solo, .rs-row--wide{ width:auto; }
   .rs-row--duoA{ gap:10%; }  .rs-row--duoA > *{ width:43%; }
   .rs-row--duoB{ gap:10%; }  .rs-row--duoB > *{ width:38%; }
   .rs-row--solo > *{ width:44%; }
