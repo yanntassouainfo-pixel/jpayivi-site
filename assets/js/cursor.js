@@ -172,17 +172,17 @@
   /* ---- Dégagement sous « +About », en fraction de la hauteur de fenêtre ----
      Le menu ayant grandi de 30 %, il descendait à 6 px seulement du haut de la
      galerie : beaucoup trop serré (retour client). On garantit désormais un
-     dégagement proportionnel sous le bas du menu.
-     POUR ÉTENDRE AUX AUTRES PAGES : ajouter leur classe ou leur nom de fichier
-     à la liste ci-dessous, ou remplacer la condition par « true ». */
+     dégagement proportionnel sous le bas du menu, sur TOUTES les pages à galerie
+     — Sport, Food, Fashion, Motion, Événement, Communication, Réseaux Sociaux,
+     Studio et Showreel. Validé sur Sport puis généralisé.
+     L'accueil et About n'ont pas de .gallery-wrap : ce bloc entier les ignore
+     (voir la sortie anticipée en tête de fonction), leur mise en page est
+     calée séparément.
+     POUR AJUSTER : une seule valeur, ci-dessous. */
   var DEGAGEMENT = 0.05;                    /* 5 % de la hauteur de fenêtre */
-  var PAGES = ['.reel--xl'];                /* Sport uniquement pour l'instant */
 
   function degagement() {
-    for (var i = 0; i < PAGES.length; i++) {
-      if (document.querySelector(PAGES[i])) return window.innerHeight * DEGAGEMENT;
-    }
-    return null;                            /* page non concernée : formule d'origine */
+    return window.innerHeight * DEGAGEMENT;
   }
 
   function place() {
@@ -198,10 +198,7 @@
        Le dégagement s'applique TOUJOURS sous le menu, y compris quand la valeur de la
        maquette est la plus grande : c'est lui qui fixe la distance sous « +About ». */
     var maquette = window.innerWidth * 0.0888;
-    var deg = degagement();
-    var top = (deg === null)
-            ? Math.max(maquette, bottom + 6)          /* formule d'origine, inchangée */
-            : Math.max(maquette, bottom) + deg;       /* pages réglées : dégagement garanti */
+    var top = Math.max(maquette, bottom) + degagement();
 
     var title = wrap.querySelector('.page-title');
     if (title) {
