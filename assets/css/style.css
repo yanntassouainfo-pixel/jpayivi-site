@@ -118,11 +118,12 @@ body.home-page{
   flex-direction:column;
   overflow:hidden;
   /* Corps de « Réalisation • Montage • Motion Design » — maquette 1,809 % du
-     panneau, réduit de 20 % à la demande du client. Publié ici et non dans
-     .hero .tags pour que .contact, qui n'en est pas un descendant, puisse s'en
-     servir pour calculer son calage. Toute redéfinition du corps de cette ligne
-     doit se faire SUR CETTE VARIABLE, sinon le calage décroche. */
-  --tags-fs:clamp(10.4px, calc(var(--panel-w) * .014472), 35.2px);
+     panneau, à 88 % de cette valeur : réduit de 20 % puis agrandi de 10 % à la
+     demande du client (0,80 x 1,10 = 0,88). Publié ici et non dans .hero .tags
+     pour que .contact, qui n'en est pas un descendant, puisse s'en servir pour
+     calculer son calage. Toute redéfinition du corps de cette ligne doit se
+     faire SUR CETTE VARIABLE, sinon le calage décroche. */
+  --tags-fs:clamp(11.44px, calc(var(--panel-w) * .0159192), 38.72px);
 }
 
 .home-top{
@@ -170,23 +171,24 @@ body.home-page{
   text-align:center;
   margin:0;
 }
-/* Bloc titre réduit de 20 % (demande client) : les trois corps de texte, leurs
-   planchers, leurs plafonds et les écarts entre les lignes sont tous multipliés
-   par 0,8. Les proportions internes du bloc sont donc intactes, il est
-   simplement plus petit. Valeurs de la maquette rappelées en commentaire. */
+/* Bloc titre à 88 % de la maquette (demande client : − 20 % puis + 10 %).
+   Les trois corps de texte, leurs planchers, leurs plafonds et les écarts entre
+   les lignes sont tous multipliés par le même 0,88 : les proportions internes du
+   bloc restent donc exactement celles de la maquette, il est simplement plus
+   petit. Valeurs de la maquette rappelées en commentaire. */
 .hero h1{
   font-family:"Jumper",sans-serif;
   font-weight:900; font-style:normal;    /* JP AYIVI en droit (non italique) */
-  font-size:clamp(17.6px, calc(var(--panel-w) * .024472), 59.2px);   /* maquette 3,059 % x 0,8 */
+  font-size:clamp(19.36px, calc(var(--panel-w) * .0269192), 65.12px);   /* maquette 3,059 % x 0,88 */
   letter-spacing:.01em;
   line-height:1;
 }
 .hero .role{
   font-family:"Jumper",sans-serif;
   font-weight:700; font-style:italic;
-  font-size:clamp(11.2px, calc(var(--panel-w) * .014576), 35.2px);   /* CRÉATEUR D'IMAGES — maquette 1,822 % x 0,8 */
+  font-size:clamp(12.32px, calc(var(--panel-w) * .0160336), 38.72px);   /* CRÉATEUR D'IMAGES — maquette 1,822 % x 0,88 */
   letter-spacing:.01em;
-  margin-top:1.6px;
+  margin-top:1.76px;
 }
 .hero .tags{
   font-family:"Jumper",sans-serif;
@@ -195,7 +197,7 @@ body.home-page{
      besoin pour calculer son propre calage. Ne pas écrire la valeur en dur ici. */
   font-size:var(--tags-fs);
   letter-spacing:-.005em;
-  margin-top:-1.6px;
+  margin-top:-1.76px;
 }
 
 /* Coordonnées rouges — à gauche, centrées verticalement sur le bloc JP AYIVI */
@@ -469,12 +471,26 @@ body:has(.gallery-wrap) .brand .sub{
   margin:clamp(11px, 1.74vw, 38px) auto 0;
 }
 /* Le trait fait 4,35 % de la fenêtre sur TOUTES les pages : c'est la valeur de la
-   maquette Sport, validée par le client. Exprimé en % de la colonne (83 %), cela
-   donne 5,24 %. Sur Motion le trait vit dans une sous-colonne à 70,41 % de la
-   galerie : 4,35 / (83 x 0,7041) = 7,44 %. */
-.reel{ --rule-w:5.24%; }        /* Fashion · Événement · Communication */
+   maquette Sport, validée par le client. Exprimé en % d'une colonne pleine (83 %),
+   cela donne 5,24 %. Dans une colonne réduite à 70,41 % de la galerie — Motion en
+   haut, et désormais Fashion, Événement et Communication — il faut
+   4,35 / (83 x 0,7041) = 7,44 % pour obtenir la même longueur à l'écran. */
+.reel{ --rule-w:5.24%; }        /* valeur de base, colonne pleine */
 .reel--large{ --rule-w:5.24%; } /* Food */
 .reel--xl{ --rule-w:5.24%; }    /* Sport */
+
+/* Fashion · Événement · Communication — mêmes proportions que la colonne à
+   légendes de Motion (choix client) : 70,41 % de la galerie, soit 58,44 % de la
+   fenêtre. Ces trois pages ont la même structure qu'elle, une vidéo et sa légende
+   dessous ; elles étaient jusqu'ici à la largeur de la GRILLE BASSE de Motion,
+   qui, elle, ne porte pas de légende.
+   Le sélecteur vise les .reel sans variante : Food, Sport et Motion gardent la
+   largeur pleine de la galerie. */
+.reel:not(.reel--large):not(.reel--xl):not(.reel--motion){
+  width:70.41%;
+  margin-left:auto; margin-right:auto;
+  --rule-w:7.44%;
+}
 
 /* ------------------------------------------------------------------
    PAGE FASHION — relevé au pixel sur site_ordi_fashion_int.png
@@ -686,7 +702,12 @@ body:has(.gallery-wrap) .brand .sub{
   .reel--xl .reel-duo .reel-media{ flex:0 0 auto; width:100%; }
 }
 @media(max-width:820px){
-  .reel{ max-width:none; padding:0 var(--pad) 60px; }
+  /* la colonne réduite de Fashion/Événement/Communication ne vaut qu'en bureau :
+     sur petit écran on reprend toute la largeur disponible */
+  .reel,
+  .reel:not(.reel--large):not(.reel--xl):not(.reel--motion){
+    width:auto; max-width:none; padding:0 var(--pad) 60px;
+  }
 }
 
 /* ============================================================
