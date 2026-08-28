@@ -530,29 +530,27 @@ body:has(.gallery-wrap) .brand .sub{
    PAGE FASHION — relevé au pixel sur site_ordi_fashion_int.png
    (page 7300 px, colonne de contenu 3248 px = 44,49 %).
    ------------------------------------------------------------------ */
-/* Bloc AFFLELOU : cadre rose 47,69 % et vidéo 52,15 %, jointifs et de même
-   hauteur (les deux ratios sont ceux relevés sur la maquette). */
-.fashion-afflelou{ display:flex; gap:0; align-items:flex-start; }
-/* valeurs relevées sur la vignette officielle afflelou_collection.png */
-.fashion-afflelou .fa-portrait{
-  flex:0 0 47.80%;
-  box-sizing:border-box;
-  aspect-ratio:1674 / 1837;
-  background:#E9A09F;                       /* rose exact de l'export */
-  padding:16.85% 12.49% 16.97% 11.59%;      /* marges du portrait, en % de la largeur du cadre */
+/* Bloc AFFLELOU — UNE SEULE VIDÉO.
+   Il était auparavant composé de deux éléments côte à côte : un panneau rose
+   statique portant un portrait, et une vidéo carrée. Le panneau restait donc à
+   l'écran pendant la lecture, ce que le client a signalé comme un bug.
+   Le diptyque rose + portrait + balcon est en réalité UNE IMAGE DU FILM, à
+   13,96 s — retrouvée par comparaison avec la vignette fournie (correspondance
+   0,991). Elle sert désormais de vignette au film entier, qui prend toute la
+   largeur du bloc : au clic, la lecture remplace bien tout le visuel.
+   Format 4096 x 2160 = 1,8963, celui du film : aucun recadrage. */
+.reel-media--afflelou{
+  position:relative;
+  aspect-ratio:4096 / 2160;
+  overflow:hidden;
 }
-.fashion-afflelou .fa-portrait img{ width:100%; height:100%; object-fit:cover; display:block; }
-.fashion-afflelou > .reel-media{ flex:0 0 52.20%; aspect-ratio:1828 / 1837; position:relative; overflow:hidden; }
-.fashion-afflelou > .reel-media > video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.reel-media--afflelou > video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; display:block;
+}
 
 /* Rythme vertical de la maquette Fashion (13,9 % de la colonne entre deux blocs) */
 .reel--fashion .reel-item:last-child{ margin-bottom:0; }
-
-@media(max-width:600px){
-  .fashion-afflelou{ gap:6px; }
-  .fashion-afflelou .fa-portrait{ flex:0 0 47%; }
-  .fashion-afflelou > .reel-media{ flex:0 0 51%; }
-}
 /* Sport — grilles triptyque / duo (carrés) */
 .reel-tri{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
 .reel-duo{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
