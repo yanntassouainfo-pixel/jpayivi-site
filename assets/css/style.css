@@ -383,7 +383,7 @@ body:has(.gallery-wrap) .brand .sub{
    relevées au pixel sur le PSD (attributs style dans studio.html).
    Le conteneur est positionné et sa hauteur vient du padding-bas :
    13 864 / 1 422 = 974,96 % de sa propre largeur. Tout reste proportionnel. */
-.masonry{ position:relative; width:100%; padding-bottom:969.29%; }
+.masonry{ position:relative; width:100%; padding-bottom:955.49%; }
 .masonry .col{ display:contents; }
 .masonry .item{ position:absolute; background:#e9e9dd; overflow:hidden; }
 .masonry .item img,
