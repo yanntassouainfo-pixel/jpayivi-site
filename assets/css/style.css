@@ -112,6 +112,12 @@ body.home-page{
   display:flex;
   flex-direction:column;
   overflow:hidden;
+  /* Corps de « Réalisation • Montage • Motion Design » — maquette 1,809 % du
+     panneau, réduit de 20 % à la demande du client. Publié ici et non dans
+     .hero .tags pour que .contact, qui n'en est pas un descendant, puisse s'en
+     servir pour calculer son calage. Toute redéfinition du corps de cette ligne
+     doit se faire SUR CETTE VARIABLE, sinon le calage décroche. */
+  --tags-fs:clamp(10.4px, calc(var(--panel-w) * .014472), 35.2px);
 }
 
 .home-top{
@@ -179,7 +185,9 @@ body.home-page{
 .hero .tags{
   font-family:"Jumper",sans-serif;
   font-weight:300; font-style:italic;    /* Jumper Light Italic = ligne la plus large */
-  font-size:clamp(10.4px, calc(var(--panel-w) * .014472), 35.2px);   /* maquette 1,809 % x 0,8 */
+  /* Le corps est publié dans --tags-fs (déclaré sur .home) : le bloc contact en a
+     besoin pour calculer son propre calage. Ne pas écrire la valeur en dur ici. */
+  font-size:var(--tags-fs);
   letter-spacing:-.005em;
   margin-top:-1.6px;
 }
@@ -189,18 +197,27 @@ body.home-page{
   position:absolute;
   /* aligné sur le bord gauche du bloc d'intro (4,20 % du panneau) */
   left:1.07%;
-  /* Calage sur le BAS DES LETTRES, pas sur la boîte de texte : sous chaque ligne
-     subsiste un blanc technique = (interligne - hauteur de police)/2 + descendante.
-     Jumper : ascendante 0,750 em, descendante 0,290 em.
-     RECALCULÉ après la réduction de 20 % du bloc titre — la ligne « Réalisation… »
-     est passée de 1,809 % à 1,447 % du panneau, son blanc technique a diminué
-     d'autant, et le décalage devait suivre sous peine de perdre l'alignement :
-       « Réalisation… » : (1,35 - 1,04)/2 + 0,29 = 0,445 em x 1,4472 % = 0,644 %
-       contacts         : (1,25 - 1,04)/2 + 0,29 = 0,395 em x 0,851  % = 0,336 %
-     Différence 0,308 % (contre 0,469 % avant) : les contacts descendent d'autant
-     pour que la ligne de base de « Mail : … » tombe exactement sur celle de
-     « Réalisation • Montage • Motion Design ». */
-  bottom:calc(var(--panel-w) * -0.00308);
+  /* CALAGE DE LA LIGNE D'ÉCRITURE — la dernière ligne du bloc, « Mail : … »,
+     doit reposer sur la même ligne que « Réalisation • Montage • Motion Design ».
+
+     .contact est calé par son BAS, donc c'est bien sa dernière ligne qui sert de
+     référence, et le bas de .hero-wrap est le bas de la ligne « Réalisation… ».
+     Sous toute ligne de texte subsiste un blanc technique :
+         (interligne - hauteur de fonte)/2 + descendante
+     Métriques RÉELLES de Jumper, relevées dans la table hhea des fichiers :
+     ascendante 0,910 em, descendante 0,290 em, soit 1,200 em de hauteur de fonte.
+     (L'ancien calcul utilisait 0,750 + 0,290 = 1,040 em, valeurs sTypo de la table
+     OS/2, que les navigateurs n'emploient pas pour la hauteur de ligne.)
+         « Réalisation… », interligne 1,35 : (1,35 - 1,20)/2 + 0,29 = 0,365 em
+         contacts,         interligne 1,25 : (1,25 - 1,20)/2 + 0,29 = 0,315 em
+     Le blanc sous « Réalisation… » étant le plus épais, à bas de boîtes confondus
+     la ligne du mail tombe TROP BAS. Elle doit donc REMONTER de la différence,
+     ce qui veut dire un « bottom » POSITIF. (L'ancienne valeur était négative :
+     les contacts descendaient au lieu de monter, d'où un décalage double.)
+
+     Le terme des contacts est écrit en « em » : il se règle donc tout seul sur le
+     corps réellement appliqué, y compris quand une media query le change. */
+  bottom:calc(0.365 * var(--tags-fs) - 0.315em);
   color:var(--red);
   text-align:left;
   font-family:"Jumper",sans-serif;
@@ -738,7 +755,8 @@ body:has(.gallery-wrap) .brand .sub{
   /* Bloc titre : taille fluide -> ne chevauche jamais les contacts, même en réduisant */
   .hero h1{ font-size:clamp(22px,3.9vw,34px); }
   .hero .role{ font-size:clamp(14px,2.4vw,20px); }
-  .hero .tags{ font-size:clamp(10px,1.7vw,16px); }
+  /* On passe par la variable, pas par font-size : le calage des contacts en dépend. */
+  .home{ --tags-fs:clamp(10px,1.7vw,16px); }
   .contact{ font-size:13px; }
   /* Accueil : 3 colonnes (Food+Sport | Fashion | Motion+Studio), paires juxtaposées, bas alignées */
   .grid{
