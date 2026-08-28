@@ -124,7 +124,17 @@ body.home-page{
    le menu de 3,77 %, la grille de 3,20 % (padding de .home). */
 .intro{
   margin-left:1.07%;   /* 4,20 % du panneau, moins le retrait de 3,20 % */
-  max-width:31.9%;      /* 29,81 % du panneau */
+  /* Largeur exprimée en EM, pas en % : la boîte suit alors exactement le corps
+     du texte, y compris quand le clamp() ci-dessous bute sur son plancher ou son
+     plafond. Le paragraphe tient donc sur SES SIX LIGNES à toutes les tailles
+     de fenêtre.
+     Largeurs relevées dans la police Jumper, ligne par ligne :
+       22,58 / 24,25 / 24,47 / 17,31 / 18,89 et 27,05 em pour la dernière,
+       « Je vous accompagne de l'idée à la post-production. »
+     La maquette n'offrait que 26,08 em (29,81 % du panneau pour un corps à
+     1,223 %) : cette dernière ligne ne pouvait pas y tenir. On passe à 27,6 em,
+     soit 31,6 % du panneau — 6 % de plus que la maquette, marge de 2 % comprise. */
+  max-width:27.6em;
   font-family:"Jumper",sans-serif;
   font-weight:100;                 /* Jumper Thin */
   font-size:clamp(12px, calc(var(--panel-w) * .01223), 30px);
@@ -148,26 +158,30 @@ body.home-page{
   text-align:center;
   margin:0;
 }
+/* Bloc titre réduit de 20 % (demande client) : les trois corps de texte, leurs
+   planchers, leurs plafonds et les écarts entre les lignes sont tous multipliés
+   par 0,8. Les proportions internes du bloc sont donc intactes, il est
+   simplement plus petit. Valeurs de la maquette rappelées en commentaire. */
 .hero h1{
   font-family:"Jumper",sans-serif;
   font-weight:900; font-style:normal;    /* JP AYIVI en droit (non italique) */
-  font-size:clamp(22px, calc(var(--panel-w) * .03059), 74px);   /* relevé maquette */
+  font-size:clamp(17.6px, calc(var(--panel-w) * .024472), 59.2px);   /* maquette 3,059 % x 0,8 */
   letter-spacing:.01em;
   line-height:1;
 }
 .hero .role{
   font-family:"Jumper",sans-serif;
   font-weight:700; font-style:italic;
-  font-size:clamp(14px, calc(var(--panel-w) * .01822), 44px);   /* CRÉATEUR D'IMAGES — relevé maquette */
+  font-size:clamp(11.2px, calc(var(--panel-w) * .014576), 35.2px);   /* CRÉATEUR D'IMAGES — maquette 1,822 % x 0,8 */
   letter-spacing:.01em;
-  margin-top:2px;
+  margin-top:1.6px;
 }
 .hero .tags{
   font-family:"Jumper",sans-serif;
   font-weight:300; font-style:italic;    /* Jumper Light Italic = ligne la plus large */
-  font-size:clamp(13px, calc(var(--panel-w) * .01809), 44px);   /* relevé maquette */
+  font-size:clamp(10.4px, calc(var(--panel-w) * .014472), 35.2px);   /* maquette 1,809 % x 0,8 */
   letter-spacing:-.005em;
-  margin-top:-2px;
+  margin-top:-1.6px;
 }
 
 /* Coordonnées rouges — à gauche, centrées verticalement sur le bloc JP AYIVI */
@@ -178,11 +192,15 @@ body.home-page{
   /* Calage sur le BAS DES LETTRES, pas sur la boîte de texte : sous chaque ligne
      subsiste un blanc technique = (interligne - hauteur de police)/2 + descendante.
      Jumper : ascendante 0,750 em, descendante 0,290 em.
-       « Réalisation… » : (1,35 - 1,04)/2 + 0,29 = 0,445 em x 1,809 % = 0,805 %
-       contacts         : (1,25 - 1,04)/2 + 0,29 = 0,395 em x 0,851 % = 0,336 %
-     Différence 0,469 % : les contacts descendent d'autant pour que la ligne de
-     base de « Mail : … » tombe sur celle de « Réalisation • Montage • Motion Design ». */
-  bottom:calc(var(--panel-w) * -0.00469);
+     RECALCULÉ après la réduction de 20 % du bloc titre — la ligne « Réalisation… »
+     est passée de 1,809 % à 1,447 % du panneau, son blanc technique a diminué
+     d'autant, et le décalage devait suivre sous peine de perdre l'alignement :
+       « Réalisation… » : (1,35 - 1,04)/2 + 0,29 = 0,445 em x 1,4472 % = 0,644 %
+       contacts         : (1,25 - 1,04)/2 + 0,29 = 0,395 em x 0,851  % = 0,336 %
+     Différence 0,308 % (contre 0,469 % avant) : les contacts descendent d'autant
+     pour que la ligne de base de « Mail : … » tombe exactement sur celle de
+     « Réalisation • Montage • Motion Design ». */
+  bottom:calc(var(--panel-w) * -0.00308);
   color:var(--red);
   text-align:left;
   font-family:"Jumper",sans-serif;
