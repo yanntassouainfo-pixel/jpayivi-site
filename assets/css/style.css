@@ -67,6 +67,11 @@
      cette valeur, mais le LOGO continue de s'y référer directement : c'est ce qui
      lui permet de garder sa taille pendant que le menu grandit. */
   --nav-base:clamp(12px, 0.572vw, 18px);
+  /* Écart de fin de page, employé DES DEUX CÔTÉS du séparateur : sous le
+     contenu de la galerie, et au-dessus de la première ligne du pied de page.
+     Une seule variable pour les deux, donc une équidistance garantie quelle que
+     soit la fenêtre. 4,37 vw = la moitié de l'espace qui existait auparavant. */
+  --fin-gap:clamp(14px, 4.37vw, 100px);
   --panel-w:calc(100vw - (2 * var(--frame-x)));
   --panel-h:calc(100vh - var(--frame-t) - var(--frame-b));
 }
@@ -401,22 +406,27 @@ body:has(.gallery-wrap) .reel{ padding-bottom:0; }
 body:has(.gallery-wrap) .rs{ padding-bottom:0; }
 body:has(.gallery-wrap) .showreel-stage{ padding-bottom:0; }
 
-/* ---- Fin de galerie : le même trait de clôture sur les neuf pages ----
-   Cinq pages se terminaient par une légende, donc par le petit trait qui la
-   souligne ; quatre autres ne se terminaient par rien : Motion, dont la grille
-   basse n'a pas de légende, Studio, Réseaux Sociaux et Showreel, qui n'en ont
-   nulle part. On leur ajoute le même trait, à la même distance du contenu.
+/* ---- Fin de galerie : UN séparateur, centré, sur les neuf pages ----
+   Le trait de clôture appartient désormais à la galerie elle-même et non plus à
+   la dernière légende. Il est posé à égale distance de la fin du contenu et de
+   la première ligne du pied de page — c'est --fin-gap, employé des deux côtés,
+   ce qui garantit l'égalité à toutes les tailles de fenêtre.
+   Valeur : la moitié de ce que valait l'ensemble avant (1,74 vw au-dessus du
+   trait + 7 vw en dessous = 8,74 vw), donc 4,37 vw. La longueur des pages ne
+   change pas, seul le trait descend au milieu.
    Largeur 5,24 % de la colonne = 4,35 % de la fenêtre, la valeur du site. */
-.gallery-wrap:has(.md-pairs)::after,
-.gallery-wrap:has(.masonry)::after,
-.gallery-wrap:has(.rs)::after,
-.gallery-wrap:has(.showreel-stage)::after{
+.gallery-wrap::after{
   content:"";
   display:block;
   width:5.24%; height:1.5px;
   background:var(--ink);
-  margin:clamp(11px, 1.74vw, 38px) auto 0;
+  margin:var(--fin-gap) auto 0;
 }
+/* La dernière légende perd son soulignement : c'est le séparateur ci-dessus qui
+   ferme la page, et deux traits se suivraient sinon. Ne concerne que le dernier
+   bloc en fin de galerie — sur Motion les légendes de la colonne haute gardent
+   le leur, puisque la grille basse vient encore après. */
+.reel > .reel-item:last-child .reel-caption::after{ display:none; }
 /* Dernier bloc des galeries légendées : plus de marge sous lui. L'écart entre le
    trait et le pied de page est alors donné par le seul retrait de celui-ci
    (7 vw) — identique sur les neuf pages. Sans cette ligne, Événement et
@@ -584,7 +594,9 @@ body:has(.gallery-wrap) .brand .sub{
 .md-row--b > *:first-child{ width:54.12%; aspect-ratio:16 / 9; }
 .md-row--b > *:last-child { width:41.64%; aspect-ratio:2 / 1; }
 
-.md-row--c > *{ width:100%; aspect-ratio:1602 / 514; }
+/* 2000 x 640 = le format exact de l'animation fournie : aucun recadrage.
+   (La maquette donnait 1602 x 514, soit 3,117 contre 3,125 — écart invisible.) */
+.md-row--c > *{ width:100%; aspect-ratio:2000 / 640; }
 
 .md-row--d{ justify-content:space-between; align-items:flex-start; }
 .md-row--d > *:first-child{ width:38.39%; aspect-ratio:1 / 1; }
@@ -1199,11 +1211,13 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
   text-align:center;
   font-family:"Jumper",sans-serif;
   color:var(--ink);
-  /* Espaces égaux avant et après le pied de page (choix client), doublés.
-     La maquette donnait 14,63 % au-dessus et 19,79 % en dessous : déséquilibre
-     de 63 %. Les 170 px hérités des conteneurs sont neutralisés plus haut,
-     l'écart n'est donc donné que par ce padding. */
-  padding:7.00vw 0;
+  /* En bas : 7 vw, l'espace validé par le client sous le pied de page.
+     En haut : --fin-gap, la même valeur que celle placée au-dessus du séparateur
+     de fin de galerie — c'est ce qui met ce dernier pile au milieu.
+     Conséquence assumée : l'espace avant le pied de page (4,37 vw) n'est plus
+     égal à celui qui le suit (7 vw), le séparateur occupant désormais le
+     premier. */
+  padding:var(--fin-gap) 0 7.00vw;
 }
 /* Ligne de contact — Gotham Medium demandée. Le fichier Gotham n'est pas encore
    fourni : Maison Neue Medium, déjà installée, prend le relais. Le jour où le
