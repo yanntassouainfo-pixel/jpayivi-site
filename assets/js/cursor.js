@@ -169,6 +169,22 @@
   if (!header || !wrap) return;
   if (getComputedStyle(header).position !== 'fixed') return;
 
+  /* ---- Dégagement sous « +About », en fraction de la hauteur de fenêtre ----
+     Le menu ayant grandi de 30 %, il descendait à 6 px seulement du haut de la
+     galerie : beaucoup trop serré (retour client). On garantit désormais un
+     dégagement proportionnel sous le bas du menu.
+     POUR ÉTENDRE AUX AUTRES PAGES : ajouter leur classe ou leur nom de fichier
+     à la liste ci-dessous, ou remplacer la condition par « true ». */
+  var DEGAGEMENT = 0.05;                    /* 5 % de la hauteur de fenêtre */
+  var PAGES = ['.reel--xl'];                /* Sport uniquement pour l'instant */
+
+  function degagement() {
+    for (var i = 0; i < PAGES.length; i++) {
+      if (document.querySelector(PAGES[i])) return window.innerHeight * DEGAGEMENT;
+    }
+    return null;                            /* page non concernée : formule d'origine */
+  }
+
   function place() {
     var nav = header.querySelector('nav');
     var brand = header.querySelector('.brand');
@@ -178,10 +194,14 @@
 
     /* Maquette : la galerie commence à 8,880 % de la largeur de la page (456 px sur 5135).
        Sur un écran étroit, le menu — maintenu à une taille lisible — descend plus bas que
-       ça : on prend alors le bas du menu + une petite marge, pour ne jamais le recouvrir.
-       Au-delà d'environ 1750 px, c'est la valeur de la maquette qui s'applique telle quelle. */
+       ça : on prend alors le bas du menu + le dégagement, pour ne jamais le recouvrir.
+       Le dégagement s'applique TOUJOURS sous le menu, y compris quand la valeur de la
+       maquette est la plus grande : c'est lui qui fixe la distance sous « +About ». */
     var maquette = window.innerWidth * 0.0888;
-    var top = Math.max(maquette, bottom + 6);
+    var deg = degagement();
+    var top = (deg === null)
+            ? Math.max(maquette, bottom + 6)          /* formule d'origine, inchangée */
+            : Math.max(maquette, bottom) + deg;       /* pages réglées : dégagement garanti */
 
     var title = wrap.querySelector('.page-title');
     if (title) {
