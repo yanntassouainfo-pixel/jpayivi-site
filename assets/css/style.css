@@ -153,8 +153,10 @@ body.home-page{
   line-height:1.25;                /* interligne resserré comme la maquette */
 }
 .home-top nav{ margin-right:0.61%; }   /* menu à 3,77 % du bord du panneau */
-/* maquette 1,13 % du panneau, agrandi de 30 % (plancher et plafond compris) */
-.home .nav{ font-size:clamp(14.3px, calc(var(--panel-w) * .01469), 36.4px); }
+/* Relevé maquette : 1,13 % du panneau. L'agrandissement de 30 % appliqué au reste
+   du site a été RETIRÉ ici à la demande du client — il ne vaut plus que pour les
+   neuf pages intérieures (voir .site-header .nav). */
+.home .nav{ font-size:clamp(11px, calc(var(--panel-w) * .0113), 28px); }
 .intro strong{font-weight:400;}    /* la partie "grasse" = Jumper Regular */
 
 /* Bloc central + coordonnées à gauche */
@@ -781,8 +783,10 @@ body:has(.gallery-wrap) .brand .sub{
 @media (min-width:951px) and (max-height:820px){
   .intro{ font-size:clamp(11px, calc(var(--panel-h) * .019), 15px); }
   .contact{ font-size:clamp(11px, calc(var(--panel-h) * .019), 15px); }
-  /* + 30 % comme les autres menus de bureau (plancher et plafond compris) */
-  .nav{ font-size:clamp(14.3px, calc(var(--panel-h) * .0247), 20.8px); }
+  /* Règle de repli pour les fenêtres basses. Revenue à sa valeur d'origine en
+     même temps que l'accueil et About : sur les pages intérieures c'est de toute
+     façon .site-header .nav, plus spécifique, qui l'emporte et garde le + 30 %. */
+  .nav{ font-size:clamp(11px, calc(var(--panel-h) * .019), 16px); }
 }
 @media(max-width:950px) and (min-width:601px){
   :root{--pad:30px;}
@@ -1003,8 +1007,10 @@ body.about-page .site-header{
 }
 body.about-page .brand .name{ font-size:clamp(30px, calc(var(--panel-w) * .03755), 150px); }
 body.about-page .brand .sub { font-size:clamp(14px, calc(var(--panel-w) * .01723), 70px); }
-/* maquette 1,130 % du panneau, agrandi de 30 % (plancher et plafond compris) */
-body.about-page .nav{ font-size:clamp(14.3px, calc(var(--panel-w) * .01469), 58.5px); line-height:1.2; }
+/* Relevé maquette : 1,130 % du panneau. Comme sur l'accueil, l'agrandissement de
+   30 % a été retiré à la demande du client : About et l'accueil partagent la même
+   taille de menu depuis l'origine, ils devaient rester ensemble. */
+body.about-page .nav{ font-size:clamp(11px, calc(var(--panel-w) * .01130), 45px); line-height:1.2; }
 
 .about{ position:static; }
 
