@@ -400,6 +400,28 @@ body:has(.gallery-wrap) .site-header{ padding-left:4%; padding-right:4%; }
 body:has(.gallery-wrap) .reel{ padding-bottom:0; }
 body:has(.gallery-wrap) .rs{ padding-bottom:0; }
 body:has(.gallery-wrap) .showreel-stage{ padding-bottom:0; }
+
+/* ---- Fin de galerie : le même trait de clôture sur les neuf pages ----
+   Cinq pages se terminaient par une légende, donc par le petit trait qui la
+   souligne ; quatre autres ne se terminaient par rien : Motion, dont la grille
+   basse n'a pas de légende, Studio, Réseaux Sociaux et Showreel, qui n'en ont
+   nulle part. On leur ajoute le même trait, à la même distance du contenu.
+   Largeur 5,24 % de la colonne = 4,35 % de la fenêtre, la valeur du site. */
+.gallery-wrap:has(.md-pairs)::after,
+.gallery-wrap:has(.masonry)::after,
+.gallery-wrap:has(.rs)::after,
+.gallery-wrap:has(.showreel-stage)::after{
+  content:"";
+  display:block;
+  width:5.24%; height:1.5px;
+  background:var(--ink);
+  margin:clamp(11px, 1.74vw, 38px) auto 0;
+}
+/* Dernier bloc des galeries légendées : plus de marge sous lui. L'écart entre le
+   trait et le pied de page est alors donné par le seul retrait de celui-ci
+   (7 vw) — identique sur les neuf pages. Sans cette ligne, Événement et
+   Communication ajoutaient 2,54 vw de plus que les autres. */
+.reel > .reel-item:last-child{ margin-bottom:0; }
 /* (le padding-bottom de .masonry n'est PAS touché : c'est le calage en hauteur
    de la page Studio, pas une marge.) */
 
@@ -1231,6 +1253,11 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
 }
 .foot-nav a{ transition:opacity .18s ease; }
 .foot-nav a:hover, .foot-contact a:hover{ opacity:.6; }
+/* Page en cours : elle reste lisible mais s'efface, pour qu'on voie d'un coup
+   d'œil où l'on se trouve. Le survol la ramène à pleine opacité comme les
+   autres, sinon elle paraîtrait désactivée. */
+.foot-nav a.is-current{ opacity:.38; }
+.foot-nav a.is-current:hover{ opacity:.6; }
 @media(max-width:600px){
   .site-footer{ padding:88px var(--pad); }
   .foot-contact{ flex-wrap:wrap; gap:10px; }
