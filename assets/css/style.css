@@ -322,54 +322,51 @@ body.home-page{
   line-height:1.05;
 }
 
-/* Largeur de contenu = celle des maquettes, en % de la fenêtre (relevé au pixel) :
-   Studio 63,0 % · Réseaux Sociaux 62,8 % · Food 62,9 % · Sport 66,9 %
-   Motion 44,3 % · Événement 44,6 % · Fashion 44,6 %
+/* Largeur de contenu — UNIFORME sur toutes les pages intérieures (choix client).
+   Les maquettes donnaient des colonnes différentes (Studio 63,0 % · RS 62,8 %
+   · Food 62,9 % · Sport 66,9 % · Motion 44,3 % · Événement, Fashion 44,6 %) ;
+   le client a validé l'élargissement de Sport à 83 % et demande les mêmes
+   marges partout. Chaque page conserve ses proportions internes : tout y est
+   exprimé en % de cette colonne, l'agrandissement est donc homothétique.
    Le contenu peut passer sous le menu : celui-ci s'estompe (voir .site-header.brand-dim). */
 .gallery-wrap{
-  width:62.8%;
-  max-width:1500px;
+  width:83%;
+  max-width:none;
   margin:0 auto;
   /* --gallery-top est calculé en JS : bas de la ligne « About » + 1,19 % (maquette).
      Sur les pages avec titre, la hauteur du titre est déduite pour que les images
      démarrent elles aussi au niveau de « About ». */
-  padding:var(--gallery-top, 150px) 0 80px;
+  padding:var(--gallery-top, 150px) 0 0;
 }
-.gallery-wrap:has(.reel){ width:44.6%; max-width:1060px; }        /* Motion · Événement · Communication · Fashion */
-.gallery-wrap:has(.reel--large){ width:62.91%; max-width:none; } /* Food (relevé maquette) */
-.gallery-wrap:has(.reel--xl){ width:83%; max-width:none; }        /* Sport — élargi (maquette : 66,9 %) */
-/* Sport élargi : logo et menu rentrés de 4 %. Ils ne suivent PLUS les
-   réglages de largeur de la galerie (choix client) : ils dépassent donc
-   légèrement les images, de 0,5 % de chaque côté. */
-body:has(.reel--xl) .site-header{ padding-left:4%; padding-right:4%; }
 
-/* Sport : la page se termine par un pied de page. Les 90 px du bas de .reel et
-   les 80 px du bas de .gallery-wrap s'ajoutaient à son écart supérieur, ce qui
-   faisait 237 px au-dessus contre 67 px en dessous. On neutralise les deux,
+/* Logo et menu rentrés de 4 % du bord de fenêtre, sur toutes les pages
+   intérieures (celles qui portent une .gallery-wrap : ni l'accueil ni About).
+   Ils ne suivent PLUS la largeur de la galerie (choix client) : ils dépassent
+   donc légèrement les images, de 0,5 % de chaque côté. */
+body:has(.gallery-wrap) .site-header{ padding-left:4%; padding-right:4%; }
+
+/* Toutes les pages intérieures se terminent par un pied de page. Les 90 px du
+   bas de .reel et les 80 px du bas de .gallery-wrap s'ajoutaient à son écart
+   supérieur (237 px au-dessus contre 67 px en dessous). On neutralise les deux :
    l'écart n'est plus donné que par le pied de page lui-même. */
-body:has(.reel--xl) .reel{ padding-bottom:0; }
-body:has(.reel--xl) .gallery-wrap{ padding-bottom:0; }
+body:has(.gallery-wrap) .reel{ padding-bottom:0; }
+body:has(.gallery-wrap) .rs{ padding-bottom:0; }
+body:has(.gallery-wrap) .showreel-stage{ padding-bottom:0; }
+/* (le padding-bottom de .masonry n'est PAS touché : c'est le calage en hauteur
+   de la page Studio, pas une marge.) */
 
-/* Sport : logo calé sur le menu — le haut de « JP AYIVI » au niveau du haut de
+/* Logo calé sur le menu — le haut de « JP AYIVI » au niveau du haut de
    « +Home », le bas de « Créateur d'images » (descendante du g comprise) au
-   niveau du bas de « +Communication ».
+   niveau du bas de « +Communication ». Réglage validé sur Sport, généralisé.
    Métriques Jumper : la hauteur visée vaut 4,914 corps de menu, le bloc logo
    1,429 corps de nom -> corps du nom = 3.4383 x corps du menu.
    On le calcule à partir du corps RÉEL du menu (plancher de 12 px compris),
    pour que le calage tienne à toutes les tailles d'écran. */
-body:has(.reel--xl) .brand .name{
+body:has(.gallery-wrap) .brand .name{
   font-size:calc(3.4383 * clamp(12px, 0.572vw, 18px));
 }
-body:has(.reel--xl) .brand .sub{
+body:has(.gallery-wrap) .brand .sub{
   font-size:calc(1.5771 * clamp(12px, 0.572vw, 18px));
-}
-
-/* Réseaux Sociaux : bord gauche aligné sur le « r » final de « Créateu-r »,
-   et retrait identique à droite (galerie centrée).
-   --logo-r est calculé en JS ; la valeur de repli couvre le cas sans JS. */
-.gallery-wrap:has(.rs){
-  width:calc(100% - (2 * var(--logo-r, 19.37%)));
-  max-width:none;
 }
 .page-title{                            /* titre petit, aligné à gauche de la colonne de contenu */
   font-family:"Jumper",sans-serif;
@@ -423,9 +420,13 @@ body:has(.reel--xl) .brand .sub{
   background:var(--ink);
   margin:clamp(11px, 1.74vw, 38px) auto 0;
 }
-.reel{ --rule-w:9.16%; }        /* Fashion · Motion · Événement · Communication */
-.reel--large{ --rule-w:6.48%; } /* Food */
-.reel--xl{ --rule-w:5.24%; }    /* Sport : 4,35 % de la fenêtre, inchangé malgré l'élargissement */
+/* Le trait fait 4,35 % de la fenêtre sur TOUTES les pages : c'est la valeur de la
+   maquette Sport, validée par le client. Exprimé en % de la colonne (83 %), cela
+   donne 5,24 %. Sur Motion le trait vit dans une sous-colonne à 70,41 % de la
+   galerie : 4,35 / (83 x 0,7041) = 7,44 %. */
+.reel{ --rule-w:5.24%; }        /* Fashion · Événement · Communication */
+.reel--large{ --rule-w:5.24%; } /* Food */
+.reel--xl{ --rule-w:5.24%; }    /* Sport */
 
 /* ------------------------------------------------------------------
    PAGE FASHION — relevé au pixel sur site_ordi_fashion_int.png
@@ -469,8 +470,7 @@ body:has(.reel--xl) .brand .sub{
    Le conteneur prend la largeur large ; la colonne du haut vaut
    1128 / 1602 = 70,41 % de ce conteneur.
    ------------------------------------------------------------------ */
-.gallery-wrap:has(.reel--motion){ width:63.12%; max-width:none; }
-.reel--motion{ --rule-w:9.40%; }
+.reel--motion{ --rule-w:7.44%; }
 
 /* Colonne étroite (11 blocs) */
 .md-col{ width:70.41%; margin:0 auto; }
@@ -645,7 +645,8 @@ body:has(.reel--xl) .brand .sub{
    PAGE SHOWREEL — grande vidéo centrée
    ============================================================ */
 .showreel-stage{
-  max-width:min(1280px, calc(100vw - 120px));
+  /* plafond levé : la vidéo occupe la colonne de 83 % comme les autres pages */
+  max-width:none;
   margin:0 auto;
   padding:0 0 70px;
 }
@@ -750,12 +751,17 @@ body:has(.reel--xl) .brand .sub{
   .card--food .label,.card--motion .label{ color:#fff; }
   .card--sport .label,.card--studio .label{ color:var(--ink); }
   /* Pages intérieures : colonnes élargies */
-  .site-header{ padding:clamp(24px,3.4vw,44px) 5% 0; }
-  .gallery-wrap{ max-width:none; padding:var(--gallery-top, 130px) 40px 40px; }
+  .site-header,
+  body:has(.gallery-wrap) .site-header{ padding:clamp(24px,3.4vw,44px) 5% 0; }
+  .gallery-wrap{ max-width:none; padding:var(--gallery-top, 130px) 40px 0; }
   .gallery-wrap:has(.reel){ max-width:min(700px, calc(100vw - 180px)); }
   .gallery-wrap:has(.rs){ width:auto; }   /* le calage sur le « r » ne vaut qu'en bureau */
-  .brand .name{ font-size:30px; }
-  .brand .sub{ font-size:13.5px; }
+  /* Le grand logo du bureau ne tient pas sur ces largeurs : on revient aux
+     corps fixes. Sélecteurs doublés pour repasser devant body:has(.gallery-wrap). */
+  .brand .name,
+  body:has(.gallery-wrap) .brand .name{ font-size:30px; }
+  .brand .sub,
+  body:has(.gallery-wrap) .brand .sub{ font-size:13.5px; }
   .site-header .nav{ font-size:12.5px; line-height:1.15; }
 }
 
@@ -798,8 +804,9 @@ body:has(.reel--xl) .brand .sub{
   /* ===== PAGES INTÉRIEURES ===== */
   .site-header{ position:absolute; }
   .site-header::before{ display:none; }
-  .site-header{ padding:22px var(--pad) 0; }
-  .gallery-wrap, .gallery-wrap:has(.reel){ max-width:none; padding:92px var(--pad) 40px; }
+  .site-header,
+  body:has(.gallery-wrap) .site-header{ padding:22px var(--pad) 0; }
+  .gallery-wrap, .gallery-wrap:has(.reel){ width:auto; max-width:none; padding:92px var(--pad) 0; }
   .gallery-wrap:has(.rs){ width:auto; }
   /* mobile : une seule colonne, on abandonne le positionnement de la maquette */
   .masonry{ position:static; padding-bottom:0; }
@@ -807,8 +814,10 @@ body:has(.reel--xl) .brand .sub{
   .masonry .item{ position:static !important; width:100% !important; left:auto !important; top:auto !important; margin-bottom:10px; }
   .rs-band{ flex-wrap:wrap; } .rs-band .rs-post--sm,.rs-band .rs-post--lg{ width:100%; }
   .rs-row{ flex-wrap:wrap; } .rs-row > *{ width:100% !important; }
-  .brand .name{ font-size:26px; }
-  .brand .sub{ font-size:12px; }
+  .brand .name,
+  body:has(.gallery-wrap) .brand .name{ font-size:26px; }
+  .brand .sub,
+  body:has(.gallery-wrap) .brand .sub{ font-size:12px; }
   .site-header .nav{ font-size:12px; line-height:1.2; }
 }
 
