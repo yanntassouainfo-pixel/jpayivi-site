@@ -158,10 +158,13 @@ body.home-page{
   line-height:1.25;                /* interligne resserré comme la maquette */
 }
 .home-top nav{ margin-right:0.61%; }   /* menu à 3,77 % du bord du panneau */
-/* Logo de l'accueil : réservé au TÉLÉPHONE. Sur grand écran l'identité est
-   portée par le bloc central « JP AYIVI / CRÉATEUR D'IMAGES », il n'y a donc
-   pas de logo en haut — c'est la maquette bureau. */
-.home-brand{ display:none; }
+/* Logo de l'accueil : réservé au TÉLÉPHONE. Sur bureau et tablette l'identité
+   est portée par le bloc central « JP AYIVI / CRÉATEUR D'IMAGES », il n'y a donc
+   pas de logo en haut — c'est la maquette.
+   Sélecteur scopé « .home .home-brand » et non « .home-brand » seul : la règle
+   générale « .brand{ display:inline-block } », plus bas dans le fichier et de
+   même force, l'emportait sinon et le logo apparaissait sur grand écran. */
+.home .home-brand{ display:none; }
 /* Relevé maquette : 1,13 % du panneau. L'agrandissement de 30 % appliqué au reste
    du site a été RETIRÉ ici à la demande du client — il ne vaut plus que pour les
    neuf pages intérieures (voir .site-header .nav). */
@@ -916,7 +919,8 @@ body:has(.gallery-wrap) .brand .sub{
      La valeur ci-dessous ne sert qu'au premier affichage, avant le calcul. */
   .home{ --ecart:22px; }
   .home-top{ flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:var(--ecart) 12px; }
-  .home-brand{ display:block; order:1; }
+  /* même force de sélecteur que la règle qui le masque plus haut */
+  .home .home-brand{ display:block; order:1; }
   .home-brand .name{ font-size:34px; }
   .home-brand .sub { font-size:15px; }
   .menu-toggle{ display:inline-block; font-size:18px; order:2; margin-left:auto; }
