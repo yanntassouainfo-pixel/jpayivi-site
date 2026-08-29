@@ -158,6 +158,10 @@ body.home-page{
   line-height:1.25;                /* interligne resserré comme la maquette */
 }
 .home-top nav{ margin-right:0.61%; }   /* menu à 3,77 % du bord du panneau */
+/* Logo de l'accueil : réservé au TÉLÉPHONE. Sur grand écran l'identité est
+   portée par le bloc central « JP AYIVI / CRÉATEUR D'IMAGES », il n'y a donc
+   pas de logo en haut — c'est la maquette bureau. */
+.home-brand{ display:none; }
 /* Relevé maquette : 1,13 % du panneau. L'agrandissement de 30 % appliqué au reste
    du site a été RETIRÉ ici à la demande du client — il ne vaut plus que pour les
    neuf pages intérieures (voir .site-header .nav). */
@@ -902,11 +906,16 @@ body:has(.gallery-wrap) .brand .sub{
      et le contenu excédentaire disparaissait sans le moindre signe. */
   .home{ position:relative; min-height:calc(100vh - 24px); overflow:visible; padding:20px 14px 0; display:flex; flex-direction:column; }
 
-  /* « +Menu » passe AU-DESSUS du paragraphe, aligné à droite, sur sa propre ligne.
-     column-reverse suffit : dans le HTML le bouton suit le texte, l'inverser les
-     remet dans le bon ordre visuel sans toucher au balisage. */
-  .home-top{ flex-direction:column-reverse; align-items:stretch; gap:10px; }
-  .menu-toggle{ display:inline-block; font-size:18px; align-self:flex-end; }
+  /* En-tête identique à celui d'About (demande client) : logo à gauche,
+     « +Menu » à droite sur la même ligne, puis le paragraphe pleine largeur en
+     dessous. Obtenu par un simple retour à la ligne du flex : le paragraphe
+     occupe 100 % et bascule donc seul sur la seconde rangée. */
+  .home-top{ flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:14px 12px; }
+  .home-brand{ display:block; order:1; }
+  .home-brand .name{ font-size:34px; }
+  .home-brand .sub { font-size:15px; }
+  .menu-toggle{ display:inline-block; font-size:18px; order:2; margin-left:auto; }
+  .intro{ order:3; flex:0 0 100%; }
 
   /* Le paragraphe reprend TOUTE la colonne. Bridé à 66 %, chacune de ses six
      lignes se cassait en deux : 11 lignes à l'écran et 179 px de haut.
@@ -932,9 +941,19 @@ body:has(.gallery-wrap) .brand .sub{
      alors de quelques pixels plutôt que de coller le titre à ses voisins. */
   .hero-wrap{ margin:auto 0; padding:14px 0; }
   .hero{ text-align:center; }
-  .hero h1{ font-size:clamp(30px,9vw,44px); }
-  .hero .role{ font-size:clamp(19px,6vw,30px); }
-  .hero .tags{ font-size:clamp(15px,4.4vw,22px); }
+  /* « JP AYIVI » et « CRÉATEUR D'IMAGES » sont désormais portés par le logo en
+     haut de page : les répéter au centre ferait doublon sur un seul écran.
+     Il ne reste au milieu que la ligne des métiers, qui garde son rôle de
+     signature entre le paragraphe et les cartes. */
+  .hero h1, .hero .role{ display:none; }
+  /* « Réalisation • Montage • Motion Design » doit tenir sur UNE ligne (demande
+     client). Elle mesure 20,42 em : à 4,4 vw elle débordait sur tous les
+     téléphones, du SE au Pro Max. Le corps est donc calculé à partir de la
+     largeur réellement disponible, avec 0,5 em de garde. */
+  .hero .tags{
+    font-size:clamp(12px, calc((100vw - 56px) / 20.9), 22px);
+    white-space:nowrap;
+  }
 
   /* cartes empilées en éventail, en bas */
   /* Plus de marge « auto » ici : c'est elle qui absorbait tout le vide et
