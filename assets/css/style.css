@@ -896,23 +896,51 @@ body:has(.gallery-wrap) .brand .sub{
   :root{--pad:20px;}
 
   /* ===== ACCUEIL ===== */
-  body.home-page{ padding:12px; }
-  .home{ position:relative; min-height:calc(100vh - 24px); overflow:hidden; padding:20px 18px 0; display:flex; flex-direction:column; }
-  .home-top{ flex-direction:row; align-items:flex-start; justify-content:space-between; gap:14px; }
-  .intro{ max-width:66%; font-size:12.5px; line-height:1.3; }
-  .menu-toggle{ display:inline-block; font-size:18px; }
+  body.home-page{ padding:12px; overflow-x:hidden; }
+  /* min-height et non height : sur un écran court la page défile au lieu de
+     rogner le bas. overflow:visible pour la même raison — c'était « hidden »,
+     et le contenu excédentaire disparaissait sans le moindre signe. */
+  .home{ position:relative; min-height:calc(100vh - 24px); overflow:visible; padding:20px 14px 0; display:flex; flex-direction:column; }
+
+  /* « +Menu » passe AU-DESSUS du paragraphe, aligné à droite, sur sa propre ligne.
+     column-reverse suffit : dans le HTML le bouton suit le texte, l'inverser les
+     remet dans le bon ordre visuel sans toucher au balisage. */
+  .home-top{ flex-direction:column-reverse; align-items:stretch; gap:10px; }
+  .menu-toggle{ display:inline-block; font-size:18px; align-self:flex-end; }
+
+  /* Le paragraphe reprend TOUTE la colonne. Bridé à 66 %, chacune de ses six
+     lignes se cassait en deux : 11 lignes à l'écran et 179 px de haut.
+     Le corps est calculé pour que la ligne la plus longue — « Je vous accompagne
+     de l'idée à la post-production. », 27,05 em — tienne toujours d'un seul
+     tenant, quelle que soit la largeur du téléphone. Plafond à 12 px, plancher
+     à 10,5 px en dessous duquel on renonce plutôt que de devenir illisible. */
+  .intro{
+    max-width:none; margin-left:0;
+    font-size:clamp(10.5px, calc((100vw - 60px) / 27.6), 12px);
+    line-height:1.35;
+  }
   .site-nav{ display:none; }
   .site-nav.open{ display:flex; position:fixed; inset:0; z-index:300; background:var(--cream); flex-direction:column; justify-content:center; padding:40px 30px; }
   .site-nav.open .nav{ text-align:left; font-size:30px; line-height:1.75; font-weight:400; }
   body.nav-open .menu-toggle{ position:fixed; top:22px; right:24px; z-index:301; }
-  .hero-wrap{ margin:16px 0 0; }
+  /* L'espace libéré par le paragraphe — une cinquantaine de pixels — est rendu
+     au bloc titre sous forme de blancs, répartis au-dessus et en dessous.
+     Deux marges « auto » dans une colonne flex se partagent le vide à parts
+     égales : le titre flotte au milieu, comme sur la maquette téléphone.
+     Le retrait de 14 px garantit 28 px de dégagement même sur un écran court,
+     où les marges « auto » ne trouveraient rien à distribuer ; la page défile
+     alors de quelques pixels plutôt que de coller le titre à ses voisins. */
+  .hero-wrap{ margin:auto 0; padding:14px 0; }
   .hero{ text-align:center; }
   .hero h1{ font-size:clamp(30px,9vw,44px); }
   .hero .role{ font-size:clamp(19px,6vw,30px); }
   .hero .tags{ font-size:clamp(15px,4.4vw,22px); }
 
   /* cartes empilées en éventail, en bas */
-  .grid{ position:static; margin:auto 0 62px; display:flex; flex-direction:column; gap:0; align-items:stretch; justify-content:flex-end; }
+  /* Plus de marge « auto » ici : c'est elle qui absorbait tout le vide et
+     collait le titre sous le paragraphe. Le vide appartient désormais au bloc
+     titre. Les 62 px du bas dégagent la barre de contacts fixe. */
+  .grid{ position:static; margin:0 0 62px; display:flex; flex-direction:column; gap:0; align-items:stretch; justify-content:flex-end; }
   .card{ position:relative; width:100%; max-width:none; height:15.5vh; min-height:92px; margin-top:-6.5vh; border-radius:20px 20px 0 0; overflow:hidden; box-shadow:0 -7px 18px rgba(0,0,0,.18); }
   .card--fashion{ order:1; z-index:1; margin-top:0; }
   .card--motion{ order:2; z-index:2; }
