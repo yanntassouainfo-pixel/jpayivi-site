@@ -295,8 +295,39 @@
 
   var PART_HAUT = 0.3965;   /* 270 / (270 + 411) sur la maquette */
 
+  /* ---- TÉLÉPHONE : trois espaces égaux ----
+     Le client demande un écart identique entre le logo, le paragraphe, la ligne
+     des métiers et les cartes — quatre éléments, donc trois espaces. Ils ne
+     peuvent pas s'écrire en CSS : leur valeur dépend de la hauteur réellement
+     occupée par les blocs, qui varie avec l'appareil. On la calcule ici et on la
+     publie dans --ecart, que le CSS applique aux trois endroits.
+     La marge haute du panneau (20 px) et le dégagement bas (62 px, qui écarte la
+     barre de contacts) restent en dehors : ce sont les marges du panneau, pas
+     des espaces de composition. */
+  var ECART_MINI = 20;
+
+  function placeMobile() {
+    home.style.setProperty('--ecart', '0px');            /* on mesure sans les écarts */
+    var cs = getComputedStyle(home);
+    var dispo = home.clientHeight
+              - parseFloat(cs.paddingTop || 0)
+              - parseFloat(cs.paddingBottom || 0);
+    var basGrille = parseFloat(getComputedStyle(grid).marginBottom) || 0;
+    var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight - basGrille;
+    /* Sous le plancher, la page défile de la différence plutôt que de coller
+       les blocs les uns aux autres. */
+    home.style.setProperty('--ecart', Math.max(ECART_MINI, Math.round(libre / 3)) + 'px');
+  }
+
   function place() {
-    if (window.innerWidth <= 950) {          /* tablette et mobile : mise en page dédiée */
+    if (window.innerWidth <= 600) {          /* téléphone : trois écarts égaux */
+      home.style.removeProperty('--hero-gap');
+      home.style.removeProperty('--card-cap');
+      placeMobile();
+      return;
+    }
+    home.style.removeProperty('--ecart');
+    if (window.innerWidth <= 950) {          /* tablette : mise en page dédiée */
       home.style.removeProperty('--hero-gap');
       home.style.removeProperty('--card-cap');
       return;

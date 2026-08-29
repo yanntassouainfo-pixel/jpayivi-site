@@ -910,7 +910,12 @@ body:has(.gallery-wrap) .brand .sub{
      « +Menu » à droite sur la même ligne, puis le paragraphe pleine largeur en
      dessous. Obtenu par un simple retour à la ligne du flex : le paragraphe
      occupe 100 % et bascule donc seul sur la seconde rangée. */
-  .home-top{ flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:14px 12px; }
+  /* --ecart : la valeur unique des TROIS espaces de la page — logo/paragraphe,
+     paragraphe/ligne des métiers, ligne des métiers/cartes. Elle est calculée en
+     JS, qui partage en trois ce qui reste de hauteur une fois les blocs posés.
+     La valeur ci-dessous ne sert qu'au premier affichage, avant le calcul. */
+  .home{ --ecart:22px; }
+  .home-top{ flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:var(--ecart) 12px; }
   .home-brand{ display:block; order:1; }
   .home-brand .name{ font-size:34px; }
   .home-brand .sub { font-size:15px; }
@@ -936,10 +941,11 @@ body:has(.gallery-wrap) .brand .sub{
      au bloc titre sous forme de blancs, répartis au-dessus et en dessous.
      Deux marges « auto » dans une colonne flex se partagent le vide à parts
      égales : le titre flotte au milieu, comme sur la maquette téléphone.
-     Le retrait de 14 px garantit 28 px de dégagement même sur un écran court,
-     où les marges « auto » ne trouveraient rien à distribuer ; la page défile
-     alors de quelques pixels plutôt que de coller le titre à ses voisins. */
-  .hero-wrap{ margin:auto 0; padding:14px 0; }
+     Les marges « auto » ont été remplacées par --ecart : le client demande trois
+     espaces ÉGAUX et non un titre flottant au milieu du vide. Les marges d'un
+     élément flex ne fusionnent pas avec celles de ses voisins, chacune vaut donc
+     exactement --ecart. */
+  .hero-wrap{ margin:var(--ecart) 0; padding:0; }
   .hero{ text-align:center; }
   /* « JP AYIVI » et « CRÉATEUR D'IMAGES » sont désormais portés par le logo en
      haut de page : les répéter au centre ferait doublon sur un seul écran.
