@@ -137,6 +137,52 @@
   for (var i = 0; i < links.length; i++) links[i].addEventListener('click', closeMenu);
 })();
 
+/* ============================================================
+   MOBILE — en-tête escamotable.
+   On descend : la barre s'efface. On remonte : elle revient.
+   Uniquement sous 600 px ; au-dessus la barre reste toujours visible.
+   ============================================================ */
+(function () {
+  var header = document.querySelector('.site-header');
+  if (!header) return;
+
+  var SEUIL_ACTIF = 600;   /* même point de rupture que le CSS */
+  var DECLENCHE   = 8;     /* mouvement minimal pris en compte, en px */
+  var GARDE       = 90;    /* on ne cache jamais dans les tout premiers pixels */
+
+  var dernier = window.pageYOffset || 0;
+  var enCours = false;
+
+  function majuscule() {
+    enCours = false;
+    if (window.innerWidth > SEUIL_ACTIF) {         /* bureau et tablette : rien */
+      header.classList.remove('est-cache');
+      dernier = window.pageYOffset || 0;
+      return;
+    }
+    if (document.body.classList.contains('nav-open')) return;   /* menu déployé */
+
+    var y = window.pageYOffset || 0;
+    var delta = y - dernier;
+    if (Math.abs(delta) < DECLENCHE) return;
+
+    if (delta > 0 && y > GARDE) header.classList.add('est-cache');
+    else if (delta < 0)         header.classList.remove('est-cache');
+    dernier = y;
+  }
+
+  function auScroll() {
+    if (enCours) return;
+    enCours = true;
+    requestAnimationFrame(majuscule);
+  }
+
+  window.addEventListener('scroll', auScroll, { passive: true });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > SEUIL_ACTIF) header.classList.remove('est-cache');
+  });
+})();
+
 /* Bouton play custom : clic sur la vidéo = lecture/pause, la pastille s'efface pendant la lecture */
 (function () {
   var vids = document.querySelectorAll('.reel-media > video:not([loop]), .rs-media > video:not([loop])');
@@ -167,7 +213,11 @@
   var header = document.querySelector('.site-header');
   var wrap = document.querySelector('.gallery-wrap');
   if (!header || !wrap) return;
-  if (getComputedStyle(header).position !== 'fixed') return;
+  /* La barre doit être détachée du flux pour que ce calcul ait un sens.
+     Elle est 'fixed' sur toutes les tailles d'écran depuis que le mobile a lui
+     aussi un en-tête escamotable ; on accepte 'absolute' par sécurité. */
+  var pos = getComputedStyle(header).position;
+  if (pos !== 'fixed' && pos !== 'absolute') return;
 
   /* ---- Dégagement sous « +About », en fraction de la hauteur de fenêtre ----
      Le menu ayant grandi de 30 %, il descendait à 6 px seulement du haut de la
@@ -188,9 +238,19 @@
   function place() {
     var nav = header.querySelector('nav');
     var brand = header.querySelector('.brand');
+    var bouton = header.querySelector('.menu-toggle');
     if (!nav) return;
-    var bottom = nav.getBoundingClientRect().bottom;          /* barre fixe : constant au scroll */
-    if (brand) bottom = Math.max(bottom, brand.getBoundingClientRect().bottom);
+    /* Mesure par offsetHeight et NON par getBoundingClientRect : la barre mobile
+       est escamotable, un rect la donnerait hors écran quand elle est cachée.
+       offsetHeight ignore les transformations et vaut 0 pour un élément masqué —
+       ce qui est exactement le comportement voulu quand le menu est replié
+       derrière le bouton « +Menu ». */
+    var hautHeader = parseFloat(getComputedStyle(header).paddingTop) || 0;
+    var bottom = hautHeader + Math.max(
+      nav.offsetHeight,
+      brand ? brand.offsetHeight : 0,
+      bouton ? bouton.offsetHeight : 0
+    );
 
     /* Maquette : la galerie commence à 8,880 % de la largeur de la page (456 px sur 5135).
        Sur un écran étroit, le menu — maintenu à une taille lisible — descend plus bas que

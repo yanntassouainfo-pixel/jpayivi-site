@@ -928,11 +928,26 @@ body:has(.gallery-wrap) .brand .sub{
   .contact, .contact a, .contact .num{ color:#fff; }
 
   /* ===== PAGES INTÉRIEURES ===== */
-  .site-header{ position:absolute; }
+  /* En-tête FIXE et escamotable : il s'efface quand on descend, revient quand on
+     remonte (classe .est-cache posée en JS). Fond crème opaque, sans quoi le menu
+     deviendrait illisible dès qu'une photo claire passerait derrière.
+     Il était auparavant en position absolue : il défilait avec la page, et
+     surtout le calcul du départ de galerie — qui exige une barre fixe — ne
+     s'exécutait pas, d'où la galerie qui remontait sous « +About ». */
+  .site-header{
+    position:fixed;
+    background:var(--cream);
+    padding-bottom:12px;
+    transition:transform .28s ease;
+  }
+  .site-header.est-cache{ transform:translateY(-115%); }
+  body.nav-open .site-header{ transform:none; }   /* jamais escamoté menu ouvert */
   .site-header::before{ display:none; }
   .site-header,
-  body:has(.gallery-wrap) .site-header{ padding:22px var(--pad) 0; }
-  .gallery-wrap, .gallery-wrap:has(.reel){ width:auto; max-width:none; padding:92px var(--pad) 0; }
+  body:has(.gallery-wrap) .site-header{ padding:22px var(--pad) 12px; }
+  /* Le départ de la galerie est calculé en direct (bas réel du menu + 5 % de la
+     hauteur d'écran), comme sur bureau. La valeur de repli couvre le cas sans JS. */
+  .gallery-wrap, .gallery-wrap:has(.reel){ width:auto; max-width:none; padding:var(--gallery-top, 116px) var(--pad) 0; }
   .gallery-wrap:has(.rs){ width:auto; }
   /* mobile : une seule colonne, on abandonne le positionnement de la maquette */
   .masonry{ position:static; padding-bottom:0; }
