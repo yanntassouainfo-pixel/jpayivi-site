@@ -1157,16 +1157,32 @@ body.about-page .nav{ font-size:clamp(11px, calc(var(--panel-w) * .01130), 45px)
 
 /* ---- Tablette et mobile : on abandonne le calage au pixel ---- */
 @media(max-width:950px){
-  .about-inner{ height:auto; min-height:var(--panel-h); padding:22px 5% 40px; }
-  body.about-page .site-header{ position:static; padding:0; margin-bottom:12vh; }
+  /* Le calage au pixel de la maquette est abandonné : tout revient dans le flux
+     normal et s'empile. overflow:visible est indispensable — le panneau a une
+     hauteur automatique ici, et un débordement serait tronqué au lieu de pousser
+     la page. */
+  .about-inner{ height:auto; min-height:var(--panel-h); overflow:visible; padding:26px 6% 44px; }
+  body.about-page .site-header{ position:static; padding:0; margin-bottom:9vh; }
   body.about-page .brand .name{ font-size:34px; }
   body.about-page .brand .sub { font-size:15px; }
   body.about-page .nav{ font-size:13px; }
   .about-text,.about-reel,.about-contact{ position:static; transform:none; }
-  .about-text{ font-size:15px; line-height:1.45; }
+  .about-text{ font-size:15px; line-height:1.5; }
   .about-text br{ display:none; }
-  .about-reel{ display:block; width:max-content; margin:6vh auto 0; font-size:30px; line-height:1; padding:.14em .42em; }
-  .about-contact{ flex-wrap:wrap; gap:16px; margin-top:5vh; font-size:14px; }
+  .about-reel{ display:block; width:max-content; margin:7vh auto 0; font-size:30px; line-height:1; padding:.14em .42em; }
+  /* Contacts empilés et non plus repliés au fil de la ligne : trois blocs de
+     longueurs très différentes se répartissaient mal, et des liens en colonne
+     offrent des zones de touche bien plus confortables au doigt. */
+  .about-contact{
+    display:flex; flex-direction:column; align-items:center;
+    gap:14px; margin-top:6vh; font-size:15px;
+    white-space:normal;
+  }
+  .about-contact a{ padding:2px 0; }
+  /* Sur About l'en-tête est dans le flux : l'escamotage au défilement, prévu pour
+     les barres fixes des pages intérieures, n'a pas lieu d'être — il laisserait
+     un trou en haut de page. */
+  body.about-page .site-header.est-cache{ transform:none; }
 }
 
 /* ============================================================
@@ -1186,8 +1202,15 @@ body.about-page .nav{ font-size:clamp(11px, calc(var(--panel-w) * .01130), 45px)
    mais le titre de section (plus bas) reste visible. */
 /* Dégradé de scroll retiré (retour client) : le header reste transparent. */
 .site-header::before{ display:none; }
-/* About : le header reste DANS le cadre (pas fixe) -> plus de bug de cadre */
-body.about-page .site-header{ position:absolute; background:transparent; }
+/* About : le header reste DANS le cadre (pas fixe) -> plus de bug de cadre.
+   RESTREINT AU BUREAU. Sans cette limite, cette règle — placée après le bloc
+   responsive et de même spécificité que lui — écrasait la mise en page mobile :
+   l'en-tête y repassait en position absolue, sortait du flux, et tout le contenu
+   d'About remontait se superposer à lui. C'était la cause du chevauchement. */
+@media(min-width:951px){
+  body.about-page .site-header{ position:absolute; background:transparent; }
+}
+body.about-page .site-header{ background:transparent; }
 body.about-page .site-header::before{ display:none; }
 
 /* Modale Showreel : croix fine + curseur rétabli dans la fenêtre */
