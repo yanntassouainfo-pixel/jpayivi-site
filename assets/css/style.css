@@ -857,7 +857,18 @@ body:has(.gallery-wrap) .brand .sub{
   .hero .role{ font-size:clamp(14px,2.4vw,20px); }
   /* On passe par la variable, pas par font-size : le calage des contacts en dépend. */
   .home{ --tags-fs:clamp(10px,1.7vw,16px); }
-  .contact{ font-size:13px; }
+  /* Les contacts sont posés à GAUCHE à taille fixe, le bloc titre est CENTRÉ et
+     rétrécit avec la fenêtre : en descendant, les deux se rejoignent. Le contact
+     le plus long, « Mail : ayivijp@gmail.com », mesure 13,09 em ; la ligne des
+     métiers 20,42 em. Le premier touchait la seconde à partir de 686 px —
+     largeur relevée par le client, retrouvée au pixel par le calcul.
+     Le corps suit donc la place réellement disponible, avec 16 px de garde :
+        (0,2441 x largeur de fenêtre − 16) / 13,09
+     Au-dessus de 763 px il reste à 13 px, en dessous il se réduit juste ce qu'il
+     faut. Le calage sur la ligne d'écriture, lui, s'ajuste tout seul : il est
+     écrit en « em » et suit donc ce corps.
+     Plancher à 9,5 px, atteint seulement sous 590 px, hors de cette plage. */
+  .contact{ font-size:clamp(9.5px, calc(1.8648vw - 1.222px), 13px); }
   /* Accueil : 3 colonnes (Food+Sport | Fashion | Motion+Studio), paires juxtaposées, bas alignées */
   .grid{
     display:grid;
