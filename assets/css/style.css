@@ -288,14 +288,22 @@ body.home-page{
    les vignettes deviendraient carrées. On verrouille donc leur FORME, relevée au
    pixel : Sport/Studio 558x589, Food/Motion 628x713, Fashion 766x849. */
 .card--sport  .thumb,
-.card--studio .thumb{ height:min(calc(var(--panel-w) * .16816), calc(var(--card-cap, 200vh) * .6936)); }
+.card--studio .thumb{ height:min(calc(var(--panel-w) * .16816 * var(--card-scale, 1)), calc(var(--card-cap, 200vh) * .6936)); }
 .card--food   .thumb,
-.card--motion .thumb{ height:min(calc(var(--panel-w) * .20350), calc(var(--card-cap, 200vh) * .8394)); }
-.card--fashion .thumb{ height:min(calc(var(--panel-w) * .24244), var(--card-cap, 200vh)); }
+.card--motion .thumb{ height:min(calc(var(--panel-w) * .20350 * var(--card-scale, 1)), calc(var(--card-cap, 200vh) * .8394)); }
+.card--fashion .thumb{ height:min(calc(var(--panel-w) * .24244 * var(--card-scale, 1)), var(--card-cap, 200vh)); }
 /* La première valeur donne la forme exacte de la maquette. --card-cap est calculé
    en JS : c'est la place réellement libre sous le bloc titre. Il n'intervient que
    sur une fenêtre trop basse, et les trois vignettes se réduisent alors ensemble,
-   donc la rangée conserve ses proportions relatives. */
+   donc la rangée conserve ses proportions relatives.
+
+   --card-scale répond au problème INVERSE, signalé par la cliente : la hauteur des
+   vignettes ne dépendant que de la LARGEUR, une fenêtre qu'on rétrécit les faisait
+   maigrir alors que la hauteur disponible ne bougeait pas. Le blanc grimpait
+   jusqu'à 39 % du panneau, contre 30 % sur la maquette. Le JS agrandit donc les
+   vignettes dès que le blanc dépasse ce seuil — jamais en dessous, la forme de la
+   maquette reste le plancher, et le facteur s'applique aux trois tailles à la fois
+   pour préserver leurs rapports. */
 
 .thumb{
   position:relative;
@@ -950,7 +958,13 @@ body:has(.gallery-wrap) .brand .sub{
   }
   .site-nav{ display:none; }
   .site-nav.open{ display:flex; position:fixed; inset:0; z-index:300; background:var(--cream); flex-direction:column; justify-content:center; padding:40px 30px; }
-  .site-nav.open .nav{ text-align:left; font-size:30px; line-height:1.75; font-weight:400; }
+  /* Menu en Jumper Thin, avant comme après ouverture (retour cliente).
+     Le bouton et le panneau repassaient en Regular ; seule la page en cours
+     garde son gras, pour qu'on sache où l'on se trouve. */
+  .site-nav.open .nav{ text-align:left; font-size:30px; line-height:1.75; font-weight:100; }
+  .site-nav.open .nav a{ font-weight:100; }
+  .site-nav.open .nav .current > a{ font-weight:700; }
+  .menu-toggle{ font-weight:100; }
   body.nav-open .menu-toggle{ position:fixed; top:22px; right:24px; z-index:301; }
   /* L'espace libéré par le paragraphe — une cinquantaine de pixels — est rendu
      au bloc titre sous forme de blancs, répartis au-dessus et en dessous.

@@ -75,6 +75,11 @@
 
   document.addEventListener('click', function (e) {
     if (modal.classList.contains('open')) return;
+    /* Tablette et téléphone : un appui n'ouvre plus la vidéo (retour cliente).
+       Sur ordinateur la pastille « SHOW REEEL » suit la souris et annonce
+       l'interaction ; au doigt rien ne la signale, et le moindre appui de côté
+       déclenchait une lecture. */
+    if (window.innerWidth <= 950) return;
     if (e.target.closest('.reel-modal')) return;
     // on ignore tout élément interactif / média / menus / contacts
     if (e.target.closest('a, button, input, textarea, select, video, img, .nav, .grid, .contact, .pastille-cursor')) return;
@@ -270,8 +275,16 @@
 
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
   window.addEventListener('load', place);
-  var t;
-  window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(place, 120); });
+  /* Recalcul IMMÉDIAT, cadence sur le rafraîchissement de l'écran. L'ancien
+     réglage attendait 120 ms d'immobilité : la mise en page ne suivait pas le
+     bord de la fenêtre et se remettait en place d'un coup, ce que la cliente
+     voyait comme un saut. Ces mesures sont légères, les enchaîner ne coûte rien. */
+  var enAttente = false;
+  window.addEventListener('resize', function () {
+    if (enAttente) return;
+    enAttente = true;
+    requestAnimationFrame(function () { enAttente = false; place(); });
+  });
   place();
   requestAnimationFrame(place);
 })();
@@ -323,6 +336,7 @@
     if (window.innerWidth <= 600) {          /* téléphone : trois écarts égaux */
       home.style.removeProperty('--hero-gap');
       home.style.removeProperty('--card-cap');
+      home.style.removeProperty('--card-scale');
       placeMobile();
       return;
     }
@@ -330,6 +344,7 @@
     if (window.innerWidth <= 950) {          /* tablette : mise en page dédiée */
       home.style.removeProperty('--hero-gap');
       home.style.removeProperty('--card-cap');
+      home.style.removeProperty('--card-scale');
       return;
     }
     home.style.setProperty('--hero-gap', '0px');
@@ -349,15 +364,39 @@
       home.style.setProperty('--card-cap', Math.max(80, Math.round(place)) + 'px');
     }
 
+    /* ---- Trop de blanc : on laisse les vignettes grandir ----
+       Leur hauteur ne dépend que de la largeur du panneau. En rétrécissant la
+       fenêtre elles maigrissent, alors que la hauteur disponible ne change pas :
+       le vide atteignait 39 % du panneau contre 30 % sur la maquette.
+       On mesure le blanc, et s'il dépasse ce seuil on donne l'excédent aux
+       vignettes. Le facteur ne descend jamais sous 1 : la forme de la maquette
+       reste le plancher, on ne fait que combler un vide excessif. */
+    var BLANC_CIBLE = 0.30;      /* part de blanc voulue, relevée sur la maquette */
+    var ECHELLE_MAX = 1.75;      /* garde-fou */
+    home.style.setProperty('--card-scale', '1');
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight;
+    if (big) {
+      var excedent = libre - dispo * BLANC_CIBLE;
+      if (excedent > 0 && big.offsetHeight > 0) {
+        var echelle = Math.min(ECHELLE_MAX, 1 + excedent / big.offsetHeight);
+        home.style.setProperty('--card-scale', echelle.toFixed(4));
+        libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight;
+      }
+    }
+
     var gap = Math.max(0, Math.round(libre * PART_HAUT));
     home.style.setProperty('--hero-gap', gap + 'px');
   }
 
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
   window.addEventListener('load', place);
-  var t;
-  window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(place, 100); });
+  /* Recalcul immédiat, sans délai d'attente — voir la note du bloc précédent. */
+  var enAttente = false;
+  window.addEventListener('resize', function () {
+    if (enAttente) return;
+    enAttente = true;
+    requestAnimationFrame(function () { enAttente = false; place(); });
+  });
   place();
   requestAnimationFrame(place);
 })();
@@ -493,9 +532,12 @@
     }
   }
   window.addEventListener('load', schedule);
-  var t;
+  /* Justification du logo : recalcul immédiat lui aussi. */
+  var enAttenteLogo = false;
   window.addEventListener('resize', function () {
-    clearTimeout(t); t = setTimeout(fitBrand, 120);
+    if (enAttenteLogo) return;
+    enAttenteLogo = true;
+    requestAnimationFrame(function () { enAttenteLogo = false; fitBrand(); });
   });
   schedule();
 })();
