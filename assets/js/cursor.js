@@ -328,11 +328,31 @@
 
     home.style.setProperty('--ecart-haut', '0px');
     home.style.setProperty('--ecart-bas',  '0px');
+    home.style.removeProperty('--carte-h');
+    home.style.removeProperty('--carte-mt');
+
     var cs = getComputedStyle(home);
     var dispo = home.clientHeight
               - parseFloat(cs.paddingTop || 0)
               - parseFloat(cs.paddingBottom || 0);
     var basGrille = parseFloat(getComputedStyle(grid).marginBottom) || 0;
+
+    /* ---- Tout doit tenir sur UN écran (demande client) ----
+       La maquette montre l'ensemble sans défilement. Les cartes sont le seul
+       bloc compressible : si la somme dépasse, on les réduit juste assez, en
+       gardant leurs proportions. Plancher à 72 % pour qu'elles restent lisibles ;
+       en dessous on laisse la page défiler plutôt que de les écraser. */
+    var CARTE = 0.169, BANDE = 0.098, PLANCHER = 0.72;
+    var placeCartes = dispo - top.offsetHeight - hero.offsetHeight
+                    - basGrille - 2 * ECART_MINI;
+    if (grid.offsetHeight > placeCartes && grid.offsetHeight > 0) {
+      var k = Math.max(PLANCHER, placeCartes / grid.offsetHeight);
+      var hCarte = CARTE * k * 100;          /* hauteur totale d'une carte, en vh */
+      var hBande = BANDE * k * 100;          /* part visible de chaque carte      */
+      home.style.setProperty('--carte-h',  hCarte.toFixed(3) + 'vh');
+      home.style.setProperty('--carte-mt', '-' + (hCarte - hBande).toFixed(3) + 'vh');
+    }
+
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight - basGrille;
 
     /* Partage relevé sur la maquette téléphone : 8,97 % de la hauteur du panneau

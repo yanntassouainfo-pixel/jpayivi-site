@@ -77,7 +77,17 @@
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
+html{
+  scroll-behavior:smooth;
+  /* INDISPENSABLE. Safari sur iOS agrandit de lui-même le texte des blocs dont la
+     largeur diffère de celle de l'écran — son « text autosizing ». Toutes les
+     tailles calculées ici étaient donc gonflées sur iPhone : le paragraphe
+     d'accueil passait de six à neuf lignes et la page débordait, alors que le
+     calcul comme le rendu sur ordinateur étaient justes.
+     Cette ligne rend au navigateur les tailles qu'on lui demande. */
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
 
 body{
   background:var(--cream);
@@ -1039,8 +1049,14 @@ body:has(.gallery-wrap) .brand .sub{
      panneau et chaque bande visible 10,8 %. En hauteur de fenêtre cela donne
      16,9 vh par carte, dont 9,8 vh visibles — soit 56,1 vh au total, ce qui
      retombe sur 59 à 61 % du panneau selon l'appareil. */
-  .card{ position:relative; width:78.62%; max-width:none; height:16.9vh; min-height:96px;
-         margin-top:-7.1vh; border-radius:20px 20px 0 0; overflow:hidden;
+  /* Les deux hauteurs passent par des variables : le JS les réduit juste ce
+     qu'il faut pour que la page tienne d'un seul écran, sans défilement. Les
+     valeurs par défaut sont celles de la maquette (16,9 vh par carte, 9,8 vh
+     visibles), utilisées telles quelles dès qu'il y a la place. */
+  .card{ position:relative; width:78.62%; max-width:none;
+         height:var(--carte-h, 16.9vh); min-height:64px;
+         margin-top:var(--carte-mt, -7.1vh);
+         border-radius:20px 20px 0 0; overflow:hidden;
          box-shadow:0 -7px 18px rgba(0,0,0,.18); }
   .card--fashion{ order:1; z-index:1; margin-top:0; }
   .card--motion{ order:2; z-index:2; }
