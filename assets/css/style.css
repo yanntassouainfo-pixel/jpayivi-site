@@ -899,6 +899,15 @@ body:has(.gallery-wrap) .brand .sub{
   .card--studio{ grid-area:studio; height:18vh; }
   .card--fashion{ grid-area:fashion; height:33vh; }
   .card .thumb{ height:100% !important; }
+  /* POINT FOCAL PAR VIGNETTE (retour client). Les cartes ne laissent voir qu'une
+     bande étroite : un cadrage centré, identique pour toutes, montrait le front
+     du modèle au lieu des lunettes. Chaque valeur est relevée en comparant la
+     bande visible du site à celle de la maquette. */
+  .card--fashion .thumb img, .card--fashion .thumb video{ object-position:50% 70%; }
+  .card--motion  .thumb img, .card--motion  .thumb video{ object-position:50% 55%; }
+  .card--sport   .thumb img, .card--sport   .thumb video{ object-position:50% 25%; }
+  .card--food    .thumb img, .card--food    .thumb video{ object-position:50% 25%; }
+  .card--studio  .thumb img, .card--studio  .thumb video{ object-position:50% 40%; }
   /* Labels ÉCRITS SUR l'image : Food/Motion blanc, Sport/Studio noir (Fashion reste au-dessus) */
   .card--food .label,.card--sport .label,.card--motion .label,.card--studio .label{
     position:absolute; top:9px; left:14px; bottom:auto; margin:0; z-index:3; font-size:19px; font-weight:400;
@@ -956,7 +965,11 @@ body:has(.gallery-wrap) .brand .sub{
      à 10,5 px en dessous duquel on renonce plutôt que de devenir illisible. */
   .intro{
     max-width:none; margin-left:0;
-    font-size:clamp(10.5px, calc((100vw - 60px) / 27.6), 12px);
+    /* Largeur réellement disponible = (100vw − 50 px de cadre) × 0,91, le
+       retrait de .home valant 4,5 % de chaque côté. La formule précédente
+       tablait encore sur un cadre de 12 px : la ligne la plus longue dépassait
+       de 14 px et le paragraphe se cassait en neuf lignes au lieu de six. */
+    font-size:clamp(10.4px, calc((100vw - 50px) * 0.03297), 12px);
     line-height:1.35;
   }
   .site-nav{ display:none; }
@@ -995,7 +1008,9 @@ body:has(.gallery-wrap) .brand .sub{
      téléphones, du SE au Pro Max. Le corps est donc calculé à partir de la
      largeur réellement disponible, avec 0,5 em de garde. */
   .hero .tags{
-    font-size:clamp(12px, calc((100vw - 56px) / 20.9), 22px);
+    /* même correction : la ligne débordait du panneau depuis le passage du
+       cadre à 25 px, et venait toucher les deux bords. */
+    font-size:clamp(12px, calc((100vw - 50px) * 0.04354), 22px);
     white-space:nowrap;
   }
 
