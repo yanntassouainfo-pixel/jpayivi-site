@@ -843,6 +843,23 @@ body:has(.gallery-wrap) .brand .sub{
   .pastille-cursor{display:none !important;}
 }
 
+/* ---------- POINT FOCAL DES VIGNETTES D'ACCUEIL (téléphone + tablette) ----------
+   En dessous de 950 px les cartes deviennent des bandes larges et basses : on n'en
+   voit qu'un dixième de hauteur. Un cadrage centré, le même pour toutes, montrait
+   le front du modèle au lieu des lunettes (retour client). Chaque valeur a été
+   relevée en comparant la bande visible du site à celle de la maquette téléphone.
+   Ce bloc est placé APRÈS la règle de base « .card--fashion … 50% 0% » : à
+   spécificité égale, c'est la dernière écrite qui l'emporte.
+   Sur ordinateur rien ne change — les cartes y sont hautes et le cadrage d'origine
+   reste le bon. */
+@media(max-width:950px){
+  .card--fashion .thumb img, .card--fashion .thumb video{ object-position:50% 70%; }
+  .card--motion  .thumb img, .card--motion  .thumb video{ object-position:50% 55%; }
+  .card--sport   .thumb img, .card--sport   .thumb video{ object-position:50% 25%; }
+  .card--food    .thumb img, .card--food    .thumb video{ object-position:50% 25%; }
+  .card--studio  .thumb img, .card--studio  .thumb video{ object-position:50% 40%; }
+}
+
 /* ---------- Éléments responsive (base) ---------- */
 .c-item{ display:block; }                 /* contacts empilés (bureau) */
 .menu-toggle{ display:none; background:none; border:0; font-family:"Jumper",sans-serif; font-weight:400; font-size:15px; color:var(--ink); cursor:pointer; padding:0; }
@@ -899,15 +916,6 @@ body:has(.gallery-wrap) .brand .sub{
   .card--studio{ grid-area:studio; height:18vh; }
   .card--fashion{ grid-area:fashion; height:33vh; }
   .card .thumb{ height:100% !important; }
-  /* POINT FOCAL PAR VIGNETTE (retour client). Les cartes ne laissent voir qu'une
-     bande étroite : un cadrage centré, identique pour toutes, montrait le front
-     du modèle au lieu des lunettes. Chaque valeur est relevée en comparant la
-     bande visible du site à celle de la maquette. */
-  .card--fashion .thumb img, .card--fashion .thumb video{ object-position:50% 70%; }
-  .card--motion  .thumb img, .card--motion  .thumb video{ object-position:50% 55%; }
-  .card--sport   .thumb img, .card--sport   .thumb video{ object-position:50% 25%; }
-  .card--food    .thumb img, .card--food    .thumb video{ object-position:50% 25%; }
-  .card--studio  .thumb img, .card--studio  .thumb video{ object-position:50% 40%; }
   /* Labels ÉCRITS SUR l'image : Food/Motion blanc, Sport/Studio noir (Fashion reste au-dessus) */
   .card--food .label,.card--sport .label,.card--motion .label,.card--studio .label{
     position:absolute; top:9px; left:14px; bottom:auto; margin:0; z-index:3; font-size:19px; font-weight:400;
