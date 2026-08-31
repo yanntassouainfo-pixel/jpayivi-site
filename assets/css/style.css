@@ -886,52 +886,135 @@ body:has(.gallery-wrap) .brand .sub{
 }
 @media(max-width:950px) and (min-width:601px){
   :root{--pad:30px;}
-  .home{ padding:24px 20px 0; }
-  /* Bloc titre : taille fluide -> ne chevauche jamais les contacts, même en réduisant */
-  .hero h1{ font-size:clamp(22px,3.9vw,34px); }
-  .hero .role{ font-size:clamp(14px,2.4vw,20px); }
-  /* On passe par la variable, pas par font-size : le calage des contacts en dépend. */
-  .home{ --tags-fs:clamp(10px,1.7vw,16px); }
-  /* Les contacts sont posés à GAUCHE à taille fixe, le bloc titre est CENTRÉ et
-     rétrécit avec la fenêtre : en descendant, les deux se rejoignent. Le contact
-     le plus long, « Mail : ayivijp@gmail.com », mesure 13,09 em ; la ligne des
-     métiers 20,42 em. Le premier touchait la seconde à partir de 686 px —
-     largeur relevée par le client, retrouvée au pixel par le calcul.
-     Le corps suit donc la place réellement disponible, avec 16 px de garde :
-        (0,2441 x largeur de fenêtre − 16) / 13,09
-     Au-dessus de 763 px il reste à 13 px, en dessous il se réduit juste ce qu'il
-     faut. Le calage sur la ligne d'écriture, lui, s'ajuste tout seul : il est
-     écrit en « em » et suit donc ce corps.
-     Plancher à 9,5 px, atteint seulement sous 590 px, hors de cette plage. */
-  .contact{ font-size:clamp(9.5px, calc(1.8648vw - 1.222px), 13px); }
-  /* Accueil : 3 colonnes (Food+Sport | Fashion | Motion+Studio), paires juxtaposées, bas alignées */
+
+  /* ============================================================
+     ACCUEIL EN TABLETTE — relevé au pixel sur la maquette
+     « site_tablette_1.png ». Panneau crème mesuré : 2003 x 2281 px.
+     Toutes les valeurs ci-dessous sont des POURCENTAGES de ce panneau,
+     donc transposables sur n'importe quelle tablette.
+
+     La maquette est dessinée sur un format 0,879 (largeur / hauteur) ;
+     une tablette réelle en portrait vaut 0,75. Impossible de respecter
+     à la fois les pourcentages verticaux ET la forme des vignettes.
+     Choix retenu (client) : on VERROUILLE LA FORME des vignettes,
+     relevée au pixel, et le surplus de hauteur va dans les blancs, qui
+     conservent leur partage 40 / 60.
+     ============================================================ */
+
+  /* Retrait latéral : la grille d'images part à 1,80 % du panneau et
+     s'arrête à 98,30 %. Le texte, lui, est rentré plus loin — voir les
+     marges de .intro et .contact ci-dessous. Le retrait haut (5,66 %)
+     est celui du bureau, identique sur la maquette tablette. */
+  .home{
+    padding:calc(var(--panel-h) * .0566) 1.75% 0;
+    /* Corps de « Réalisation • Montage • Motion Design » : 2,051 % de la
+       largeur du panneau. Publié dans la variable et non dans .hero .tags,
+       parce que le calage des contacts en dépend. */
+    --tags-fs:clamp(12px, calc(var(--panel-w) * .02051), 39px);
+  }
+
+  /* ---- Échelle typographique de la maquette ----
+     Chaque corps est la largeur mesurée dans la maquette divisée par la
+     largeur de la chaîne en « em » dans Jumper (relevée dans les fichiers
+     de police), rapportée à la largeur du panneau :
+       JP AYIVI ............ 303 px / 4,35 em  -> 3,478 %
+       CRÉATEUR D'IMAGES ... 429 px / 10,34 em -> 2,071 %
+       Réalisation… ........ 839 px / 20,42 em -> 2,051 %
+       paragraphe .......... 1008 px / 26,39 em-> 1,907 %
+       menu ................ 372 px / 9,80 em  -> 1,895 %
+       contacts ............ 363 px / 11,36 em -> 1,595 %
+       étiquettes .......... 334 px / 7,62 em  -> 2,188 %
+     Planchers de lisibilité en tête de chaque clamp(). */
+  .intro{
+    margin-left:2.79%;               /* 4,45 % du panneau − 1,75 % de retrait */
+    font-size:clamp(12px, calc(var(--panel-w) * .01907), 30px);
+  }
+  .home .nav{ font-size:clamp(12px, calc(var(--panel-w) * .01895), 28px); line-height:1.25; }
+  .home-top nav{ margin-right:3.15%; }   /* menu calé à 95,2 % du panneau */
+  .hero h1{ font-size:clamp(20px, calc(var(--panel-w) * .03478), 65px); }
+  .hero .role{ font-size:clamp(12px, calc(var(--panel-w) * .02071), 39px); }
+
+  /* Contacts : même retrait que le paragraphe, et corps proportionnel.
+     Le calage sur la ligne « Réalisation… » est écrit en « em » dans la
+     règle de base : il suit tout seul ce nouveau corps.
+     Garde-fou : le bloc titre est CENTRÉ et les contacts sont posés à
+     gauche ; en rétrécissant, les deux se rapprochent. Au plus étroit de
+     cette plage (panneau 548 px) la ligne « Mail : … » mesure 9 x 11,36
+     = 102 px et il reste 120 px avant « Réalisation… ». Aucune collision
+     possible dans la plage 601-950 px. */
+  .contact{ left:2.79%; font-size:clamp(9px, calc(var(--panel-w) * .01595), 22px); }
+
+  /* ---- Grille : Food+Sport | Fashion | Motion+Studio ----
+     Colonnes relevées : 27,71 % / 37,39 % / 27,91 % du panneau, gouttières
+     1,89 % et 1,74 %. Ramené à la boîte de contenu (96,5 % du panneau) :
+     28,70 % / 38,72 % / 28,83 %, gouttière unique de 1,875 %.
+
+     Les RANGÉES sont explicites, ce n'est pas un détail : Fashion enjambe
+     toute la colonne et dépasse la somme des deux vignettes latérales. Avec
+     des rangées « auto », le navigateur redistribue cet excédent dans les
+     deux rangées et décolle Food de Sport. Les trois hauteurs écrites ici
+     valent exactement la hauteur de Fashion. */
   .grid{
     display:grid;
-    grid-template-columns:27% 36% 27%;
-    column-gap:2.5%;
-    row-gap:0;                     /* paires collées (juxtaposées) */
+    --tab-u:calc(var(--panel-w) * var(--tab-k, 1));
+    grid-template-columns:28.70% 38.72% 28.83%;
+    column-gap:1.875%;
+    row-gap:0;
+    grid-template-rows:calc(var(--tab-u) * .0793) calc(var(--tab-u) * .0779) calc(var(--tab-u) * .2941);
     grid-template-areas:
-      "food fashion motion"
+      ".     fashion .     "
+      "food  fashion motion"
       "sport fashion studio";
     align-items:end;
     justify-content:center;
-    margin-top:0;
+    margin-top:var(--tab-bas, auto);
   }
-  .hero-wrap{ margin:auto 0; }        /* centre verticalement titre+contacts entre le menu et les cartes */
-  .card{ flex:none; max-width:none; margin:0; width:auto; }   /* annule les largeurs desktop proportionnelles */
-  /* Sport/Studio plus grandes que Food/Motion (comme la maquette) */
-  .card--food{ grid-area:food; height:11vh; }
-  .card--motion{ grid-area:motion; height:11vh; }
-  .card--sport{ grid-area:sport; height:18vh; }
-  .card--studio{ grid-area:studio; height:18vh; }
-  .card--fashion{ grid-area:fashion; height:33vh; }
+  /* Sans JS, --tab-haut et --tab-bas valent « auto » : le blanc se partage
+     alors en deux parts égales. Avec JS, c'est le 40 / 60 de la maquette. */
+  .hero-wrap{ margin:var(--tab-haut, auto) 0 0; }
+  .card{ flex:none; max-width:none; margin:0; width:auto; }   /* annule les largeurs du bureau */
+  /* Forme exacte des vignettes de la maquette, en % de la largeur du panneau :
+     bandeau 156/2003 = 7,79 %, vignette 589/2003 = 29,41 %,
+     Fashion 904/2003 = 45,13 %. --tab-k est le facteur de compression calculé
+     en JS ; il vaut 1 tant que tout tient dans la hauteur. */
+  .card--food  { grid-area:food;    height:calc(var(--tab-u) * .0779); }
+  .card--motion{ grid-area:motion;  height:calc(var(--tab-u) * .0779); }
+  .card--sport { grid-area:sport;   height:calc(var(--tab-u) * .2941); }
+  .card--studio{ grid-area:studio;  height:calc(var(--tab-u) * .2941); }
+  .card--fashion{ grid-area:fashion; height:calc(var(--tab-u) * .4513); }
   .card .thumb{ height:100% !important; }
-  /* Labels ÉCRITS SUR l'image : Food/Motion blanc, Sport/Studio noir (Fashion reste au-dessus) */
-  .card--food .label,.card--sport .label,.card--motion .label,.card--studio .label{
-    position:absolute; top:9px; left:14px; bottom:auto; margin:0; z-index:3; font-size:19px; font-weight:400;
+
+  /* ---- Étiquettes : TOUTES écrites sur l'image, Fashion comprise ----
+     Sur la maquette « Fashion » est posée dans la photo, en haut à gauche,
+     dans le gris d'encre (#242) — et non au-dessus, sur le crème, comme
+     c'était le cas ici. Retraits relevés : environ 40 px sur un panneau de
+     2003, soit 1,9 % de sa largeur en haut et 2,0 % à gauche, identiques
+     pour les cinq cartes. */
+  .card .label{
+    position:absolute;
+    top:calc(var(--panel-w) * .019);
+    left:calc(var(--panel-w) * .020);
+    bottom:auto; margin:0; z-index:3;
+    font-size:clamp(12px, calc(var(--panel-w) * .02188), 34px);
+    font-weight:400;
   }
   .card--food .label,.card--motion .label{ color:#fff; }
-  .card--sport .label,.card--studio .label{ color:var(--ink); }
+  .card--sport .label,.card--studio .label,.card--fashion .label{ color:var(--ink); }
+
+  /* ---- Point focal propre à la tablette ----
+     Les valeurs du bloc « ≤ 950 px » ont été réglées sur la maquette
+     TÉLÉPHONE, où les cartes sont des bandes très larges et très basses.
+     En tablette les vignettes sont au contraire presque carrées, ou hautes
+     pour Fashion : le même cadrage n'y montre pas la même chose.
+     Ces cinq valeurs sont retrouvées par corrélation entre la vignette de
+     la maquette tablette et l'image source, à sa forme réelle.
+     Bloc écrit APRÈS celui du téléphone : à spécificité égale il l'emporte. */
+  .card--fashion .thumb img,.card--fashion .thumb video{ object-position:50% 50%; }
+  .card--sport   .thumb img,.card--sport   .thumb video{ object-position:67% 50%; }
+  .card--studio  .thumb img,.card--studio  .thumb video{ object-position:50% 0%; }
+  .card--food    .thumb img,.card--food    .thumb video{ object-position:50% 10%; }
+  .card--motion  .thumb img,.card--motion  .thumb video{ object-position:50% 0%; }
+
   /* ---- Pages intérieures en tablette ----
      La construction du bureau est PROLONGÉE ici (choix client) : galerie à 83 %
      de la fenêtre, colonne à 70,41 % pour les pages à légendes. Plus aucun

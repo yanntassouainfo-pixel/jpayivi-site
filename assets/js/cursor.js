@@ -365,11 +365,58 @@
     home.style.setProperty('--ecart-bas',  bas  + 'px');
   }
 
+  /* ---- TABLETTE : le partage des blancs de la maquette, sur un seul écran ----
+     Relevé sur site_tablette_1.png : 13,55 % de la hauteur du panneau entre le
+     paragraphe et le bloc titre, 20,34 % entre le bloc titre et les images, soit
+     exactement 40 % / 60 % de l'espace libre — le même parti pris que le bureau
+     (39,65 %) et le téléphone (39,1 %) : le titre n'est pas centré, il est posé
+     un peu haut.
+     Les vignettes gardent la forme relevée sur la maquette. Si la fenêtre est
+     trop basse pour les contenir, --tab-k les réduit TOUTES du même facteur :
+     leurs rapports entre elles sont donc préservés. Plancher à 60 %, en dessous
+     duquel on laisse la page défiler plutôt que d'écraser les images. */
+  var TAB_HAUT = 0.400, TAB_PLANCHER = 0.60, TAB_MINI = 12;
+
+  function placeTablette() {
+    home.style.setProperty('--tab-haut', '0px');
+    home.style.setProperty('--tab-bas',  '0px');
+    home.style.setProperty('--tab-k',    '1');
+
+    var cs = getComputedStyle(home);
+    /* On mesure sur min-height (= la hauteur du panneau crème) et non sur
+       clientHeight : si les images débordent, la boîte grandit et clientHeight
+       cesse de dire la place réellement disponible — la compression serait
+       alors sous-estimée. */
+    var mh = parseFloat(cs.minHeight);
+    var dispo = ((mh > 0) ? mh : home.clientHeight)
+              - parseFloat(cs.paddingTop || 0)
+              - parseFloat(cs.paddingBottom || 0);
+
+    var placeCartes = dispo - top.offsetHeight - hero.offsetHeight - 2 * TAB_MINI;
+    if (grid.offsetHeight > placeCartes && grid.offsetHeight > 0) {
+      var k = Math.max(TAB_PLANCHER, placeCartes / grid.offsetHeight);
+      home.style.setProperty('--tab-k', k.toFixed(4));
+    }
+
+    var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight;
+    var haut = Math.max(TAB_MINI, Math.round(libre * TAB_HAUT));
+    var bas  = Math.max(TAB_MINI, Math.round(libre * (1 - TAB_HAUT)));
+    home.style.setProperty('--tab-haut', haut + 'px');
+    home.style.setProperty('--tab-bas',  bas  + 'px');
+  }
+
+  function oublieTablette() {
+    home.style.removeProperty('--tab-haut');
+    home.style.removeProperty('--tab-bas');
+    home.style.removeProperty('--tab-k');
+  }
+
   function place() {
     if (window.innerWidth <= 600) {          /* téléphone : trois écarts égaux */
       home.style.removeProperty('--hero-gap');
       home.style.removeProperty('--card-cap');
       home.style.removeProperty('--card-scale');
+      oublieTablette();
       placeMobile();
       return;
     }
@@ -380,8 +427,10 @@
       home.style.removeProperty('--hero-gap');
       home.style.removeProperty('--card-cap');
       home.style.removeProperty('--card-scale');
+      placeTablette();
       return;
     }
+    oublieTablette();
     home.style.setProperty('--hero-gap', '0px');
     var cs = getComputedStyle(home);
     var dispo = home.clientHeight
