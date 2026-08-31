@@ -320,16 +320,29 @@
   var ECART_MINI = 20;
 
   function placeMobile() {
-    home.style.setProperty('--ecart', '0px');            /* on mesure sans les écarts */
+    /* Dégagement sous la dernière carte : exactement la hauteur de la barre de
+       contacts, qui est fixée par-dessus la page. La maquette montre la carte
+       affleurant le bas du panneau, la barre juste en dessous. */
+    var barre = document.querySelector('.home .contact');
+    if (barre) home.style.setProperty('--barre-h', Math.ceil(barre.offsetHeight) + 'px');
+
+    home.style.setProperty('--ecart-haut', '0px');
+    home.style.setProperty('--ecart-bas',  '0px');
     var cs = getComputedStyle(home);
     var dispo = home.clientHeight
               - parseFloat(cs.paddingTop || 0)
               - parseFloat(cs.paddingBottom || 0);
     var basGrille = parseFloat(getComputedStyle(grid).marginBottom) || 0;
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight - basGrille;
-    /* Sous le plancher, la page défile de la différence plutôt que de coller
-       les blocs les uns aux autres. */
-    home.style.setProperty('--ecart', Math.max(ECART_MINI, Math.round(libre / 3)) + 'px');
+
+    /* Partage relevé sur la maquette téléphone : 8,97 % de la hauteur du panneau
+       au-dessus du bloc titre, 13,96 % en dessous, soit 39,1 % / 60,9 %.
+       C'est le même parti pris que la maquette bureau (39,65 %) : le titre n'est
+       pas centré, il est posé un peu haut. Plancher pour les écrans courts. */
+    var haut = Math.max(ECART_MINI, Math.round(libre * 0.391));
+    var bas  = Math.max(ECART_MINI, Math.round(libre * 0.609));
+    home.style.setProperty('--ecart-haut', haut + 'px');
+    home.style.setProperty('--ecart-bas',  bas  + 'px');
   }
 
   function place() {
@@ -340,7 +353,9 @@
       placeMobile();
       return;
     }
-    home.style.removeProperty('--ecart');
+    home.style.removeProperty('--ecart-haut');
+    home.style.removeProperty('--ecart-bas');
+    home.style.removeProperty('--barre-h');
     if (window.innerWidth <= 950) {          /* tablette : mise en page dédiée */
       home.style.removeProperty('--hero-gap');
       home.style.removeProperty('--card-cap');

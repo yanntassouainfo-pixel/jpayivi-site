@@ -922,11 +922,13 @@ body:has(.gallery-wrap) .brand .sub{
   :root{--pad:20px;}
 
   /* ===== ACCUEIL ===== */
-  body.home-page{ padding:12px; overflow-x:hidden; }
+  /* Cadre sombre : 25 px, relevé sur la maquette téléphone (76 px sur un rendu
+     à 3x, soit 7,04 % de la largeur d'image). Il était à 12 px. */
+  body.home-page{ padding:25px; overflow-x:hidden; }
   /* min-height et non height : sur un écran court la page défile au lieu de
      rogner le bas. overflow:visible pour la même raison — c'était « hidden »,
      et le contenu excédentaire disparaissait sans le moindre signe. */
-  .home{ position:relative; min-height:calc(100vh - 24px); overflow:visible; padding:20px 14px 0; display:flex; flex-direction:column; }
+  .home{ position:relative; min-height:calc(100vh - 50px); overflow:visible; padding:2.27% 4.5% 0; display:flex; flex-direction:column; }
 
   /* En-tête identique à celui d'About (demande client) : logo à gauche,
      « +Menu » à droite sur la même ligne, puis le paragraphe pleine largeur en
@@ -937,13 +939,14 @@ body:has(.gallery-wrap) .brand .sub{
      JS, qui partage en trois ce qui reste de hauteur une fois les blocs posés.
      La valeur ci-dessous ne sert qu'au premier affichage, avant le calcul. */
   .home{ --ecart:22px; }
-  .home-top{ flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:var(--ecart) 12px; }
-  /* même force de sélecteur que la règle qui le masque plus haut */
-  .home .home-brand{ display:block; order:1; }
-  .home-brand .name{ font-size:34px; }
-  .home-brand .sub { font-size:15px; }
-  .menu-toggle{ display:inline-block; font-size:18px; order:2; margin-left:auto; }
-  .intro{ order:3; flex:0 0 100%; }
+  /* MAQUETTE : pas de logo en haut, le paragraphe et « +Menu » sur la même
+     ligne, le paragraphe à gauche et le bouton collé à droite. Le logo ajouté
+     précédemment est retiré — la maquette porte l'identité au centre de la page,
+     pas en en-tête. */
+  .home-top{ flex-direction:row; flex-wrap:nowrap; align-items:flex-start; gap:14px; }
+  .home .home-brand{ display:none; }
+  .menu-toggle{ display:inline-block; font-size:18px; margin-left:auto; flex:0 0 auto; }
+  .intro{ flex:1 1 auto; min-width:0; }
 
   /* Le paragraphe reprend TOUTE la colonne. Bridé à 66 %, chacune de ses six
      lignes se cassait en deux : 11 lignes à l'écran et 179 px de haut.
@@ -974,13 +977,19 @@ body:has(.gallery-wrap) .brand .sub{
      espaces ÉGAUX et non un titre flottant au milieu du vide. Les marges d'un
      élément flex ne fusionnent pas avec celles de ses voisins, chacune vaut donc
      exactement --ecart. */
-  .hero-wrap{ margin:var(--ecart) 0; padding:0; }
+  /* MAQUETTE : le vide ne se partage PAS à parts égales. Elle laisse 8,97 % de
+     la hauteur du panneau au-dessus du bloc titre et 13,96 % en dessous, soit
+     39,1 % / 60,9 % — le même parti pris que la maquette bureau, où j'avais
+     relevé 39,65 %. Le titre est posé un peu haut, avec plus d'air sous lui.
+     Les deux valeurs sont calculées en JS sur la hauteur réellement libre. */
+  .hero-wrap{ margin:var(--ecart-haut, 24px) 0 var(--ecart-bas, 38px); padding:0; }
   .hero{ text-align:center; }
-  /* « JP AYIVI » et « CRÉATEUR D'IMAGES » sont désormais portés par le logo en
-     haut de page : les répéter au centre ferait doublon sur un seul écran.
-     Il ne reste au milieu que la ligne des métiers, qui garde son rôle de
-     signature entre le paragraphe et les cartes. */
-  .hero h1, .hero .role{ display:none; }
+  /* MAQUETTE : les trois lignes sont bien présentes au centre. Elles avaient été
+     masquées quand un logo coiffait la page ; ce logo étant retiré, elles
+     reprennent leur place. Corps relevés sur la maquette, rapportés à la largeur
+     du panneau : 6,05 %, 3,13 % et 3,03 % de sa largeur. */
+  .hero h1  { display:block; font-size:clamp(24px, 6.05vw, 46px); }
+  .hero .role{ display:block; font-size:clamp(13px, 3.13vw, 24px); }
   /* « Réalisation • Montage • Motion Design » doit tenir sur UNE ligne (demande
      client). Elle mesure 20,42 em : à 4,4 vw elle débordait sur tous les
      téléphones, du SE au Pro Max. Le corps est donc calculé à partir de la
@@ -994,8 +1003,22 @@ body:has(.gallery-wrap) .brand .sub{
   /* Plus de marge « auto » ici : c'est elle qui absorbait tout le vide et
      collait le titre sous le paragraphe. Le vide appartient désormais au bloc
      titre. Les 62 px du bas dégagent la barre de contacts fixe. */
-  .grid{ position:static; margin:0 0 62px; display:flex; flex-direction:column; gap:0; align-items:stretch; justify-content:flex-end; }
-  .card{ position:relative; width:100%; max-width:none; height:15.5vh; min-height:92px; margin-top:-6.5vh; border-radius:20px 20px 0 0; overflow:hidden; box-shadow:0 -7px 18px rgba(0,0,0,.18); }
+  /* MAQUETTE : les cartes ne font PAS toute la largeur. Elles occupent 78,62 %
+     du panneau, centrées, avec 10,7 % de marge de chaque côté — c'est ce retrait
+     qui donne l'effet de pile posée sur la page.
+     La dernière carte affleure le bas du panneau ; les 62 px dégagent la barre
+     de contacts, qui est fixée par-dessus. */
+  .grid{ position:static; margin:0 0 var(--barre-h, 62px); display:flex; flex-direction:column; gap:0;
+         align-items:center; justify-content:flex-end; }
+  /* Bande visible par carte : 10,8 % de la hauteur du panneau sur la maquette.
+     Exprimée en vh, avec un plancher pour les très petits écrans. */
+  /* Hauteurs calées sur la maquette : le bloc des cinq cartes y occupe 60,2 % du
+     panneau et chaque bande visible 10,8 %. En hauteur de fenêtre cela donne
+     16,9 vh par carte, dont 9,8 vh visibles — soit 56,1 vh au total, ce qui
+     retombe sur 59 à 61 % du panneau selon l'appareil. */
+  .card{ position:relative; width:78.62%; max-width:none; height:16.9vh; min-height:96px;
+         margin-top:-7.1vh; border-radius:20px 20px 0 0; overflow:hidden;
+         box-shadow:0 -7px 18px rgba(0,0,0,.18); }
   .card--fashion{ order:1; z-index:1; margin-top:0; }
   .card--motion{ order:2; z-index:2; }
   .card--sport{ order:3; z-index:3; }
