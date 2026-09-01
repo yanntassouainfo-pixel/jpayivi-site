@@ -1188,16 +1188,26 @@ body:has(.gallery-wrap) .brand .sub{
      La carte valant 67,41 vw, cela donne 19,908 vw et 17,685 vw.
      Conséquence directe : le rapport des vignettes est celui de la maquette sur
      tous les téléphones, et les cinq cadrages ci-dessous tombent juste. */
+  /* Les cartes sont HAUTES et fortement superposées : au repos on n'en voit
+     qu'une bande de 17,685 vw — celle de la maquette — le reste est caché sous
+     la carte suivante et se dévoile à l'ouverture. La hauteur est calculée en
+     JS pour que ce dévoilement tienne exactement dans le blanc disponible
+     au-dessus de la pile, sans jamais toucher le bloc titre.
+     Arrondi : 62 px sur une carte de 728 dans la maquette, soit 8,5 % de sa
+     largeur — 5,73 vw ici, contre 20 px auparavant. */
   .card{ position:relative; width:86.40%; max-width:none;
-         height:var(--carte-h, 19.908vw); min-height:52px;
-         margin-top:var(--carte-mt, -2.222vw);
-         border-radius:20px 20px 0 0; overflow:hidden;
+         height:var(--carte-h, 42.1vw); min-height:52px;
+         margin-top:var(--carte-mt, -24.4vw);
+         border-radius:5.73vw 5.73vw 0 0; overflow:hidden;
          box-shadow:0 -7px 18px rgba(0,0,0,.18); }
   .card--fashion{ order:1; z-index:1; margin-top:0; }
   .card--motion{ order:2; z-index:2; }
   .card--sport{ order:3; z-index:3; }
   .card--food{ order:4; z-index:4; }
-  .card--studio{ order:5; z-index:5; }
+  /* Dernière de la pile : rien ne la recouvre, sa hauteur est donc celle qu'on
+     lui voit sur la maquette — 215 px pour une bande de 191. Sans cela elle
+     afficherait toute sa hauteur cachée et dépasserait des quatre autres. */
+  .card--studio{ order:5; z-index:5; height:var(--carte-fin, 19.908vw); }
 
   /* ---- Ouverture d'une carte au doigt ----
      Au premier appui, la carte touchée sort de sa pile : elle remonte
@@ -1255,16 +1265,37 @@ body:has(.gallery-wrap) .brand .sub{
      des lettres au trait, sur lequel aucune méthode de corrélation ne se cale
      franchement. La valeur retenue est le sommet du calcul sur les contours,
      confirmé à l'œil. */
+  /* ---- Les vignettes ne sont plus ajustées à la carte, elles sont POSÉES ----
+     Tant que l'image était étirée sur toute la carte (object-fit:cover), sa
+     taille dépendait de la hauteur de celle-ci : en rendant les cartes plus
+     hautes, la bande visible au repos aurait montré autre chose. On donne donc
+     à chaque vignette une taille et une position ABSOLUES, exprimées en vw,
+     c'est-à-dire calées sur la seule largeur de la carte. La bande du haut
+     montre alors exactement le cadrage de la maquette, quelle que soit la
+     hauteur de la carte — et la partie basse, découverte à l'ouverture, est la
+     suite naturelle de la même image.
+
+     Les quatre nombres de chaque ligne sont la traduction directe de la fenêtre
+     retrouvée dans la maquette : largeur et hauteur de l'image rendue, puis son
+     décalage. Tout est rapporté à la carte, qui vaut 67,41 vw.
+     Le rapport hauteur/largeur donné à la boîte est celui de la photo : l'image
+     n'est donc pas recadrée. La vidéo de survol, elle, n'a pas le même rapport
+     et reste en « cover » dans cette même boîte.
+
+     Food est retournée : la recherche a été faite sur l'image miroir, le
+     décalage horizontal vaut donc pour elle. */
+  .card .thumb img,.card .thumb video{
+    inset:auto; object-fit:cover; object-position:50% 50%; transform:none; }
   .card--fashion .thumb img,.card--fashion .thumb video{
-    object-position:50% 60.9%; transform:scale(1.050); transform-origin:49.6% 50%; }
+    left:-1.667vw;  top:-40.560vw; width:70.56vw;  height:86.67vw; }
   .card--motion .thumb img,.card--motion .thumb video{
-    object-position:50% 29.0%; transform:scale(1.075); transform-origin:49.6% 50%; }
+    left:-2.500vw;  top:-20.280vw; width:72.23vw;  height:88.61vw; }
   .card--sport .thumb img,.card--sport .thumb video{
-    object-position:50% 0%; transform:scale(1.275); transform-origin:46.5% 0%; }
+    left:-8.612vw;  top:0;         width:85.84vw;  height:105.27vw; }
   .card--food .thumb img,.card--food .thumb video{
-    object-position:50% 12.5%; transform:scale(-1.075, 1.075); transform-origin:49.9% 50%; }
+    left:-2.500vw;  top:-9.166vw;  width:72.23vw;  height:88.61vw; transform:scaleX(-1); }
   .card--studio .thumb img,.card--studio .thumb video{
-    object-position:50% 16.6%; transform:scale(1.075); transform-origin:55.1% 50%; }
+    left:-2.778vw;  top:-11.945vw; width:72.23vw;  height:88.89vw; }
 
   /* ---- Bandeau de contacts ----
      Relevé sur la maquette : bandeau de 160 px sur une image de 1080, soit

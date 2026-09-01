@@ -332,32 +332,60 @@
     home.style.removeProperty('--carte-mt');
 
     var cs = getComputedStyle(home);
-    var dispo = home.clientHeight
+    /* On mesure sur min-height — la hauteur du panneau crème — et non sur
+       clientHeight : les cartes étant désormais bien plus hautes que ce qu'on
+       en voit, la boîte peut grandir au-delà de l'écran et clientHeight
+       cesserait de dire la place réellement disponible. */
+    var mh = parseFloat(cs.minHeight);
+    var dispo = ((mh > 0) ? mh : home.clientHeight)
               - parseFloat(cs.paddingTop || 0)
               - parseFloat(cs.paddingBottom || 0);
     var basGrille = parseFloat(getComputedStyle(grid).marginBottom) || 0;
 
-    /* ---- Tout doit tenir sur UN écran (demande client) ----
-       La maquette montre l'ensemble sans défilement. Les cartes sont le seul
-       bloc compressible : si la somme dépasse, on les réduit juste assez, en
-       gardant leurs proportions. Plancher à 72 % pour qu'elles restent lisibles ;
-       en dessous on laisse la page défiler plutôt que de les écraser. */
-    /* Les proportions viennent de la LARGEUR, plus de la hauteur de fenêtre :
-       la maquette fixe une carte de 728 x 215 px et une bande visible de
-       728 x 191, soit 29,533 % et 26,236 % de la largeur de carte. En « vh »,
-       ce rapport variait avec la forme de l'écran et les vignettes se
-       déformaient. On calcule donc en pixels, à partir de la largeur réelle. */
-    var CARTE = 0.19908, BANDE = 0.17685, PLANCHER = 0.72;   /* en vw */
-    var base = window.innerWidth / 100;
-    var placeCartes = dispo - top.offsetHeight - hero.offsetHeight
-                    - basGrille - 2 * ECART_MINI;
-    if (grid.offsetHeight > placeCartes && grid.offsetHeight > 0) {
-      var k = Math.max(PLANCHER, placeCartes / grid.offsetHeight);
-      var hCarte = CARTE * 100 * base * k;   /* hauteur totale d'une carte, en px */
-      var hBande = BANDE * 100 * base * k;   /* part visible de chaque carte      */
-      home.style.setProperty('--carte-h',  hCarte.toFixed(2) + 'px');
-      home.style.setProperty('--carte-mt', '-' + (hCarte - hBande).toFixed(2) + 'px');
-    }
+    /* ---- Hauteur des cartes ----
+       Deux choses n'ont rien à voir et étaient confondues :
+
+       LA BANDE VISIBLE au repos, qui vaut 17,685 % de la largeur de la carte —
+       c'est la maquette, et elle ne doit jamais changer. Elle est calculée sur
+       la LARGEUR : en « vh », son rapport variait avec la forme de l'écran et
+       les vignettes se déformaient.
+
+       LA HAUTEUR TOTALE de la carte, dont on ne voit rien au repos puisqu'elle
+       passe sous la carte suivante, et qui n'existe que pour être dévoilée au
+       doigt. On la veut la plus grande possible, à condition que la remontée
+       tienne dans le blanc laissé au-dessus de la pile.
+
+       La DERNIÈRE carte fait exception : rien ne la recouvre, sa hauteur est
+       donc celle qu'on lui voit sur la maquette — 215 px pour une bande de 191,
+       soit 1,1257 fois la bande. La pile occupe ainsi exactement l'empreinte de
+       la maquette, et cette empreinte ne dépend pas de R.
+
+       Reste l'équation, où R est ce qu'une carte peut dévoiler et K la hauteur
+       disponible une fois le texte posé :
+           R = 0,609 x (K - 5,1257 x bande) - garde
+       0,609 étant la part basse du blanc relevée sur la maquette, et la garde
+       ce qu'on refuse de manger au bloc titre.
+
+       Plafond à 27 vw : au-delà, la photo de Fashion — la moins haute des cinq
+       une fois posée — n'aurait plus de matière à découvrir sous la carte. */
+    var BANDE = 0.17685, FIN = 1.1257, PART_BAS = 0.609,
+        GARDE = 20, R_MAX = 0.27, PLANCHER = 0.72;
+    var L = window.innerWidth;
+    var B = BANDE * L;
+    var K = dispo - top.offsetHeight - hero.offsetHeight - basGrille;
+    var R = PART_BAS * (K - (4 + FIN) * B) - GARDE;
+    R = Math.max(0.35 * B, Math.min(R_MAX * L, R));
+
+    /* Écran vraiment court : on comprime l'ensemble, bande comprise, plutôt que
+       de laisser la page déborder. */
+    var placeCartes = K - 2 * ECART_MINI;
+    var grille = (4 + FIN) * B;
+    var k = 1;
+    if (grille > placeCartes && grille > 0) k = Math.max(PLANCHER, placeCartes / grille);
+
+    home.style.setProperty('--carte-h',   ((B + R) * k).toFixed(2) + 'px');
+    home.style.setProperty('--carte-mt',  '-' + (R * k).toFixed(2) + 'px');
+    home.style.setProperty('--carte-fin', (FIN * B * k).toFixed(2) + 'px');
 
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight - basGrille;
 
