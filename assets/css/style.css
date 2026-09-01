@@ -1198,6 +1198,21 @@ body:has(.gallery-wrap) .brand .sub{
   .card--sport{ order:3; z-index:3; }
   .card--food{ order:4; z-index:4; }
   .card--studio{ order:5; z-index:5; }
+
+  /* ---- Ouverture d'une carte au doigt ----
+     Au premier appui, la carte touchée sort de sa pile : elle remonte
+     exactement de la part qu'on ne voyait pas d'elle. Les cartes situées
+     AU-DESSUS remontent du même nombre de pixels — elles se contentent de
+     translater, leur taille et leur bande visible ne changent pas. Les cartes
+     du dessous ne bougent pas : c'est ce qui fait grandir la bande de la carte
+     touchée, et elle seule.
+
+     Le déplacement vaut --carte-mt, c'est-à-dire le recouvrement lui-même,
+     déjà négatif : translateY de cette valeur remonte donc pile de ce qui
+     était caché. Aucune constante en double, et le JS qui comprime les cartes
+     sur les écrans courts met la variable à jour, l'ouverture suit. */
+  .card{ transition:transform .32s cubic-bezier(.22,.61,.36,1); }
+  .card.remonte{ transform:translateY(var(--carte-mt, -2.222vw)); }
   .card .thumb{ height:100% !important; }
   /* ---- Étiquettes : relevées une par une sur la maquette téléphone ----
      Graisse THIN, comme partout ailleurs. Corps : « Motion design » mesure

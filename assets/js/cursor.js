@@ -492,6 +492,87 @@
 })();
 
 /* ============================================================
+   ACCUEIL AU DOIGT — une carte sort de la pile avant d'ouvrir
+   sa page.
+
+   Premier appui : la carte touchée remonte de la part d'elle-même
+   qu'on ne voyait pas, et toutes les cartes situées AU-DESSUS
+   remontent d'autant. Elles ne font que translater : leur taille
+   et leur bande visible restent identiques, aucune n'est masquée.
+   Les cartes du dessous, elles, ne bougent pas — c'est ce qui
+   fait grandir la bande de la seule carte touchée.
+
+   Second appui sur la même carte : le lien agit normalement et la
+   page s'ouvre. Un appui ailleurs referme.
+
+   La position dans la pile se lit dans « order », pas dans l'ordre
+   du HTML : les deux diffèrent. Le document liste sport, food,
+   fashion, motion, studio, tandis que l'affichage suit fashion,
+   motion, sport, food, studio.
+
+   Téléphone uniquement : au-dessus de 600 px les cartes sont
+   côte à côte, il n'y a plus de pile à ouvrir.
+   ============================================================ */
+(function () {
+  var grille = document.querySelector('.home .grid');
+  if (!grille) return;
+  var cartes = Array.prototype.slice.call(grille.querySelectorAll('.card'));
+  if (!cartes.length) return;
+
+  function rang(c) { return parseInt(getComputedStyle(c).order, 10) || 0; }
+
+  function fermer() {
+    for (var i = 0; i < cartes.length; i++) {
+      cartes[i].classList.remove('remonte', 'est-ouverte');
+    }
+  }
+
+  function ouvrir(carte) {
+    var n = rang(carte);
+    for (var i = 0; i < cartes.length; i++) {
+      var c = cartes[i];
+      /* toutes celles qui sont au-dessus dans la pile, la touchée comprise */
+      c.classList.toggle('remonte', rang(c) <= n);
+      c.classList.toggle('est-ouverte', c === carte);
+    }
+  }
+
+  function carteDe(cible) {
+    return (cible && cible.closest) ? cible.closest('.card') : null;
+  }
+
+  grille.addEventListener('click', function (e) {
+    if (window.innerWidth > 600) return;
+    /* Activation au clavier (Entrée) : detail vaut 0. On n'impose pas deux
+       frappes à qui navigue sans souris, le lien s'ouvre directement. */
+    if (e.detail === 0) return;
+    var carte = carteDe(e.target);
+    if (!carte) return;
+    /* déjà sortie : on laisse le lien faire son travail */
+    if (carte.classList.contains('est-ouverte')) return;
+    /* Dernière carte de la pile : rien ne la recouvre, il n'y a donc rien à
+       dévoiler. La faire remonter ne ferait que la décoller du bas du panneau.
+       Elle ouvre sa page du premier appui. */
+    var dernier = 0;
+    for (var i = 0; i < cartes.length; i++) dernier = Math.max(dernier, rang(cartes[i]));
+    if (rang(carte) === dernier) { fermer(); return; }
+    e.preventDefault();
+    ouvrir(carte);
+  });
+
+  document.addEventListener('click', function (e) {
+    if (window.innerWidth > 600) return;
+    if (carteDe(e.target)) return;
+    fermer();
+  });
+
+  /* On repasse en tablette ou en bureau : la pile n'existe plus, on remet tout à plat. */
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 600) fermer();
+  });
+})();
+
+/* ============================================================
    Logo + menu : ils s'estompent quand une image ou une vidéo
    passe derrière eux (pages intérieures, barre fixe).
    ============================================================ */
