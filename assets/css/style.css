@@ -853,22 +853,14 @@ body:has(.gallery-wrap) .brand .sub{
   .pastille-cursor{display:none !important;}
 }
 
-/* ---------- POINT FOCAL DES VIGNETTES D'ACCUEIL (téléphone + tablette) ----------
-   En dessous de 950 px les cartes deviennent des bandes larges et basses : on n'en
-   voit qu'un dixième de hauteur. Un cadrage centré, le même pour toutes, montrait
-   le front du modèle au lieu des lunettes (retour client). Chaque valeur a été
-   relevée en comparant la bande visible du site à celle de la maquette téléphone.
-   Ce bloc est placé APRÈS la règle de base « .card--fashion … 50% 0% » : à
-   spécificité égale, c'est la dernière écrite qui l'emporte.
-   Sur ordinateur rien ne change — les cartes y sont hautes et le cadrage d'origine
-   reste le bon. */
-@media(max-width:950px){
-  .card--fashion .thumb img, .card--fashion .thumb video{ object-position:50% 70%; }
-  .card--motion  .thumb img, .card--motion  .thumb video{ object-position:50% 55%; }
-  .card--sport   .thumb img, .card--sport   .thumb video{ object-position:50% 25%; }
-  .card--food    .thumb img, .card--food    .thumb video{ object-position:50% 25%; }
-  .card--studio  .thumb img, .card--studio  .thumb video{ object-position:50% 40%; }
-}
+/* ---------- Sport et Studio : cadrage du haut (bureau) ----------
+   Les deux vignettes ont été refabriquées depuis les originaux de 1_home,
+   ceux-là mêmes qu'emploient les trois maquettes : 558 x 686 px. La maquette
+   bureau les pose à leur taille native et coupe par le BAS — corrélation 0,999
+   pour Sport, 1,000 pour Studio. D'où ce calage en haut, qui remplace le
+   centrage par défaut. */
+.card--sport  .thumb img,.card--sport  .thumb video,
+.card--studio .thumb img,.card--studio .thumb video{ object-position:50% 0%; }
 
 /* ---------- Éléments responsive (base) ---------- */
 .c-item{ display:block; }                 /* contacts empilés (bureau) */
@@ -995,25 +987,55 @@ body:has(.gallery-wrap) .brand .sub{
     top:calc(var(--panel-w) * .019);
     left:calc(var(--panel-w) * .020);
     bottom:auto; margin:0; z-index:3;
-    font-size:clamp(12px, calc(var(--panel-w) * .02188), 34px);
-    font-weight:400;
+    /* Graisse THIN, comme partout ailleurs sur le site — c'était l'erreur : la
+       règle héritée de l'ancienne tablette imposait Regular.
+       Corps : « Motion design » mesure 334 px sur un panneau de 2003 ; la chaîne
+       vaut 7,20 em en Jumper Thin (7,62 en Regular) — d'où 2,318 % de la largeur
+       du panneau. La hauteur de glyphes relevée (48 px) confirme ce corps. */
+    font-weight:100;
+    font-size:clamp(12px, calc(var(--panel-w) * .02318), 36px);
   }
   .card--food .label,.card--motion .label{ color:#fff; }
   .card--sport .label,.card--studio .label,.card--fashion .label{ color:var(--ink); }
 
-  /* ---- Point focal propre à la tablette ----
-     Les valeurs du bloc « ≤ 950 px » ont été réglées sur la maquette
-     TÉLÉPHONE, où les cartes sont des bandes très larges et très basses.
-     En tablette les vignettes sont au contraire presque carrées, ou hautes
-     pour Fashion : le même cadrage n'y montre pas la même chose.
-     Ces cinq valeurs sont retrouvées par corrélation entre la vignette de
-     la maquette tablette et l'image source, à sa forme réelle.
+  /* ---- Cadrage des vignettes, retrouvé image par image ----
+     Chaque vignette de la maquette a été recherchée dans son fichier source,
+     à toutes les échelles et dans les deux sens, jusqu'à retrouver la fenêtre
+     exacte. Corrélations obtenues : Fashion 0,989 · Studio 0,980 · Food 0,952 ·
+     Sport 0,90 · Motion vérifiée sur la position du triangle turquoise, au pixel.
+
+     DEUX ENSEIGNEMENTS.
+
+     1. La maquette RETOURNE horizontalement la photo Food. C'est ce
+        retournement, et rien d'autre, qui amène le fond noir à gauche sous
+        l'étiquette blanche. Corrélation avec l'image retournée : 0,952 ;
+        sans retournement, 0,08 — autrement dit aucun rapport.
+
+     2. Les images sont posées à leur TAILLE NATIVE dans la maquette, et non
+        redimensionnées pour remplir la carte. Le navigateur, lui, applique
+        « cover », qui réduit un peu plus. D'où les scale() ci-dessous : ils
+        rendent aux vignettes l'échelle du fichier d'origine. Les valeurs de
+        transform-origin sont calculées pour que la fenêtre visible tombe
+        exactement sur celle de la maquette.
+
+     Sport ne demande aucune transformation : le fichier du site est déjà un
+     recadrage carré de l'original, « cover » centré retrouve la maquette à 7 %
+     près — l'écart tient au haut et au bas perdus lors de ce recadrage.
+
      Bloc écrit APRÈS celui du téléphone : à spécificité égale il l'emporte. */
-  .card--fashion .thumb img,.card--fashion .thumb video{ object-position:50% 50%; }
-  .card--sport   .thumb img,.card--sport   .thumb video{ object-position:67% 50%; }
-  .card--studio  .thumb img,.card--studio  .thumb video{ object-position:50% 0%; }
-  .card--food    .thumb img,.card--food    .thumb video{ object-position:50% 10%; }
-  .card--motion  .thumb img,.card--motion  .thumb video{ object-position:50% 0%; }
+  .card--fashion .thumb img,.card--fashion .thumb video{
+    object-position:50% 63.1%; transform:scale(1.023); transform-origin:47.1% 50%; }
+  /* Sport et Studio ont été refabriquées depuis les originaux de 1_home, ceux
+     de la maquette : leur cadrage se retrouve désormais sans forcer.
+     Sport ne demande plus rien — « cover » calé en haut suffit. */
+  .card--sport .thumb img,.card--sport .thumb video{
+    object-position:50% 0%; transform:none; }
+  .card--food .thumb img,.card--food .thumb video{
+    object-position:50% 0%; transform:scale(-1.12, 1.12); transform-origin:50% 0%; }
+  .card--motion .thumb img,.card--motion .thumb video{
+    object-position:50% 0%; transform:scale(1.1235); transform-origin:0% 0%; }
+  .card--studio .thumb img,.card--studio .thumb video{
+    object-position:50% 0%; transform:scale(1.10); transform-origin:44.4% 20.7%; }
 
   /* ---- Pages intérieures en tablette ----
      La construction du bureau est PROLONGÉE ici (choix client) : galerie à 83 %
@@ -1032,13 +1054,15 @@ body:has(.gallery-wrap) .brand .sub{
   :root{--pad:20px;}
 
   /* ===== ACCUEIL ===== */
-  /* Cadre sombre : 25 px, relevé sur la maquette téléphone (76 px sur un rendu
-     à 3x, soit 7,04 % de la largeur d'image). Il était à 12 px. */
-  body.home-page{ padding:25px; overflow-x:hidden; }
+  /* Cadre sombre relevé au pixel sur la maquette : 76 / 78 / 79 px sur une image
+     de 1080 — il est bien UNIFORME sur les trois côtés, soit 7,13 % de la
+     largeur, ce qui fait 27,8 px sur un iPhone. Le bas, lui, mesure 160 px, soit
+     14,81 % : c'est le double, parce qu'il porte le bandeau de contacts. */
+  body.home-page{ padding:7.13vw 7.13vw 14.81vw; overflow-x:hidden; }
   /* min-height et non height : sur un écran court la page défile au lieu de
      rogner le bas. overflow:visible pour la même raison — c'était « hidden »,
      et le contenu excédentaire disparaissait sans le moindre signe. */
-  .home{ position:relative; min-height:calc(100vh - 50px); overflow:visible; padding:2.27% 4.5% 0; display:flex; flex-direction:column; }
+  .home{ position:relative; min-height:calc(100vh - 21.94vw); overflow:visible; padding:2.27% 4.5% 0; display:flex; flex-direction:column; }
 
   /* En-tête identique à celui d'About (demande client) : logo à gauche,
      « +Menu » à droite sur la même ligne, puis le paragraphe pleine largeur en
@@ -1055,7 +1079,7 @@ body:has(.gallery-wrap) .brand .sub{
      pas en en-tête. */
   .home-top{ flex-direction:row; flex-wrap:nowrap; align-items:flex-start; gap:14px; }
   .home .home-brand{ display:none; }
-  .menu-toggle{ display:inline-block; font-size:18px; margin-left:auto; flex:0 0 auto; }
+  .menu-toggle{ display:inline-block; font-size:14.4px; margin-left:auto; flex:0 0 auto; }
   .intro{ flex:1 1 auto; min-width:0; }
 
   /* Le paragraphe reprend TOUTE la colonne. Bridé à 66 %, chacune de ses six
@@ -1070,7 +1094,12 @@ body:has(.gallery-wrap) .brand .sub{
        retrait de .home valant 4,5 % de chaque côté. La formule précédente
        tablait encore sur un cadre de 12 px : la ligne la plus longue dépassait
        de 14 px et le paragraphe se cassait en neuf lignes au lieu de six. */
-    font-size:clamp(10.4px, calc((100vw - 50px) * 0.03297), 12px);
+    /* Réduit de 20 % (décision client) : la maquette demanderait 2,275 % de la
+       largeur du panneau, soit 7,7 px sur un iPhone — elle est dessinée sur une
+       toile de 1080 px alors qu'un téléphone en fait 390, tout y est donc 2,8
+       fois plus grand. On fait 20 % du chemin : 9 px au lieu de 11,2.
+       Effet recherché : la ligne la plus longue ne touche plus « +Menu ». */
+    font-size:clamp(8.3px, 2.308vw, 9.6px);
     line-height:1.35;
   }
   .site-nav{ display:none; }
@@ -1102,8 +1131,12 @@ body:has(.gallery-wrap) .brand .sub{
      masquées quand un logo coiffait la page ; ce logo étant retiré, elles
      reprennent leur place. Corps relevés sur la maquette, rapportés à la largeur
      du panneau : 6,05 %, 3,13 % et 3,03 % de sa largeur. */
-  .hero h1  { display:block; font-size:clamp(24px, 6.05vw, 46px); }
-  .hero .role{ display:block; font-size:clamp(13px, 3.13vw, 24px); }
+  /* Les trois corps sont réduits de 20 %, comme le paragraphe et pour la même
+     raison. La maquette donnerait 16,5 / 9,8 / 9,7 px sur un iPhone ; on
+     s'arrête à 19,2 / 10,4 / 11,8. Le rapport entre les trois lignes, lui, est
+     conservé au centième. */
+  .hero h1  { display:block; font-size:clamp(19.2px, 4.84vw, 36.8px); }
+  .hero .role{ display:block; font-size:clamp(10.4px, 2.504vw, 19.2px); }
   /* « Réalisation • Montage • Motion Design » doit tenir sur UNE ligne (demande
      client). Elle mesure 20,42 em : à 4,4 vw elle débordait sur tous les
      téléphones, du SE au Pro Max. Le corps est donc calculé à partir de la
@@ -1111,7 +1144,7 @@ body:has(.gallery-wrap) .brand .sub{
   .hero .tags{
     /* même correction : la ligne débordait du panneau depuis le passage du
        cadre à 25 px, et venait toucher les deux bords. */
-    font-size:clamp(12px, calc((100vw - 50px) * 0.04354), 22px);
+    font-size:clamp(9.6px, 3.036vw, 17.6px);
     white-space:nowrap;
   }
 
@@ -1124,7 +1157,11 @@ body:has(.gallery-wrap) .brand .sub{
      qui donne l'effet de pile posée sur la page.
      La dernière carte affleure le bas du panneau ; les 62 px dégagent la barre
      de contacts, qui est fixée par-dessus. */
-  .grid{ position:static; margin:0 0 var(--barre-h, 62px); display:flex; flex-direction:column; gap:0;
+  /* Plus de réserve pour la barre de contacts : le retrait bas du cadre
+     (14,81 vw) vaut désormais exactement la hauteur du bandeau, qui se pose
+     par-dessus. La dernière carte affleure donc le bas du panneau crème, comme
+     sur la maquette. */
+  .grid{ position:static; margin:0; display:flex; flex-direction:column; gap:0;
          align-items:center; justify-content:flex-end; }
   /* Bande visible par carte : 10,8 % de la hauteur du panneau sur la maquette.
      Exprimée en vh, avec un plancher pour les très petits écrans. */
@@ -1136,9 +1173,24 @@ body:has(.gallery-wrap) .brand .sub{
      qu'il faut pour que la page tienne d'un seul écran, sans défilement. Les
      valeurs par défaut sont celles de la maquette (16,9 vh par carte, 9,8 vh
      visibles), utilisées telles quelles dès qu'il y a la place. */
-  .card{ position:relative; width:78.62%; max-width:none;
-         height:var(--carte-h, 16.9vh); min-height:64px;
-         margin-top:var(--carte-mt, -7.1vh);
+  /* 78,62 % est la largeur de la carte rapportée au PANNEAU, relevée sur la
+     maquette. Or .grid est à l'intérieur de .home, qui a 4,5 % de retrait de
+     chaque côté : appliquer 78,62 % ici donnait 71,5 % du panneau, soit des
+     cartes visiblement trop étroites. On divise donc par 0,91. */
+  /* ---- LA CORRECTION DE FOND ----
+     Les hauteurs étaient exprimées en « vh ». Or la maquette fixe un RAPPORT :
+     bande visible 728 x 191 px, carte entière 728 x 215. En vh, ce rapport
+     dépendait de la forme de l'écran et retombait à 3,23 au lieu de 3,81 sur un
+     iPhone — 18 % de hauteur en trop dans chaque bande. Tout le contenu des
+     vignettes descendait d'autant : « Sport » venait sur le F, Studio paraissait
+     déformée. Les deux hauteurs sont donc désormais des pourcentages de la
+     LARGEUR de la carte : 29,533 % pour la carte, 26,236 % pour la bande.
+     La carte valant 67,41 vw, cela donne 19,908 vw et 17,685 vw.
+     Conséquence directe : le rapport des vignettes est celui de la maquette sur
+     tous les téléphones, et les cinq cadrages ci-dessous tombent juste. */
+  .card{ position:relative; width:86.40%; max-width:none;
+         height:var(--carte-h, 19.908vw); min-height:52px;
+         margin-top:var(--carte-mt, -2.222vw);
          border-radius:20px 20px 0 0; overflow:hidden;
          box-shadow:0 -7px 18px rgba(0,0,0,.18); }
   .card--fashion{ order:1; z-index:1; margin-top:0; }
@@ -1147,12 +1199,80 @@ body:has(.gallery-wrap) .brand .sub{
   .card--food{ order:4; z-index:4; }
   .card--studio{ order:5; z-index:5; }
   .card .thumb{ height:100% !important; }
-  .card .label{ position:absolute; top:9px; left:16px; bottom:auto; margin:0; z-index:2; font-size:20px; font-weight:400; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.55); }
+  /* ---- Étiquettes : relevées une par une sur la maquette téléphone ----
+     Graisse THIN, comme partout ailleurs. Corps : « Motion design » mesure
+     339 px sur une carte de 728, soit 6,47 % de sa largeur ; la carte valant
+     78,62 % du panneau, cela fait 5,087 % de (100vw − 50px), le panneau réel.
+     Sur un iPhone 13 Pro : 17,3 px. Plancher de lisibilité à 13 px, jamais
+     atteint au-dessus de 306 px de large.
+     Retraits en POURCENTAGE de la carte (9,5 % et 9,8 %) et non en pixels :
+     ils suivent ainsi la compression des cartes décidée par le JS.
+     Aucune ombre portée : la maquette n'en a pas, et les cadrages ci-dessous
+     posent chaque étiquette sur une zone contrastée — c'est précisément le
+     rôle du retournement de la photo Food. */
+  .card .label{
+    position:absolute; top:9.8%; left:9.5%; bottom:auto; margin:0; z-index:2;
+    font-weight:100;
+    font-size:clamp(13px, 4.362vw, 26px);
+    text-shadow:none;
+  }
+  /* Couleurs de la maquette : blanc sur les trois fonds sombres, encre sur les
+     deux fonds clairs. La règle précédente forçait le blanc sur les cinq, d'où
+     un « Sport » et un « Studio » illisibles sur gris clair et sur ocre. */
+  .card--fashion .label,.card--motion .label,.card--food .label{ color:#fff; }
+  .card--sport .label,.card--studio .label{ color:var(--ink); }
 
-  /* contacts : barre noire pleine largeur en bas */
-  .contact{ position:fixed; left:0; right:0; bottom:0; top:auto; transform:none; background:var(--ink); z-index:150; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:6px 18px; padding:11px 14px; font-size:12px; line-height:1.2; }
-  .contact .c-item{ display:inline-block; }
-  .contact, .contact a, .contact .num{ color:#fff; }
+  /* ---- Cadrage des vignettes, retrouvé sur la maquette téléphone ----
+     Même méthode qu'en tablette : recherche de la fenêtre exacte dans chaque
+     fichier source, à toutes les échelles et dans les deux sens.
+     Corrélations : Fashion 0,940 · Food 0,929 · Studio 0,919 · Motion 0,778.
+
+     Food est RETOURNÉE ici aussi. Le graphiste ne l'a fait que sur les petits
+     formats — la maquette bureau, elle, est à l'endroit (corrélation 0,993
+     contre 0,046 retournée). En bande large et basse, c'est le seul moyen
+     d'amener le fond noir sous l'étiquette blanche.
+
+     Aucune carte ne déborde horizontalement (la source est toujours plus
+     étroite que la carte une fois « cover » appliqué) : le cadrage latéral
+     passe donc entièrement par transform-origin, jamais par object-position.
+
+     Sport est le moins sûr des cinq : l'image est un aplat de gris clair avec
+     des lettres au trait, sur lequel aucune méthode de corrélation ne se cale
+     franchement. La valeur retenue est le sommet du calcul sur les contours,
+     confirmé à l'œil. */
+  .card--fashion .thumb img,.card--fashion .thumb video{
+    object-position:50% 60.9%; transform:scale(1.050); transform-origin:49.6% 50%; }
+  .card--motion .thumb img,.card--motion .thumb video{
+    object-position:50% 29.0%; transform:scale(1.075); transform-origin:49.6% 50%; }
+  .card--sport .thumb img,.card--sport .thumb video{
+    object-position:50% 0%; transform:scale(1.275); transform-origin:46.5% 0%; }
+  .card--food .thumb img,.card--food .thumb video{
+    object-position:50% 12.5%; transform:scale(-1.075, 1.075); transform-origin:49.9% 50%; }
+  .card--studio .thumb img,.card--studio .thumb video{
+    object-position:50% 16.6%; transform:scale(1.075); transform-origin:55.1% 50%; }
+
+  /* ---- Bandeau de contacts ----
+     Relevé sur la maquette : bandeau de 160 px sur une image de 1080, soit
+     14,81 % de la largeur ; texte BLANC (mesuré 247,247,235, c'est-à-dire le
+     crème), sur UNE seule ligne, centré dans les deux sens.
+     Le fond reprend la couleur du cadre (#242424) et non l'encre : c'est le même
+     gris anthracite que le pourtour, le bandeau en fait partie.
+     Le corps est calculé pour que la ligne tienne toujours d'un seul tenant :
+     « iG : @ocrefilms   Tel : …   Mail : … » mesure 45,48 em, et on lui laisse
+     la largeur de l'écran moins 32 px. Sur un iPhone cela fait 7,9 px — petit,
+     mais c'est le prix d'une seule ligne avec une adresse plus longue que celle
+     de la maquette. flex-wrap:nowrap interdit tout retour à la ligne. */
+  .contact{ position:fixed; left:0; right:0; bottom:0; top:auto; transform:none;
+            background:var(--frame); z-index:150;
+            height:14.81vw; min-height:34px;
+            display:flex; flex-wrap:nowrap; justify-content:center; align-items:center;
+            gap:0 1.6em; padding:0 12px;
+            /* 46,5 em = la ligne complète, séparateurs compris, avec 2 % de
+               garde. Vérifié de l'iPhone SE (6,4 px) au Pro Max (8,7 px) :
+               elle ne se casse jamais. */
+            font-size:clamp(6px, calc((100vw - 24px) * 0.021505), 13px); line-height:1.2; }
+  .contact .c-item{ display:inline-block; white-space:nowrap; }
+  .contact, .contact a, .contact .num{ color:var(--cream); }
 
   /* ===== PAGES INTÉRIEURES ===== */
   /* En-tête FIXE et escamotable : il s'efface quand on descend, revient quand on

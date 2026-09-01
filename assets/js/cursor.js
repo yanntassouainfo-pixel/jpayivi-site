@@ -342,15 +342,21 @@
        bloc compressible : si la somme dépasse, on les réduit juste assez, en
        gardant leurs proportions. Plancher à 72 % pour qu'elles restent lisibles ;
        en dessous on laisse la page défiler plutôt que de les écraser. */
-    var CARTE = 0.169, BANDE = 0.098, PLANCHER = 0.72;
+    /* Les proportions viennent de la LARGEUR, plus de la hauteur de fenêtre :
+       la maquette fixe une carte de 728 x 215 px et une bande visible de
+       728 x 191, soit 29,533 % et 26,236 % de la largeur de carte. En « vh »,
+       ce rapport variait avec la forme de l'écran et les vignettes se
+       déformaient. On calcule donc en pixels, à partir de la largeur réelle. */
+    var CARTE = 0.19908, BANDE = 0.17685, PLANCHER = 0.72;   /* en vw */
+    var base = window.innerWidth / 100;
     var placeCartes = dispo - top.offsetHeight - hero.offsetHeight
                     - basGrille - 2 * ECART_MINI;
     if (grid.offsetHeight > placeCartes && grid.offsetHeight > 0) {
       var k = Math.max(PLANCHER, placeCartes / grid.offsetHeight);
-      var hCarte = CARTE * k * 100;          /* hauteur totale d'une carte, en vh */
-      var hBande = BANDE * k * 100;          /* part visible de chaque carte      */
-      home.style.setProperty('--carte-h',  hCarte.toFixed(3) + 'vh');
-      home.style.setProperty('--carte-mt', '-' + (hCarte - hBande).toFixed(3) + 'vh');
+      var hCarte = CARTE * 100 * base * k;   /* hauteur totale d'une carte, en px */
+      var hBande = BANDE * 100 * base * k;   /* part visible de chaque carte      */
+      home.style.setProperty('--carte-h',  hCarte.toFixed(2) + 'px');
+      home.style.setProperty('--carte-mt', '-' + (hCarte - hBande).toFixed(2) + 'px');
     }
 
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight - basGrille;
