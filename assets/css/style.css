@@ -1166,8 +1166,26 @@ body:has(.gallery-wrap) .brand .sub{
      (14,81 vw) vaut désormais exactement la hauteur du bandeau, qui se pose
      par-dessus. La dernière carte affleure donc le bas du panneau crème, comme
      sur la maquette. */
+  /* ---- La grille est une FENÊTRE, pas un conteneur ----
+     Les cartes mesurent désormais trois fois ce qu'on en voit : mises bout à
+     bout avec leur recouvrement, elles descendent bien plus bas que la pile.
+     Sans limite, la dernière ne recouvrait pas les précédentes et l'avant-
+     dernière débordait de 93 px sous le panneau crème — on voyait son image
+     réapparaître sous la mise en page.
+     On fixe donc la hauteur de la grille à l'empreinte de la maquette, quatre
+     bandes plus la dernière carte, et on coupe ce qui dépasse.
+
+     La coupe se fait par le BAS seulement : clip-path avec un retrait négatif
+     en haut laisse toute liberté à la carte qui remonte à l'ouverture — un
+     overflow:hidden l'aurait tronquée. Les côtés restent au bord de la grille,
+     à 21 px des cartes : l'ombre portée, floutée sur 18 px, passe entière.
+
+     flex-start et non flex-end : quand le contenu dépasse la hauteur fixée,
+     flex-end le ferait déborder par le HAUT et toute la pile remonterait. */
   .grid{ position:static; margin:0; display:flex; flex-direction:column; gap:0;
-         align-items:center; justify-content:flex-end; }
+         align-items:center; justify-content:flex-start;
+         height:var(--grille-h, 90.65vw);
+         clip-path:inset(-100vh 0 0 0); }
   /* Bande visible par carte : 10,8 % de la hauteur du panneau sur la maquette.
      Exprimée en vh, avec un plancher pour les très petits écrans. */
   /* Hauteurs calées sur la maquette : le bloc des cinq cartes y occupe 60,2 % du
@@ -1209,10 +1227,7 @@ body:has(.gallery-wrap) .brand .sub{
   .card--motion{ order:2; z-index:2; }
   .card--sport{ order:3; z-index:3; }
   .card--food{ order:4; z-index:4; }
-  /* Dernière de la pile : rien ne la recouvre, sa hauteur est donc celle qu'on
-     lui voit sur la maquette — 215 px pour une bande de 191. Sans cela elle
-     afficherait toute sa hauteur cachée et dépasserait des quatre autres. */
-  .card--studio{ order:5; z-index:5; height:var(--carte-fin, 19.908vw); }
+  .card--studio{ order:5; z-index:5; }
 
   /* ---- Ouverture d'une carte au doigt ----
      Au premier appui, la carte touchée sort de sa pile : elle remonte

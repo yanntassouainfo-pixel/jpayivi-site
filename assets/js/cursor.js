@@ -323,10 +323,11 @@
        doigt. On la veut la plus grande possible, à condition que la remontée
        tienne dans le blanc laissé au-dessus de la pile.
 
-       La DERNIÈRE carte fait exception : rien ne la recouvre, sa hauteur est
-       donc celle qu'on lui voit sur la maquette — 215 px pour une bande de 191,
-       soit 1,1257 fois la bande. La pile occupe ainsi exactement l'empreinte de
-       la maquette, et cette empreinte ne dépend pas de R.
+       Les cinq cartes ont la MÊME hauteur. C'est la grille qui décide de ce
+       qu'on en voit : sa hauteur vaut l'empreinte de la maquette — quatre
+       bandes plus la dernière carte, 1,1257 fois la bande comme dans le
+       fichier — et tout ce qui dépasse est coupé par le bas. La dernière carte
+       a donc elle aussi de la matière cachée, et s'ouvre comme les autres.
 
        Reste l'équation, où R est ce qu'une carte peut dévoiler et K la hauteur
        disponible une fois le texte posé :
@@ -339,12 +340,17 @@
        sinon les deux bords deviennent jointifs et l'on voit une coupure nette
        au lieu d'une carte qui sort de la pile.
 
-       Plafond à 46 vw : c'est Motion, la moins haute des cinq photos une fois
+       Plafond à 45 vw : c'est Motion, la moins haute des cinq photos une fois
        posée à la largeur de la carte, qui décide — au-delà on découvrirait du
        vide sous son image. Fashion tenait ce rôle auparavant avec 27 vw ;
-       elle a été ré-extraite plus longue et ne contraint plus rien. */
+       elle a été ré-extraite plus longue et ne contraint plus rien.
+
+       La réserve est passée de 4 à 5,5 % : la dernière carte montre une bande
+       plus haute que les autres (1,1257 fois), elle consomme donc une part de
+       cette réserve. À 4 % il ne lui restait que 7 px sous la coupe, elle en a
+       maintenant 13. */
     var BANDE = 0.17685, FIN = 1.1257, PART_BAS = 0.609,
-        GARDE = 20, RESERVE = 0.04, R_MAX = 0.46, PLANCHER = 0.72;
+        GARDE = 20, RESERVE = 0.055, R_MAX = 0.45, PLANCHER = 0.72;
     var L = window.innerWidth;
     var B = BANDE * L;
     var K = dispo - top.offsetHeight - hero.offsetHeight - basGrille;
@@ -365,7 +371,9 @@
     home.style.setProperty('--carte-h',      ((B + R + reserve) * k).toFixed(2) + 'px');
     home.style.setProperty('--carte-mt',     '-' + ((R + reserve) * k).toFixed(2) + 'px');
     home.style.setProperty('--carte-sortie', '-' + (R * k).toFixed(2) + 'px');
-    home.style.setProperty('--carte-fin',    (FIN * B * k).toFixed(2) + 'px');
+    /* Hauteur de la FENÊTRE : quatre bandes plus la dernière carte, telle qu'on
+       la voit sur la maquette. C'est elle qui coupe tout ce qui dépasse. */
+    home.style.setProperty('--grille-h',     (grille * k).toFixed(2) + 'px');
 
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight - basGrille;
 
@@ -510,6 +518,11 @@
    Les cartes du dessous, elles, ne bougent pas — c'est ce qui
    fait grandir la bande de la seule carte touchée.
 
+   La dernière carte se comporte comme les quatre autres : ce n'est
+   plus une voisine qui la recouvre mais le bas de la grille, qui
+   coupe tout ce qui dépasse. Elle a donc, elle aussi, de la
+   matière à dévoiler.
+
    Second appui sur la même carte : le lien agit normalement et la
    page s'ouvre. Un appui ailleurs referme.
 
@@ -580,12 +593,6 @@
     if (!carte) return;
     /* déjà sortie : on laisse le lien faire son travail */
     if (carte.classList.contains('est-ouverte')) return;
-    /* Dernière carte de la pile : rien ne la recouvre, il n'y a donc rien à
-       dévoiler. La faire remonter ne ferait que la décoller du bas du panneau.
-       Elle ouvre sa page du premier appui. */
-    var dernier = 0;
-    for (var i = 0; i < cartes.length; i++) dernier = Math.max(dernier, rang(cartes[i]));
-    if (rang(carte) === dernier) { fermer(); return; }
     /* Écran trop court pour dévoiler quoi que ce soit : le JS de mise en page a
        ramené la sortie à zéro. On n'impose pas un appui pour rien. */
     var sortie = parseFloat(getComputedStyle(carte).getPropertyValue('--carte-sortie'));
