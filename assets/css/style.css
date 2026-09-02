@@ -1062,7 +1062,21 @@ body:has(.gallery-wrap) .brand .sub{
   /* min-height et non height : sur un écran court la page défile au lieu de
      rogner le bas. overflow:visible pour la même raison — c'était « hidden »,
      et le contenu excédentaire disparaissait sans le moindre signe. */
-  .home{ position:relative; min-height:calc(100vh - 21.94vw); overflow:visible; padding:2.27% 4.5% 0; display:flex; flex-direction:column; }
+  /* ---- La hauteur d'écran d'iOS ne vaut pas ce qu'elle dit ----
+     Safari calcule « vh » BARRES MASQUÉES. Sur un iPhone 13 Pro, 100vh vaut
+     844 px alors que la zone réellement visible, barre d'URL et barre d'outils
+     affichées, n'en fait que 618 : il manque 226 px, soit 27 % de la hauteur.
+     La page était donc construite sur une place qui n'existe pas — d'où le
+     défilement et la dernière carte hors champ.
+     « svh » est la plus petite des hauteurs possibles, celle où les deux barres
+     sont visibles : la page tient alors toujours, quel que soit l'état de
+     Safari. La ligne en « vh » reste au-dessus pour les navigateurs qui ne
+     connaissent pas encore l'unité — elle est simplement écrasée par la
+     suivante partout où svh existe. */
+  .home{ position:relative;
+         min-height:calc(100vh - 21.94vw);
+         min-height:calc(100svh - 21.94vw);
+         overflow:visible; padding:2.27% 4.5% 0; display:flex; flex-direction:column; }
 
   /* En-tête identique à celui d'About (demande client) : logo à gauche,
      « +Menu » à droite sur la même ligne, puis le paragraphe pleine largeur en
@@ -1175,17 +1189,30 @@ body:has(.gallery-wrap) .brand .sub{
      On fixe donc la hauteur de la grille à l'empreinte de la maquette, quatre
      bandes plus la dernière carte, et on coupe ce qui dépasse.
 
-     La coupe se fait par le BAS seulement : clip-path avec un retrait négatif
-     en haut laisse toute liberté à la carte qui remonte à l'ouverture — un
-     overflow:hidden l'aurait tronquée. Les côtés restent au bord de la grille,
-     à 21 px des cartes : l'ombre portée, floutée sur 18 px, passe entière.
+     La coupe se fait par le BAS seulement, pour laisser toute liberté à la
+     carte qui remonte à l'ouverture — un overflow:hidden l'aurait tronquée.
+     Elle est écrite en polygon() et non en inset() : inset() REFUSE les valeurs
+     négatives, la déclaration entière était donc jetée et plus rien n'était
+     coupé. Un polygone, lui, accepte des sommets hors du cadre : les trois
+     premiers points sont largement au-dessus et sur les côtés, seul le quatrième
+     côté — la ligne du bas, à 100 % — coupe réellement.
 
      flex-start et non flex-end : quand le contenu dépasse la hauteur fixée,
-     flex-end le ferait déborder par le HAUT et toute la pile remonterait. */
-  .grid{ position:static; margin:0; display:flex; flex-direction:column; gap:0;
+     flex-end le ferait déborder par le HAUT et toute la pile remonterait.
+
+     z-index 2 : filet de sécurité. La pile s'arrête dix pixels sous le bloc
+     titre et ne devrait jamais l'atteindre, mais si un arrondi la faisait
+     dépasser, elle passerait devant plutôt que derrière — un chevauchement
+     franc se voit et se corrige, une carte à moitié avalée par le titre est
+     beaucoup plus difficile à diagnostiquer.
+     On ne donne AUCUN z-index au bloc titre en retour : il en créerait un
+     contexte d'empilement, et la barre de contacts — qui est son enfant et
+     monte à 150 — s'y trouverait enfermée, donc recouverte par la grille. */
+  .grid{ position:relative; z-index:2; margin:0;
+         display:flex; flex-direction:column; gap:0;
          align-items:center; justify-content:flex-start;
          height:var(--grille-h, 90.65vw);
-         clip-path:inset(-100vh 0 0 0); }
+         clip-path:polygon(-200% -400%, 300% -400%, 300% 100%, -200% 100%); }
   /* Bande visible par carte : 10,8 % de la hauteur du panneau sur la maquette.
      Exprimée en vh, avec un plancher pour les très petits écrans. */
   /* Hauteurs calées sur la maquette : le bloc des cinq cartes y occupe 60,2 % du

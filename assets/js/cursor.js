@@ -329,11 +329,15 @@
        fichier — et tout ce qui dépasse est coupé par le bas. La dernière carte
        a donc elle aussi de la matière cachée, et s'ouvre comme les autres.
 
-       Reste l'équation, où R est ce qu'une carte peut dévoiler et K la hauteur
-       disponible une fois le texte posé :
-           R = 0,609 x (K - 5,1257 x bande) - garde
-       0,609 étant la part basse du blanc relevée sur la maquette, et la garde
-       ce qu'on refuse de manger au bloc titre.
+       Ce qu'une carte peut dévoiler, R, est le blanc qui sépare la pile du bloc
+       titre — et rien de plus : la pile ne doit ni le recouvrir ni le déplacer
+       (choix client). Ce blanc vaut la part basse du partage de la maquette,
+       60,9 % de ce qui reste une fois le texte et la pile posés :
+           R = 0,609 x (dispo - paragraphe - titre - 5,1257 x bande) - garde
+       La garde, dix pixels, empêche la carte de venir toucher la ligne des
+       métiers. Conséquence assumée : barres de Safari affichées, il ne reste
+       qu'une trentaine de pixels de blanc et le dévoilement est modeste ; il
+       redevient ample dès que l'utilisateur masque les barres.
 
        RÉSERVE : la carte est plus haute que ce qu'elle dévoile. Ces quatre pour
        cent de largeur restent engagés sous la carte suivante une fois ouverte,
@@ -350,7 +354,7 @@
        cette réserve. À 4 % il ne lui restait que 7 px sous la coupe, elle en a
        maintenant 13. */
     var BANDE = 0.17685, FIN = 1.1257, PART_BAS = 0.609,
-        GARDE = 20, RESERVE = 0.055, R_MAX = 0.45, PLANCHER = 0.72;
+        GARDE = 10, RESERVE = 0.055, R_MAX = 0.45, PLANCHER = 0.72;
     var L = window.innerWidth;
     var B = BANDE * L;
     var K = dispo - top.offsetHeight - hero.offsetHeight - basGrille;
@@ -358,7 +362,8 @@
        et forcer un dévoilement ferait remonter la pile sur le bloc titre. R
        tombe alors à zéro et les cartes ouvrent leur page du premier appui — le
        JS de l'ouverture le détecte tout seul. */
-    var R = Math.max(0, Math.min(R_MAX * L, PART_BAS * (K - (4 + FIN) * B) - GARDE));
+    var R = Math.max(0, Math.min(R_MAX * L,
+                     PART_BAS * (K - (4 + FIN) * B) - GARDE));
     var reserve = RESERVE * L;
 
     /* Écran vraiment court : on comprime l'ensemble, bande comprise, plutôt que
