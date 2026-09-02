@@ -386,10 +386,36 @@
        au-dessus du bloc titre, 13,96 % en dessous, soit 39,1 % / 60,9 %.
        C'est le même parti pris que la maquette bureau (39,65 %) : le titre n'est
        pas centré, il est posé un peu haut. Plancher pour les écrans courts. */
-    var haut = Math.max(ECART_MINI, Math.round(libre * 0.391));
-    var bas  = Math.max(ECART_MINI, Math.round(libre * 0.609));
+    /* Le second écart se DÉDUIT du premier au lieu d'être calculé lui aussi :
+       leur somme vaut alors exactement le blanc disponible. En les arrondissant
+       chacun de son côté, et surtout en leur imposant chacun un plancher, on
+       fabriquait jusqu'à 4,4 px de trop — assez pour que la page redevienne
+       défilable alors qu'on venait de la figer.
+       Quand le blanc ne suffit plus pour deux planchers, on le partage
+       simplement en deux. */
+    var haut, bas;
+    if (libre <= 2 * ECART_MINI) {
+      haut = Math.round(libre / 2);
+      bas  = libre - haut;
+    } else {
+      haut = Math.max(ECART_MINI, Math.round(libre * 0.391));
+      bas  = libre - haut;
+    }
     home.style.setProperty('--ecart-haut', haut + 'px');
     home.style.setProperty('--ecart-bas',  bas  + 'px');
+
+    /* ---- Figer la page, mais seulement si elle tient vraiment ----
+       Le débordement des cartes sous la grille est invisible — clip-path s'en
+       charge — mais il compte dans la hauteur défilable du document. On coupe
+       donc le défilement à la racine.
+       On ne le fait qu'après avoir vérifié que le contenu entre réellement dans
+       la hauteur disponible, écarts minimaux compris. Sur un écran trop court,
+       ou si l'utilisateur a agrandi le texte dans les réglages d'iOS, la classe
+       n'est pas posée et la page redevient défilable : mieux vaut un défilement
+       imprévu qu'un contenu inatteignable. */
+    var tient = (dispo - top.offsetHeight - hero.offsetHeight
+                       - grid.offsetHeight - basGrille - 2 * ECART_MINI) >= 0;
+    document.documentElement.classList.toggle('page-figee', tient);
   }
 
   /* ---- TABLETTE : le partage des blancs de la maquette, sur un seul écran ----
@@ -450,6 +476,10 @@
     home.style.removeProperty('--ecart-haut');
     home.style.removeProperty('--ecart-bas');
     home.style.removeProperty('--barre-h');
+    /* On quitte le téléphone : la page redevient défilable. La règle CSS est de
+       toute façon bornée à 600 px, mais on nettoie la classe pour ne pas laisser
+       traîner un état qui ne correspond plus à rien. */
+    document.documentElement.classList.remove('page-figee');
     if (window.innerWidth <= 950) {          /* tablette : mise en page dédiée */
       home.style.removeProperty('--hero-gap');
       home.style.removeProperty('--card-cap');

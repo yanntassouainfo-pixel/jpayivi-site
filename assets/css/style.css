@@ -1059,6 +1059,22 @@ body:has(.gallery-wrap) .brand .sub{
      largeur, ce qui fait 27,8 px sur un iPhone. Le bas, lui, mesure 160 px, soit
      14,81 % : c'est le double, parce qu'il porte le bandeau de contacts. */
   body.home-page{ padding:7.13vw 7.13vw 14.81vw; overflow-x:hidden; }
+
+  /* ---- Page figée : plus aucun défilement ----
+     Les cartes mesurent trois fois ce qu'on en voit et descendent donc bien
+     plus bas que la grille. clip-path les empêche d'être PEINTES hors du cadre,
+     mais pas de compter dans la hauteur défilable : la spécification distingue
+     les deux, et c'est ce débordement invisible qu'on faisait défiler.
+
+     La classe n'est posée QUE par le JS, et seulement après avoir vérifié que
+     tout tient réellement. Sans JavaScript, ou sur un écran trop court malgré
+     la compression, elle reste absente et la page redevient défilable : on
+     préfère un défilement inattendu à un contenu inatteignable.
+
+     overscroll-behavior supprime en plus le rebond élastique d'iOS, qui laisse
+     entrevoir le fond de la page même quand il n'y a rien à faire défiler. */
+  html.page-figee,
+  html.page-figee body.home-page{ overflow:hidden; height:100%; overscroll-behavior:none; }
   /* min-height et non height : sur un écran court la page défile au lieu de
      rogner le bas. overflow:visible pour la même raison — c'était « hidden »,
      et le contenu excédentaire disparaissait sans le moindre signe. */
