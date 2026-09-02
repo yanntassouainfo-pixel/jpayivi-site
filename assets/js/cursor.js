@@ -143,50 +143,18 @@
 })();
 
 /* ============================================================
-   MOBILE — en-tête escamotable.
-   On descend : la barre s'efface. On remonte : elle revient.
-   Uniquement sous 600 px ; au-dessus la barre reste toujours visible.
+   MOBILE — en-tête permanent.
+
+   La barre logo + menu restait fixe mais s'escamotait au
+   défilement vers le bas. Le client la veut visible en
+   permanence : le bloc qui posait la classe « est-cache » est
+   retiré, la barre garde donc simplement sa position fixe et son
+   fond crème opaque, définis dans la feuille de style.
+
+   Rien d'autre ne dépendait de ce mécanisme : le calcul du départ
+   de galerie mesure la hauteur réelle de la barre, il n'a pas
+   besoin de savoir si elle est escamotée.
    ============================================================ */
-(function () {
-  var header = document.querySelector('.site-header');
-  if (!header) return;
-
-  var SEUIL_ACTIF = 600;   /* même point de rupture que le CSS */
-  var DECLENCHE   = 8;     /* mouvement minimal pris en compte, en px */
-  var GARDE       = 90;    /* on ne cache jamais dans les tout premiers pixels */
-
-  var dernier = window.pageYOffset || 0;
-  var enCours = false;
-
-  function majuscule() {
-    enCours = false;
-    if (window.innerWidth > SEUIL_ACTIF) {         /* bureau et tablette : rien */
-      header.classList.remove('est-cache');
-      dernier = window.pageYOffset || 0;
-      return;
-    }
-    if (document.body.classList.contains('nav-open')) return;   /* menu déployé */
-
-    var y = window.pageYOffset || 0;
-    var delta = y - dernier;
-    if (Math.abs(delta) < DECLENCHE) return;
-
-    if (delta > 0 && y > GARDE) header.classList.add('est-cache');
-    else if (delta < 0)         header.classList.remove('est-cache');
-    dernier = y;
-  }
-
-  function auScroll() {
-    if (enCours) return;
-    enCours = true;
-    requestAnimationFrame(majuscule);
-  }
-
-  window.addEventListener('scroll', auScroll, { passive: true });
-  window.addEventListener('resize', function () {
-    if (window.innerWidth > SEUIL_ACTIF) header.classList.remove('est-cache');
-  });
-})();
 
 /* Bouton play custom : clic sur la vidéo = lecture/pause, la pastille s'efface pendant la lecture */
 (function () {

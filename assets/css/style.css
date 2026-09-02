@@ -1102,6 +1102,11 @@ body:has(.gallery-wrap) .brand .sub{
     font-size:clamp(8.3px, 2.308vw, 9.6px);
     line-height:1.35;
   }
+  /* Dernière ligne retirée sur téléphone (demande client). Le saut de ligne qui
+     la précède est DANS le span : sans cela il resterait une ligne vide sous le
+     paragraphe. Le bloc passe donc de six à cinq lignes, et le JS redistribue
+     de lui-même la hauteur ainsi libérée. */
+  .intro-fin{ display:none; }
   .site-nav{ display:none; }
   .site-nav.open{ display:flex; position:fixed; inset:0; z-index:300; background:var(--cream); flex-direction:column; justify-content:center; padding:40px 30px; }
   /* Menu en Jumper Thin, avant comme après ouverture (retour cliente).
@@ -1321,20 +1326,21 @@ body:has(.gallery-wrap) .brand .sub{
   .contact, .contact a, .contact .num{ color:var(--cream); }
 
   /* ===== PAGES INTÉRIEURES ===== */
-  /* En-tête FIXE et escamotable : il s'efface quand on descend, revient quand on
-     remonte (classe .est-cache posée en JS). Fond crème opaque, sans quoi le menu
-     deviendrait illisible dès qu'une photo claire passerait derrière.
-     Il était auparavant en position absolue : il défilait avec la page, et
-     surtout le calcul du départ de galerie — qui exige une barre fixe — ne
-     s'exécutait pas, d'où la galerie qui remontait sous « +About ». */
+  /* En-tête FIXE et TOUJOURS VISIBLE (demande client). Il s'escamotait au
+     défilement vers le bas et revenait en remontant ; ce comportement est
+     supprimé, le logo et le menu accompagnent désormais toute la lecture.
+     Fond #FEFEF2 opaque et pleine largeur : sans lui le menu deviendrait
+     illisible dès qu'une photo claire passerait derrière.
+     La position fixe est aussi ce qui permet de calculer le départ de la
+     galerie ; en position absolue, la barre défilait et la galerie remontait
+     sous « +About ». */
   .site-header{
     position:fixed;
-    background:var(--cream);
+    left:0; right:0; top:0;
+    background:#FEFEF2;
     padding-bottom:12px;
-    transition:transform .28s ease;
+    z-index:200;
   }
-  .site-header.est-cache{ transform:translateY(-115%); }
-  body.nav-open .site-header{ transform:none; }   /* jamais escamoté menu ouvert */
   .site-header::before{ display:none; }
   .site-header,
   body:has(.gallery-wrap) .site-header{ padding:22px var(--pad) 12px; }
@@ -1572,10 +1578,6 @@ body.about-page .nav{ font-size:clamp(11px, calc(var(--panel-w) * .01130), 45px)
     white-space:normal;
   }
   .about-contact a{ padding:2px 0; }
-  /* Sur About l'en-tête est dans le flux : l'escamotage au défilement, prévu pour
-     les barres fixes des pages intérieures, n'a pas lieu d'être — il laisserait
-     un trou en haut de page. */
-  body.about-page .site-header.est-cache{ transform:none; }
 }
 
 /* ============================================================
@@ -1618,9 +1620,21 @@ html.has-pastille body.reel-open .reel-close, html.has-pastille body.reel-open .
    ============================================================ */
 .reel-media{ position:relative; }
 .reel-media.has-play, .rs-media.has-play{ cursor:pointer; }
+/* Le bouton était une image, play.png. Ses pixels transparents étaient stockés
+   en BLANC pur : au redimensionnement — 333 px ramenés à 72 — le navigateur
+   mélange les couleurs voisines sans tenir compte de la transparence et fait
+   remonter ce blanc sur les bords. D'où le liseré clair, rectangulaire comme le
+   fichier, que la cliente voyait autour de la pastille.
+   Le dessin est donc refait en vectoriel, directement dans la feuille de style.
+   Il n'y a plus ni fichier, ni redimensionnement, ni pixel blanc : le liseré ne
+   peut plus apparaître, et le tracé reste net à toutes les tailles.
+   Géométrie relevée au pixel sur l'ancien fichier : ellipse de 320 x 283 dans
+   une boîte de 333 x 304, gris #171717 à 84 % d'opacité ; triangle crème aux
+   sommets (122,96) (236,110) (149,223). */
 .reel-media.has-play::after, .rs-media.has-play::after{
   content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width:72px; height:66px; background:url("../img/play.png") center/contain no-repeat;
+  width:72px; height:66px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 333 304'%3E%3Cellipse cx='165.5' cy='151' rx='160' ry='141.5' fill='%23171717' fill-opacity='.84'/%3E%3Cpath d='M122 96 236 110 149 223Z' fill='%23E9E9E0'/%3E%3C/svg%3E") center/contain no-repeat;
   pointer-events:none; z-index:3; transition:opacity .18s ease, transform .18s ease;
   filter:drop-shadow(0 3px 10px rgba(0,0,0,.35));
 }
