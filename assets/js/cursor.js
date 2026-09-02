@@ -334,15 +334,26 @@
        0,609 étant la part basse du blanc relevée sur la maquette, et la garde
        ce qu'on refuse de manger au bloc titre.
 
-       Plafond à 27 vw : au-delà, la photo de Fashion — la moins haute des cinq
-       une fois posée — n'aurait plus de matière à découvrir sous la carte. */
+       RÉSERVE : la carte est plus haute que ce qu'elle dévoile. Ces quatre pour
+       cent de largeur restent engagés sous la carte suivante une fois ouverte,
+       sinon les deux bords deviennent jointifs et l'on voit une coupure nette
+       au lieu d'une carte qui sort de la pile.
+
+       Plafond à 46 vw : c'est Motion, la moins haute des cinq photos une fois
+       posée à la largeur de la carte, qui décide — au-delà on découvrirait du
+       vide sous son image. Fashion tenait ce rôle auparavant avec 27 vw ;
+       elle a été ré-extraite plus longue et ne contraint plus rien. */
     var BANDE = 0.17685, FIN = 1.1257, PART_BAS = 0.609,
-        GARDE = 20, R_MAX = 0.27, PLANCHER = 0.72;
+        GARDE = 20, RESERVE = 0.04, R_MAX = 0.46, PLANCHER = 0.72;
     var L = window.innerWidth;
     var B = BANDE * L;
     var K = dispo - top.offsetHeight - hero.offsetHeight - basGrille;
-    var R = PART_BAS * (K - (4 + FIN) * B) - GARDE;
-    R = Math.max(0.35 * B, Math.min(R_MAX * L, R));
+    /* Aucun plancher : sur un écran très court il n'y a pas de blanc à occuper,
+       et forcer un dévoilement ferait remonter la pile sur le bloc titre. R
+       tombe alors à zéro et les cartes ouvrent leur page du premier appui — le
+       JS de l'ouverture le détecte tout seul. */
+    var R = Math.max(0, Math.min(R_MAX * L, PART_BAS * (K - (4 + FIN) * B) - GARDE));
+    var reserve = RESERVE * L;
 
     /* Écran vraiment court : on comprime l'ensemble, bande comprise, plutôt que
        de laisser la page déborder. */
@@ -351,9 +362,10 @@
     var k = 1;
     if (grille > placeCartes && grille > 0) k = Math.max(PLANCHER, placeCartes / grille);
 
-    home.style.setProperty('--carte-h',   ((B + R) * k).toFixed(2) + 'px');
-    home.style.setProperty('--carte-mt',  '-' + (R * k).toFixed(2) + 'px');
-    home.style.setProperty('--carte-fin', (FIN * B * k).toFixed(2) + 'px');
+    home.style.setProperty('--carte-h',      ((B + R + reserve) * k).toFixed(2) + 'px');
+    home.style.setProperty('--carte-mt',     '-' + ((R + reserve) * k).toFixed(2) + 'px');
+    home.style.setProperty('--carte-sortie', '-' + (R * k).toFixed(2) + 'px');
+    home.style.setProperty('--carte-fin',    (FIN * B * k).toFixed(2) + 'px');
 
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight - basGrille;
 
@@ -517,7 +529,10 @@
 
   function rang(c) { return parseInt(getComputedStyle(c).order, 10) || 0; }
 
+  var attente = null;   /* refermeture en cours avant une nouvelle ouverture */
+
   function fermer() {
+    if (attente) { clearTimeout(attente); attente = null; }
     for (var i = 0; i < cartes.length; i++) {
       cartes[i].classList.remove('remonte', 'est-ouverte');
     }
@@ -531,6 +546,25 @@
       c.classList.toggle('remonte', rang(c) <= n);
       c.classList.toggle('est-ouverte', c === carte);
     }
+  }
+
+  function ouverte() {
+    for (var i = 0; i < cartes.length; i++) {
+      if (cartes[i].classList.contains('est-ouverte')) return cartes[i];
+    }
+    return null;
+  }
+
+  /* Une carte est déjà sortie et on en touche une autre : la pile revient
+     d'abord à sa position de repos, PUIS la nouvelle s'ouvre. Sans ce temps
+     mort, les deux mouvements se confondaient en un seul glissement et l'on ne
+     voyait pas la première se refermer. 210 ms : la transition en dure 320, le
+     retour est donc encore en cours quand la nouvelle ouverture prend le
+     relais — le mouvement reste continu, sans temps mort perceptible. */
+  function ouvrirApresRetour(carte) {
+    if (!ouverte()) { ouvrir(carte); return; }
+    fermer();
+    attente = setTimeout(function () { attente = null; ouvrir(carte); }, 210);
   }
 
   function carteDe(cible) {
@@ -552,8 +586,12 @@
     var dernier = 0;
     for (var i = 0; i < cartes.length; i++) dernier = Math.max(dernier, rang(cartes[i]));
     if (rang(carte) === dernier) { fermer(); return; }
+    /* Écran trop court pour dévoiler quoi que ce soit : le JS de mise en page a
+       ramené la sortie à zéro. On n'impose pas un appui pour rien. */
+    var sortie = parseFloat(getComputedStyle(carte).getPropertyValue('--carte-sortie'));
+    if (!(Math.abs(sortie) > 6)) { fermer(); return; }
     e.preventDefault();
-    ouvrir(carte);
+    ouvrirApresRetour(carte);
   });
 
   document.addEventListener('click', function (e) {

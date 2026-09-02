@@ -1201,8 +1201,8 @@ body:has(.gallery-wrap) .brand .sub{
      Arrondi : 62 px sur une carte de 728 dans la maquette, soit 8,5 % de sa
      largeur — 5,73 vw ici, contre 20 px auparavant. */
   .card{ position:relative; width:86.40%; max-width:none;
-         height:var(--carte-h, 42.1vw); min-height:52px;
-         margin-top:var(--carte-mt, -24.4vw);
+         height:var(--carte-h, 61.4vw); min-height:52px;
+         margin-top:var(--carte-mt, -43.7vw);
          border-radius:5.73vw 5.73vw 0 0; overflow:hidden;
          box-shadow:0 -7px 18px rgba(0,0,0,.18); }
   .card--fashion{ order:1; z-index:1; margin-top:0; }
@@ -1222,12 +1222,14 @@ body:has(.gallery-wrap) .brand .sub{
      du dessous ne bougent pas : c'est ce qui fait grandir la bande de la carte
      touchée, et elle seule.
 
-     Le déplacement vaut --carte-mt, c'est-à-dire le recouvrement lui-même,
-     déjà négatif : translateY de cette valeur remonte donc pile de ce qui
-     était caché. Aucune constante en double, et le JS qui comprime les cartes
-     sur les écrans courts met la variable à jour, l'ouverture suit. */
+     La remontée vaut --carte-sortie, qui est VOLONTAIREMENT plus petite que le
+     recouvrement --carte-mt. La différence — quatre pour cent de la largeur
+     d'écran — est ce qui reste engagé sous la carte suivante une fois la carte
+     ouverte. Sans cette réserve, le bas de la carte arrivait exactement au ras
+     de sa voisine : les deux bords devenaient jointifs et l'œil lisait une
+     image coupée net plutôt qu'une carte qui sort de la pile. */
   .card{ transition:transform .32s cubic-bezier(.22,.61,.36,1); }
-  .card.remonte{ transform:translateY(var(--carte-mt, -2.222vw)); }
+  .card.remonte{ transform:translateY(var(--carte-sortie, -39.7vw)); }
   .card .thumb{ height:100% !important; }
   /* ---- Étiquettes : relevées une par une sur la maquette téléphone ----
      Graisse THIN, comme partout ailleurs. Corps : « Motion design » mesure
@@ -1291,8 +1293,13 @@ body:has(.gallery-wrap) .brand .sub{
      décalage horizontal vaut donc pour elle. */
   .card .thumb img,.card .thumb video{
     inset:auto; object-fit:cover; object-position:50% 50%; transform:none; }
+  /* Fashion sert ici fashion_tel.jpg (668 x 1396) : même cadrage que la photo
+     d'origine, mais prolongé vers le bas. La largeur et le décalage ne changent
+     donc pas — seule la hauteur passe de 86,67 à 147,47 vw, ce qui donne à la
+     carte de quoi se déployer sans finir sur une coupure. */
   .card--fashion .thumb img,.card--fashion .thumb video{
-    left:-1.667vw;  top:-40.560vw; width:70.56vw;  height:86.67vw; }
+    left:-1.667vw;  top:-40.560vw; width:70.56vw;  height:147.47vw; }
+  .card--fashion .thumb video{ height:86.67vw; }   /* la vidéo, elle, n'a pas été rallongée */
   .card--motion .thumb img,.card--motion .thumb video{
     left:-2.500vw;  top:-20.280vw; width:72.23vw;  height:88.61vw; }
   .card--sport .thumb img,.card--sport .thumb video{
