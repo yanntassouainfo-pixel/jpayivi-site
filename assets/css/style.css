@@ -761,6 +761,45 @@ body:has(.gallery-wrap) .brand .sub{
   .reel--xl .reel-item--solo .reel-media{ width:72%; }
   .reel--xl .reel-duo .reel-media{ flex:0 0 38%; }
 }
+
+/* ------------------------------------------------------------------
+   SPORT EN TABLETTE (601 → 950 px) — une seule colonne
+   ------------------------------------------------------------------
+   Les groupes se dépilent : le triptyque TENNIS et le duo BASKET, qui
+   posaient trois et deux carrés côte à côte, se suivent désormais
+   verticalement. Les vidéos solos, elles, ne bougent pas.
+
+   LARGEUR — les vidéos dépilées reprennent les 72 % des solos. À pleine
+   largeur de galerie un carré mesurerait 788 px de haut sur une tablette de
+   950, soit plus que la hauteur utile de l'écran : il écraserait tout le
+   reste. À 72 % il fait 567 px, et surtout la colonne devient homogène —
+   une seule largeur du haut en bas de la page.
+
+   ÉCART — proportionnel comme partout ailleurs sur le site. 1,90 vw entre
+   les vidéos d'un même groupe (14,6 px à 768, 18 px à 950) : c'est trois
+   fois moins que l'écart entre deux blocs, réglé lui par .reel-item à
+   2,54 vw, de sorte que les vidéos d'un groupe restent lisibles comme un
+   ensemble et ne se confondent pas avec les blocs voisins.
+
+   La légende reste unique et ferme le groupe : aucune modification du HTML,
+   donc rien à maintenir en double quand on étendra ce principe aux huit
+   autres pages intérieures.
+
+   Attention au piège : la règle générique .reel-tri / .reel-duo les déclare
+   en GRILLE, mais Sport les repasse en FLEX quelques lignes plus haut. C'est
+   donc flex-direction et align-items qu'il faut employer ici, pas
+   grid-template-columns — qui serait purement ignoré. */
+@media(max-width:950px) and (min-width:601px){
+  .reel--xl .reel-tri,
+  .reel--xl .reel-duo{
+    flex-direction:column;
+    align-items:center;
+    gap:clamp(11px, 1.90vw, 18px);
+  }
+  .reel--xl .reel-tri .reel-media,
+  .reel--xl .reel-duo .reel-media{ flex:0 0 auto; width:72%; }
+}
+
 @media(max-width:600px){
   .reel--xl .reel-item--solo .reel-media{ width:100%; }
   .reel--xl .reel-tri,
