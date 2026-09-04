@@ -12,8 +12,12 @@
   var tx = window.innerWidth / 2, ty = window.innerHeight / 2;
   var x = tx, y = ty, shown = false;
 
-  // Zones où l'on rétablit le curseur normal (menus, images+catégories, contacts)
-  var NORMAL = '.nav, .grid, .contact';
+  /* Zones où l'on rétablit le curseur normal (menus, images+catégories, contacts).
+     .menu-toggle est le bouton « +Menu », qui devient « +Fermer » une fois la
+     liste ouverte : c'est le même élément, il suffit donc de le citer une fois.
+     .site-nav couvre le panneau déroulé lui-même, au cas où le survol tombe
+     entre deux entrées de la liste plutôt que sur .nav. */
+  var NORMAL = '.nav, .site-nav, .menu-toggle, .grid, .contact';
 
   window.addEventListener('mousemove', function (e) {
     tx = e.clientX; ty = e.clientY;
@@ -636,6 +640,9 @@
     /* Activation au clavier (Entrée) : detail vaut 0. On n'impose pas deux
        frappes à qui navigue sans souris, le lien s'ouvre directement. */
     if (e.detail === 0) return;
+    /* Souris : le dévoilement se fait au survol (plus bas), le clic doit donc
+       ouvrir la page du premier coup. On n'intercepte qu'au doigt. */
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     var carte = carteDe(e.target);
     if (!carte) return;
     /* déjà sortie : on laisse le lien faire son travail */
@@ -651,6 +658,27 @@
   document.addEventListener('click', function (e) {
     if (window.innerWidth > 600) return;
     if (carteDe(e.target)) return;
+    fermer();
+  });
+
+  /* ---- Souris : la carte se déploie à l'approche, sans clic ----
+     Demande de la cliente. Cela ne concerne QUE la présentation empilée, donc
+     la même largeur que ci-dessus, et QUE les appareils à souris : au doigt il
+     n'y a pas de survol, et un « hover » émulé déclencherait l'ouverture au
+     premier appui, avant même que le lien puisse s'activer.
+     Le clic n'est pas intercepté ici : il ouvre la page de la rubrique, comme
+     sur le reste du site. La carte se referme dès que la souris la quitte. */
+  var souris = window.matchMedia('(hover: hover) and (pointer: fine)');
+  grille.addEventListener('mouseover', function (e) {
+    if (window.innerWidth > 600 || !souris.matches) return;
+    var carte = carteDe(e.target);
+    if (!carte || carte.classList.contains('est-ouverte')) return;
+    var sortie = parseFloat(getComputedStyle(carte).getPropertyValue('--carte-sortie'));
+    if (!(Math.abs(sortie) > 6)) return;
+    ouvrirApresRetour(carte);
+  });
+  grille.addEventListener('mouseleave', function () {
+    if (window.innerWidth > 600 || !souris.matches) return;
     fermer();
   });
 

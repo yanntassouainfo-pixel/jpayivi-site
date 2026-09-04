@@ -1109,7 +1109,12 @@ body:has(.gallery-wrap) .brand .sub{
      pas en en-tête. */
   .home-top{ flex-direction:row; flex-wrap:nowrap; align-items:flex-start; gap:14px; }
   .home .home-brand{ display:none; }
-  .menu-toggle{ display:inline-block; font-size:14.4px; margin-left:auto; flex:0 0 auto; }
+  /* Taille du bouton : la maquette téléphone donne un rapport de 1,533 entre le
+     corps du « +Menu » et celui du paragraphe (mesuré sur les six lignes) ; le
+     site était déjà à 1,600, donc DÉJÀ 4 % au-dessus de la maquette. Le
+     grossissement demandé est donc un écart assumé au document de référence,
+     pas un retour à celui-ci : +15 %, soit un rapport de 1,84. */
+  .menu-toggle{ display:inline-block; font-size:16.5px; margin-left:auto; flex:0 0 auto; }
   .intro{ flex:1 1 auto; min-width:0; }
 
   /* Le paragraphe reprend TOUTE la colonne. Bridé à 66 %, chacune de ses six
@@ -1132,11 +1137,12 @@ body:has(.gallery-wrap) .brand .sub{
     font-size:clamp(8.3px, 2.308vw, 9.6px);
     line-height:1.35;
   }
-  /* Dernière ligne retirée sur téléphone (demande client). Le saut de ligne qui
-     la précède est DANS le span : sans cela il resterait une ligne vide sous le
-     paragraphe. Le bloc passe donc de six à cinq lignes, et le JS redistribue
-     de lui-même la hauteur ainsi libérée. */
-  .intro-fin{ display:none; }
+  /* La dernière ligne avait été retirée sur téléphone, puis rétablie : la
+     maquette téléphone comporte bien SIX lignes de paragraphe — mesurées une à
+     une, corps 18,3 à 21,5 px pour une image de 1080 — et la sixième est
+     « Je vous accompagne de l'idée à la post-production. » Elle reste donc
+     visible sur tous les formats. Le JS reprend le calcul avec cette ligne en
+     plus et redistribue les blancs en conséquence. */
   .site-nav{ display:none; }
   .site-nav.open{ display:flex; position:fixed; inset:0; z-index:300; background:var(--cream); flex-direction:column; justify-content:center; padding:40px 30px; }
   /* Menu en Jumper Thin, avant comme après ouverture (retour cliente).
@@ -1297,13 +1303,27 @@ body:has(.gallery-wrap) .brand .sub{
      78,62 % du panneau, cela fait 5,087 % de (100vw − 50px), le panneau réel.
      Sur un iPhone 13 Pro : 17,3 px. Plancher de lisibilité à 13 px, jamais
      atteint au-dessus de 306 px de large.
-     Retraits en POURCENTAGE de la carte (9,5 % et 9,8 %) et non en pixels :
-     ils suivent ainsi la compression des cartes décidée par le JS.
+     RETRAIT VERTICAL — corrigé. Il était exprimé en pourcentage de la HAUTEUR
+     DE CARTE, laquelle est calculée en JS et vaut deux à trois fois la bande
+     visible : 9,8 % donnaient 4,08 à 4,33 vw selon l'écran, contre 2,007 vw
+     mesurés sur la maquette. L'étiquette descendait donc du double, et venait
+     mordre sur le motif — « Sport » sur les lettres au trait, « Motion design »
+     sur l'étoile. C'est la cause des deux remarques de la cliente.
+     Mesure : le sommet de l'encre est à 29 px du haut de la bande sur la
+     maquette ; Jumper Thin monte à 0,755 em et son ascendante hhea vaut
+     0,910 em, l'écart boîte-encre est donc de 0,155 em, soit 7,32 px pour un
+     corps de 47,25 px. Haut de boîte = 29 − 7,32 = 21,68 px sur 1080, soit
+     2,007 vw. Le retrait est désormais en vw : il ne dépend plus d'une hauteur
+     que le JS fait varier.
+     Contrôle du corps : 49 px d'encre pour « Motion design » (1,037 em en Thin)
+     donnent 47,25 px, soit 4,375 vw — le site était déjà à 4,362 vw, à 0,3 %.
+     Retrait horizontal : 7,13 vw sur Sport et 7,407 sur Motion, les deux seules
+     étiquettes isolables proprement ; on retient 7,27 vw.
      Aucune ombre portée : la maquette n'en a pas, et les cadrages ci-dessous
      posent chaque étiquette sur une zone contrastée — c'est précisément le
      rôle du retournement de la photo Food. */
   .card .label{
-    position:absolute; top:9.8%; left:9.5%; bottom:auto; margin:0; z-index:2;
+    position:absolute; top:2.007vw; left:7.27vw; bottom:auto; margin:0; z-index:2;
     font-weight:100;
     font-size:clamp(13px, 4.362vw, 26px);
     text-shadow:none;
@@ -1359,7 +1379,29 @@ body:has(.gallery-wrap) .brand .sub{
      carte de quoi se déployer sans finir sur une coupure. */
   .card--fashion .thumb img,.card--fashion .thumb video{
     left:-1.667vw;  top:-40.560vw; width:70.56vw;  height:147.47vw; }
-  .card--fashion .thumb video{ height:86.67vw; }   /* la vidéo, elle, n'a pas été rallongée */
+  /* ---- Animations de survol : cadrage propre ----
+     Les deux vidéos héritaient des hauteurs calculées pour les PHOTOS, dont
+     le format diffère : fashion_hover mesure 900 x 1432 (rapport 0,629) et
+     motion_hover 900 x 900 (1,000), tandis que les valeurs héritées donnaient
+     0,814 et 0,815. Les deux étaient donc déformées. On leur rend leur format
+     et on choisit leur point focal.
+
+     FASHION — les lunettes noires occupent la bande 20,60 % à 30,03 % de la
+     hauteur de la vidéo (mesure : ligne sombre couvrant plus de 30 % de la
+     largeur). À 70,56 vw de large, la vidéo fait 112,18 vw de haut et les
+     lunettes tombent entre 23,11 et 33,69 vw. On les amène à 8 vw du haut de
+     la carte : sous l'étiquette, qui s'arrête vers 6,5 vw, et bien dans la
+     bande visible de 17,685 vw. D'où top = 8 − 23,11 = −15,11 vw.
+
+     MOTION — « le point focal le plus élevé » : la vidéo est carrée, on l'ancre
+     simplement en haut de la carte. La bande découvre alors ses 24,5 %
+     supérieurs.
+
+     Sur bureau et tablette rien à changer, vérification faite : la boîte
+     Fashion ne montre que les 69,6 % supérieurs de la vidéo et l'ancrage est
+     déjà en haut — les lunettes ne peuvent pas être remontées davantage. Pour
+     Motion, la vidéo carrée dans une boîte plus étroite est recadrée sur les
+     CÔTÉS, jamais en hauteur : elle est déjà montrée en entier. */
   .card--motion .thumb img,.card--motion .thumb video{
     left:-2.500vw;  top:-20.280vw; width:72.23vw;  height:88.61vw; }
   .card--sport .thumb img,.card--sport .thumb video{
@@ -1375,8 +1417,32 @@ body:has(.gallery-wrap) .brand .sub{
      du même rapport pour que l'ÉCHELLE et le cadrage restent au pixel ce qu'ils
      étaient — seul le vide sous la photo disparaît. Les vidéos de survol, elles,
      n'ont pas changé de format et gardent donc les valeurs d'origine. */
-  .card--sport  .thumb img{ height:96.83vw; }   /* 105,27 x 631/686 */
+  /* SPORT — l'étiquette doit reposer sur le gris uni, pas sur les lettres au
+     trait. Sur la maquette le gris descend jusqu'à 8,61 vw sous le haut de la
+     carte ; au cadrage actuel il s'arrête à 6,44 vw, et le « p » de Sport, qui
+     descend à 6,67 vw, mordait sur le motif.
+     Le fichier ne permet pas de rattraper ces 2,17 vw : il ne contient que 42
+     lignes de gris uni sur 631, et l'ORIGINAL fourni n'en a que 79 sur 1080 —
+     soit exactement les mêmes 41 lignes une fois ramené à cette largeur. Il n'y
+     a donc pas de matière à découvrir au-dessus, et agrandir la photo pour y
+     arriver la ferait passer à 2,2 fois son échelle : les lettres deviennent
+     bien plus grosses que sur la maquette.
+     On descend donc la photo de 2,17 vw et on donne au cadre la COULEUR EXACTE
+     du gris de la photo — 224,224,224, relevé aussi bien dans le fichier que
+     dans la maquette. La jonction est invisible, l'échelle et le cadrage
+     latéral ne bougent pas, et l'étiquette retrouve la marge de la maquette. */
+  .card--sport .thumb{ background:#e0e0e0; }
+  .card--sport .thumb img{ top:2.17vw; }
   .card--studio .thumb img{ height:79.43vw; }   /*  88,89 x 613/686 */
+  /* Les deux vidéos de survol viennent EN DERNIER : les règles ci-dessus les
+     visent aussi, à spécificité égale, et c'est l'ordre du fichier qui tranche. */
+  .card--fashion .thumb video{ top:-15.11vw; height:112.18vw; }
+  .card--motion  .thumb video{ top:0;        height:72.23vw;  }
+  /* Sport : la vidéo est carrée (900 x 900) et héritait de 105,27 vw pour
+     85,84 de large — elle était donc étirée d'un quart. On lui rend son format
+     et on la descend du même 2,17 vw que la photo, pour que le survol ne
+     décale pas l'image. */
+  .card--sport   .thumb video{ top:2.17vw;  height:85.84vw;  }
 
   /* ---- Bandeau de contacts ----
      Relevé sur la maquette : bandeau de 160 px sur une image de 1080, soit
