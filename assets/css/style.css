@@ -838,12 +838,20 @@ body:has(.gallery-wrap) .brand .sub{
 @media (hover:hover) and (pointer:fine){
   html.has-pastille,
   html.has-pastille *{cursor:none !important;}
-  /* Curseur normal sur : menus, images+catégories, contacts */
+  /* Curseur normal sur : menus, images+catégories, contacts.
+     .menu-toggle (le bouton « +Menu », qui devient « +Fermer ») et .site-nav
+     (le panneau déroulé) doivent figurer ici : le JS les avait bien exclus de
+     la pastille, mais cette règle-ci continuait de masquer le curseur système.
+     On se retrouvait alors sans rien du tout — ni pastille, ni flèche. */
   html.has-pastille .nav, html.has-pastille .nav *,
+  html.has-pastille .site-nav, html.has-pastille .site-nav *,
+  html.has-pastille .menu-toggle,
   html.has-pastille .grid, html.has-pastille .grid *,
   html.has-pastille .contact, html.has-pastille .contact *{cursor:auto !important;}
   /* Les éléments cliquables de ces zones -> main */
   html.has-pastille .nav a, html.has-pastille .nav a *,
+  html.has-pastille .site-nav a, html.has-pastille .site-nav a *,
+  html.has-pastille .menu-toggle,
   html.has-pastille .grid a, html.has-pastille .grid a *,
   html.has-pastille .contact a{cursor:pointer !important;}
   /* Sur le cadre gris autour, curseur normal (évite la pastille coupée au bord) */
