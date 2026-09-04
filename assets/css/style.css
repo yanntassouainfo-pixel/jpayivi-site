@@ -1366,6 +1366,15 @@ body:has(.gallery-wrap) .brand .sub{
     left:-2.500vw;  top:-9.166vw;  width:72.23vw;  height:88.61vw; transform:scaleX(-1); }
   .card--studio .thumb img,.card--studio .thumb video{
     left:-2.778vw;  top:-11.945vw; width:72.23vw;  height:88.89vw; }
+  /* Les PHOTOS Sport et Studio ont été raccourcies : elles traînaient une bande
+     unie de la couleur du cadre, cuite dans le fichier par un découpage de
+     maquette pris pour un original. Sport passe de 686 à 631 lignes, Studio de
+     686 à 613. Les hauteurs ci-dessus visaient l'ancien format ; on les corrige
+     du même rapport pour que l'ÉCHELLE et le cadrage restent au pixel ce qu'ils
+     étaient — seul le vide sous la photo disparaît. Les vidéos de survol, elles,
+     n'ont pas changé de format et gardent donc les valeurs d'origine. */
+  .card--sport  .thumb img{ height:96.83vw; }   /* 105,27 x 631/686 */
+  .card--studio .thumb img{ height:79.43vw; }   /*  88,89 x 613/686 */
 
   /* ---- Bandeau de contacts ----
      Relevé sur la maquette : bandeau de 160 px sur une image de 1080, soit

@@ -373,6 +373,18 @@
     var k = 1;
     if (grille > placeCartes && grille > 0) k = Math.max(PLANCHER, placeCartes / grille);
 
+    /* La carte ouverte descend jusqu'à (B + 2R + reserve) * k. Les photos, elles,
+       ont une hauteur finie : la plus courte est Studio, 79,43 % de la largeur de
+       l'écran. Si le dévoilement passait sous ce trait, on verrait le fond du
+       cadre sous la photo. On borne donc R, ce qui fait simplement s'ouvrir la
+       carte un peu moins loin — invisible, et sans déformer l'image.
+       Sur les téléphones réels la borne n'intervient jamais (la marge la plus
+       serrée mesurée est de 11 % sur Pixel 7) ; elle ne protège que les formats
+       très étroits et très hauts. */
+    var PHOTO_LA_PLUS_COURTE = 0.7943;
+    var Rmax2 = (PHOTO_LA_PLUS_COURTE * L / k - B - reserve) / 2;
+    if (Rmax2 > 0 && R > Rmax2) R = Rmax2;
+
     home.style.setProperty('--carte-h',      ((B + R + reserve) * k).toFixed(2) + 'px');
     home.style.setProperty('--carte-mt',     '-' + ((R + reserve) * k).toFixed(2) + 'px');
     home.style.setProperty('--carte-sortie', '-' + (R * k).toFixed(2) + 'px');
