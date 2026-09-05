@@ -301,7 +301,7 @@
     home.style.setProperty('--ecart-haut', '0px');
     home.style.setProperty('--ecart-bas',  '0px');
     home.style.removeProperty('--carte-h');
-    home.style.removeProperty('--carte-mt');
+    home.style.removeProperty('--bande');
 
     var cs = getComputedStyle(home);
     /* On mesure sur min-height — la hauteur du panneau crème — et non sur
@@ -403,8 +403,11 @@
     var Rmax2 = (PHOTO_LA_PLUS_COURTE * L / k - B - reserve) / 2;
     if (Rmax2 > 0 && R > Rmax2) R = Rmax2;
 
+    /* On publie la BANDE, pas la marge : le CSS en déduit la marge par
+       soustraction, si bien que la bande visible vaut exactement cette valeur
+       quelle que soit la hauteur de carte. Les deux ne peuvent plus diverger. */
+    home.style.setProperty('--bande',        (B * k).toFixed(2) + 'px');
     home.style.setProperty('--carte-h',      ((B + R + reserve) * k).toFixed(2) + 'px');
-    home.style.setProperty('--carte-mt',     '-' + ((R + reserve) * k).toFixed(2) + 'px');
     home.style.setProperty('--carte-sortie', '-' + (R * k).toFixed(2) + 'px');
     /* Hauteur de la FENÊTRE : quatre bandes plus la dernière carte, telle qu'on
        la voit sur la maquette. C'est elle qui coupe tout ce qui dépasse. */

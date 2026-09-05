@@ -1349,9 +1349,27 @@ body:has(.gallery-wrap) .brand .sub{
      largeur — 5,73 vw ici, contre 20 px auparavant. */
   /* Aucune ombre portée : la maquette téléphone n'en a pas. Les cartes se
      distinguent par leur seul décalage et par l'arrondi de leur bord haut. */
+  /* flex-shrink:0 — LA correction du bug de pile signalé par la cliente.
+     La grille a une hauteur DÉFINIE, --grille-h : c'est la fenêtre de la
+     maquette, quatre bandes plus la dernière carte, soit 90,65 vw. La pile
+     réelle, elle, est bien plus haute — chaque carte cache sous la suivante
+     tout ce qu'elle doit dévoiler au doigt : de 94 vw quand le dévoilement est
+     nul jusqu'à 139 vw quand il est maximal. Ce dépassement est VOULU, c'est
+     clip-path qui le coupe.
+     Mais des éléments flexibles sont rétractables par défaut. Le navigateur
+     voyait donc un contenu débordant d'un conteneur à hauteur définie, et
+     comprimait les cartes pour résorber l'écart — jusqu'à 48 vw à reprendre
+     sur cinq cartes. Leur hauteur ne valait plus --carte-h, la bande visible
+     ne valait plus 17,685 vw, les écarts devenaient irréguliers et la page
+     débordait vers le bas.
+
+     La marge est en outre calculée à partir de la BANDE, et non plus posée
+     indépendamment : la bande visible vaut donc --bande par construction, quoi
+     qu'il arrive à --carte-h. Les deux valeurs ne peuvent plus diverger. */
   .card{ position:relative; width:86.40%; max-width:none;
+         flex:0 0 auto;
          height:var(--carte-h, 61.4vw); min-height:52px;
-         margin-top:var(--carte-mt, -43.7vw);
+         margin-top:calc(var(--bande, 17.685vw) - var(--carte-h, 61.4vw));
          border-radius:5.73vw 5.73vw 0 0; overflow:hidden;
          box-shadow:none; }
   .card--fashion{ order:1; z-index:1; margin-top:0; }
@@ -1369,7 +1387,8 @@ body:has(.gallery-wrap) .brand .sub{
      touchée, et elle seule.
 
      La remontée vaut --carte-sortie, qui est VOLONTAIREMENT plus petite que le
-     recouvrement --carte-mt. La différence — quatre pour cent de la largeur
+     recouvrement, c'est-à-dire que --carte-h moins --bande. La différence — cinq
+     et demi pour cent de la largeur
      d'écran — est ce qui reste engagé sous la carte suivante une fois la carte
      ouverte. Sans cette réserve, le bas de la carte arrivait exactement au ras
      de sa voisine : les deux bords devenaient jointifs et l'œil lisait une
