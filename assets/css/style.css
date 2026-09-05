@@ -321,12 +321,14 @@ body.home-page{
        et rogner l'image sur les côtés. C'est ce que voyait le client de la
        cliente en rétrécissant sa fenêtre.
 
-   PLAFOND. Les cinq cartes plus les quatre écarts totalisent 99,99 % de la
-   largeur de la grille : le rang occupe déjà toute la place. La seule marge de
-   manœuvre est le retrait de 3,20 % que .home laisse de chaque côté, d'où un
-   plafond de 100 / 93,60 = 1,0684. Au-delà, le rang déborderait du panneau.
-   L'agrandissement possible est donc modeste — mais il est juste, là où
-   l'ancien était spectaculaire et faux. */
+   PLAFOND À 1 — le facteur ne fait que RÉDUIRE, jamais agrandir. Les cinq
+   cartes et leurs quatre écarts totalisent 99,99 % de la largeur de la grille :
+   le rang occupe déjà toute la place que la maquette lui donne. Le seul
+   « jeu » apparent est le retrait de 3,20 % que .home laisse de chaque côté —
+   mais c'en est pas : la maquette le mesure au pixel, 112 px sur un panneau de
+   3502, soit 3,198 %. L'entamer collait les images aux bords du panneau.
+   Sur une fenêtre large et basse, le blanc excédentaire n'est donc plus
+   comblé : c'est le prix de la fidélité au document. */
 
 .thumb{
   position:relative;

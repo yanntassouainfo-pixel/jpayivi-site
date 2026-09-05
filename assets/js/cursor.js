@@ -528,25 +528,29 @@
        carré reste carré et aucune image n'est recadrée — c'est la demande du
        client, qui voyait les vignettes s'étirer en rétrécissant sa fenêtre.
 
-       On vise le blanc de la maquette, 30 % du panneau, et on en déduit la
-       hauteur que devrait avoir le rang. Deux bornes l'encadrent :
-         · en haut 1,0684 — au-delà le rang déborderait du panneau, puisque les
-           cinq cartes et leurs quatre écarts en occupent déjà 99,99 % ;
-         · en bas 0,45 — une réduction plus forte rendrait les étiquettes
-           illisibles ; on préfère alors laisser le blanc se réduire.
-       Une seconde borne, dure, garantit que le rang ne pousse jamais le bloc
-       titre : il doit tenir dans la place restante, moins 3 % de garde. */
-    var K_MAX = 1.0684, K_MIN = 0.45, BLANC_CIBLE = 0.30;
+       LE FACTEUR NE DÉPASSE JAMAIS 1. J'avais d'abord autorisé 1,0684, en
+       prenant pour du jeu disponible le retrait de 3,20 % que .home laisse de
+       chaque côté. C'en est pas : la maquette le mesure au pixel — 112 px sur
+       un panneau de 3502, soit 3,198 % — et c'est un élément de la composition.
+       À plein régime le rang occupait donc 100 % du panneau et venait coller
+       les bords, ce que la cliente a vu tout de suite.
+       Conséquence assumée : sur une fenêtre large et basse, le rang ne comble
+       plus le blanc excédentaire. Il garde la taille de la maquette, et le
+       blanc reste ce que la géométrie donne.
+
+       IL NE RÉDUIT QUE SI C'EST NÉCESSAIRE. Le rang garde la taille de
+       référence tant qu'il tient sous le bloc titre ; il ne rétrécit qu'au
+       dernier moment, juste assez pour ne pas le pousser, avec 3 % de garde.
+       Plancher à 0,45 : en dessous les étiquettes deviendraient illisibles, on
+       préfère alors laisser le blanc se réduire. */
+    var K_MIN = 0.45;
     var big = grid.querySelector('.card--fashion .thumb');
     home.style.setProperty('--card-k', '1');
     if (big && big.offsetHeight > 0) {
       var horsImage = grid.offsetHeight - big.offsetHeight;   /* étiquette + écart */
       var reste     = dispo - top.offsetHeight - hero.offsetHeight;
-      var viseeImg  = reste - dispo * BLANC_CIBLE - horsImage;
-      var k = viseeImg / big.offsetHeight;
-      var kPlafond  = (reste - horsImage - dispo * 0.03) / big.offsetHeight;
-      k = Math.min(k, kPlafond, K_MAX);
-      k = Math.max(k, K_MIN);
+      var k = (reste - horsImage - dispo * 0.03) / big.offsetHeight;
+      k = Math.max(K_MIN, Math.min(1, k));
       home.style.setProperty('--card-k', k.toFixed(4));
     }
 
