@@ -809,6 +809,77 @@ body:has(.gallery-wrap) .brand .sub{
   }
   .reel--xl .reel-tri .reel-media,
   .reel--xl .reel-duo .reel-media{ flex:0 0 auto; width:72%; }
+
+  /* ================================================================
+     LE MÊME PRINCIPE, ÉTENDU AUX AUTRES PAGES INTÉRIEURES
+     ================================================================
+     Validé d'abord sur Sport, puis généralisé. Cinq pages ne sont pas
+     concernées : Fashion, Événement, Communication, Showreel et About n'ont
+     déjà qu'un média par rangée.
+
+     Une seule largeur, 72 % de la galerie, sur toutes les pages et tous les
+     formats — 16:9, carrés, portraits 2:3 et 4:5, 9:16. La colonne reste donc
+     homogène du haut en bas d'une page, et d'une page à l'autre.
+
+     FOOD — six groupes : un triptyque, deux duos, un duo et un triptyque de
+     portraits, et le duo Tomatoo dont les deux photos ont des rapports
+     différents mais la même hauteur sur la maquette. Une fois dépilés, cette
+     égalité de hauteur n'a plus d'objet : on leur rend leur rapport propre en
+     neutralisant l'aspect-ratio imposé.
+
+     MOTION — seules les quatre rangées appariées du bas sont dépilées. La
+     colonne haute, à blocs légendés, n'a déjà qu'un média par rangée et garde
+     ses 70,41 %.
+
+     RÉSEAUX SOCIAUX — les six rangées de la grille. Les formats y sont
+     verticaux (9:16 pour la plupart), donc la page s'allonge beaucoup : c'est
+     le choix assumé de la cohérence sur la composition d'origine.
+
+     STUDIO — la mosaïque est posée en absolu, chaque photo à ses coordonnées.
+     On repasse le conteneur en flux, comme le fait déjà le bloc téléphone, et
+     les deux colonnes se suivent alors dans l'ordre du document : toute la
+     colonne de gauche, puis toute celle de droite. */
+
+  /* ---- Food ---- */
+  .reel--large .reel-tri,
+  .reel--large .reel-duo,
+  .reel--large .reel-duo--portrait,
+  .reel--large .reel-tri--portrait,
+  .reel--large .reel-duo--tomatoo{
+    display:flex; flex-direction:column; align-items:center;
+    gap:clamp(11px, 1.90vw, 18px);
+  }
+  .reel--large .reel-tri > .reel-media,
+  .reel--large .reel-duo > .reel-media,
+  .reel--large .reel-duo--portrait > .reel-media,
+  .reel--large .reel-tri--portrait > .reel-media,
+  .reel--large .reel-duo--tomatoo > .reel-media{ flex:0 0 auto; width:72%; }
+  .reel--large .reel-duo--tomatoo > .reel-media{ aspect-ratio:auto; }
+
+  /* ---- Motion design : les quatre rangées appariées du bas ---- */
+  .md-row{
+    flex-direction:column; align-items:center;
+    gap:clamp(11px, 1.90vw, 18px);
+  }
+  .md-row > *{ width:72% !important; }
+
+  /* ---- Réseaux Sociaux ---- */
+  .rs-row{
+    flex-direction:column; align-items:center;
+    gap:clamp(11px, 1.90vw, 18px) !important;
+    width:auto !important;
+  }
+  .rs-row > *{ width:72% !important; }
+
+  /* ---- Studio ---- */
+  .masonry{ position:static; padding-bottom:0;
+            display:flex; flex-direction:column; align-items:center; }
+  .masonry .col{ display:contents; }
+  .masonry .item{
+    position:static !important; left:auto !important; top:auto !important;
+    width:72% !important; height:auto !important;
+    margin-bottom:clamp(11px, 1.90vw, 18px);
+  }
 }
 
 @media(max-width:600px){
