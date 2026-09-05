@@ -377,6 +377,20 @@
     var k = 1;
     if (grille > placeCartes && grille > 0) k = Math.max(PLANCHER, placeCartes / grille);
 
+    /* Filet de sécurité : si le contenu ne tient toujours pas, on comprime
+       au-delà du plancher habituel plutôt que de laisser la page défiler.
+       Un défilement sur cette page ne se voit pas seulement : sur iOS il fait
+       apparaître et disparaître les barres de Safari, la hauteur de fenêtre
+       change, la mise en page est recalculée, et la page semble « descendre »
+       toute seule. Mieux vaut des cartes 5 % plus courtes qu'un tel va-et-vient.
+       Plancher absolu à 0,58 : en dessous, la bande visible deviendrait plus
+       étroite que l'étiquette qu'elle porte. */
+    var PLANCHER_DUR = 0.58;
+    if (grille > 0) {
+      var kTient = placeCartes / grille;
+      if (kTient < k) k = Math.max(PLANCHER_DUR, kTient);
+    }
+
     /* La carte ouverte descend jusqu'à (B + 2R + reserve) * k. Les photos, elles,
        ont une hauteur finie : la plus courte est Studio, 79,43 % de la largeur de
        l'écran. Si le dévoilement passait sous ce trait, on verrait le fond du
@@ -483,8 +497,7 @@
   function place() {
     if (window.innerWidth <= 600) {          /* téléphone : trois écarts égaux */
       home.style.removeProperty('--hero-gap');
-      home.style.removeProperty('--card-cap');
-      home.style.removeProperty('--card-scale');
+      home.style.removeProperty('--card-k');
       oublieTablette();
       placeMobile();
       return;
@@ -498,8 +511,7 @@
     document.documentElement.classList.remove('page-figee');
     if (window.innerWidth <= 950) {          /* tablette : mise en page dédiée */
       home.style.removeProperty('--hero-gap');
-      home.style.removeProperty('--card-cap');
-      home.style.removeProperty('--card-scale');
+      home.style.removeProperty('--card-k');
       placeTablette();
       return;
     }
@@ -510,37 +522,35 @@
               - parseFloat(cs.paddingTop || 0)
               - parseFloat(cs.paddingBottom || 0);
 
-    /* Plafond de sécurité : sur une fenêtre très basse, la rangée d'images
-       ne doit jamais pousser le bloc titre. On calcule la place réellement
-       disponible et on la donne au CSS ; tant qu'il y en a assez, c'est la
-       forme relevée sur la maquette qui l'emporte. */
+    /* ---- Un seul facteur, homothétique ----
+       Le rang d'images se réduit et s'agrandit en gardant ses proportions :
+       --card-k multiplie les largeurs, les hauteurs et l'écart à la fois. Un
+       carré reste carré et aucune image n'est recadrée — c'est la demande du
+       client, qui voyait les vignettes s'étirer en rétrécissant sa fenêtre.
+
+       On vise le blanc de la maquette, 30 % du panneau, et on en déduit la
+       hauteur que devrait avoir le rang. Deux bornes l'encadrent :
+         · en haut 1,0684 — au-delà le rang déborderait du panneau, puisque les
+           cinq cartes et leurs quatre écarts en occupent déjà 99,99 % ;
+         · en bas 0,45 — une réduction plus forte rendrait les étiquettes
+           illisibles ; on préfère alors laisser le blanc se réduire.
+       Une seconde borne, dure, garantit que le rang ne pousse jamais le bloc
+       titre : il doit tenir dans la place restante, moins 3 % de garde. */
+    var K_MAX = 1.0684, K_MIN = 0.45, BLANC_CIBLE = 0.30;
     var big = grid.querySelector('.card--fashion .thumb');
-    if (big) {
+    home.style.setProperty('--card-k', '1');
+    if (big && big.offsetHeight > 0) {
       var horsImage = grid.offsetHeight - big.offsetHeight;   /* étiquette + écart */
-      var place = dispo - top.offsetHeight - hero.offsetHeight - horsImage - dispo * 0.03;
-      home.style.setProperty('--card-cap', Math.max(80, Math.round(place)) + 'px');
+      var reste     = dispo - top.offsetHeight - hero.offsetHeight;
+      var viseeImg  = reste - dispo * BLANC_CIBLE - horsImage;
+      var k = viseeImg / big.offsetHeight;
+      var kPlafond  = (reste - horsImage - dispo * 0.03) / big.offsetHeight;
+      k = Math.min(k, kPlafond, K_MAX);
+      k = Math.max(k, K_MIN);
+      home.style.setProperty('--card-k', k.toFixed(4));
     }
 
-    /* ---- Trop de blanc : on laisse les vignettes grandir ----
-       Leur hauteur ne dépend que de la largeur du panneau. En rétrécissant la
-       fenêtre elles maigrissent, alors que la hauteur disponible ne change pas :
-       le vide atteignait 39 % du panneau contre 30 % sur la maquette.
-       On mesure le blanc, et s'il dépasse ce seuil on donne l'excédent aux
-       vignettes. Le facteur ne descend jamais sous 1 : la forme de la maquette
-       reste le plancher, on ne fait que combler un vide excessif. */
-    var BLANC_CIBLE = 0.30;      /* part de blanc voulue, relevée sur la maquette */
-    var ECHELLE_MAX = 1.75;      /* garde-fou */
-    home.style.setProperty('--card-scale', '1');
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight;
-    if (big) {
-      var excedent = libre - dispo * BLANC_CIBLE;
-      if (excedent > 0 && big.offsetHeight > 0) {
-        var echelle = Math.min(ECHELLE_MAX, 1 + excedent / big.offsetHeight);
-        home.style.setProperty('--card-scale', echelle.toFixed(4));
-        libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight;
-      }
-    }
-
     var gap = Math.max(0, Math.round(libre * PART_HAUT));
     home.style.setProperty('--hero-gap', gap + 'px');
   }

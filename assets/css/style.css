@@ -272,7 +272,7 @@ body.home-page{
 .grid{
   margin-top:auto;                   /* pousse la rangée tout en bas, SOUS le bloc titre (plus de chevauchement) */
   display:flex;
-  gap:1.07%;                         /* écart relevé sur la maquette (1% de la largeur du panneau) */
+  gap:calc(1.07% * var(--card-k, 1));   /* écart maquette, suivant l'homothétie */
   align-items:flex-end;              /* les BAS des images s'alignent sur le cadre */
   justify-content:center;
 }
@@ -283,10 +283,13 @@ body.home-page{
   flex-direction:column;
   justify-content:flex-end;         /* l'image reste calée en bas, le label au-dessus */
 }
-/* Largeurs relevées sur la maquette (% de la largeur du panneau crème) */
-.card--sport,.card--studio{ width:17.02%; }
-.card--food,.card--motion{ width:19.15%; }
-.card--fashion{ width:23.37%; }
+/* Largeurs relevées sur la maquette (% de la largeur du panneau crème),
+   multipliées par --card-k. Ce facteur unique s'applique AUSSI aux hauteurs et
+   à l'écart : le rang d'images se réduit et s'agrandit donc en homothétie, il
+   ne se déforme jamais. Voir le commentaire sous les hauteurs. */
+.card--sport,.card--studio{ width:calc(17.02% * var(--card-k, 1)); }
+.card--food,.card--motion{ width:calc(19.15% * var(--card-k, 1)); }
+.card--fashion{ width:calc(23.37% * var(--card-k, 1)); }
 /* Le label fait partie du flux : il compte dans la hauteur de la rangée,
    il ne peut donc plus venir chevaucher le bloc titre. */
 .card .label{
@@ -302,22 +305,28 @@ body.home-page{
    les vignettes deviendraient carrées. On verrouille donc leur FORME, relevée au
    pixel : Sport/Studio 558x589, Food/Motion 628x713, Fashion 766x849. */
 .card--sport  .thumb,
-.card--studio .thumb{ height:min(calc(var(--panel-w) * .16816 * var(--card-scale, 1)), calc(var(--card-cap, 200vh) * .6936)); }
+.card--studio .thumb{ height:calc(var(--panel-w) * .16816 * var(--card-k, 1)); }
 .card--food   .thumb,
-.card--motion .thumb{ height:min(calc(var(--panel-w) * .20350 * var(--card-scale, 1)), calc(var(--card-cap, 200vh) * .8394)); }
-.card--fashion .thumb{ height:min(calc(var(--panel-w) * .24244 * var(--card-scale, 1)), var(--card-cap, 200vh)); }
-/* La première valeur donne la forme exacte de la maquette. --card-cap est calculé
-   en JS : c'est la place réellement libre sous le bloc titre. Il n'intervient que
-   sur une fenêtre trop basse, et les trois vignettes se réduisent alors ensemble,
-   donc la rangée conserve ses proportions relatives.
+.card--motion .thumb{ height:calc(var(--panel-w) * .20350 * var(--card-k, 1)); }
+.card--fashion .thumb{ height:calc(var(--panel-w) * .24244 * var(--card-k, 1)); }
+/* --card-k : UN SEUL facteur, appliqué aux largeurs, aux hauteurs et à l'écart.
+   Le rang d'images grandit et rétrécit donc en homothétie stricte — un carré
+   reste carré, aucune image n'est recadrée, seule sa taille change.
 
-   --card-scale répond au problème INVERSE, signalé par la cliente : la hauteur des
-   vignettes ne dépendant que de la LARGEUR, une fenêtre qu'on rétrécit les faisait
-   maigrir alors que la hauteur disponible ne bougeait pas. Le blanc grimpait
-   jusqu'à 39 % du panneau, contre 30 % sur la maquette. Le JS agrandit donc les
-   vignettes dès que le blanc dépasse ce seuil — jamais en dessous, la forme de la
-   maquette reste le plancher, et le facteur s'applique aux trois tailles à la fois
-   pour préserver leurs rapports. */
+   Il remplace deux mécanismes qui n'agissaient que sur la HAUTEUR, et
+   déformaient donc les cadres :
+     · --card-cap raccourcissait les vignettes sur une fenêtre trop basse ;
+     · --card-scale les allongeait quand le blanc dépassait 30 % du panneau,
+       jusqu'à 1,75 fois — de quoi transformer un carré en rectangle vertical
+       et rogner l'image sur les côtés. C'est ce que voyait le client de la
+       cliente en rétrécissant sa fenêtre.
+
+   PLAFOND. Les cinq cartes plus les quatre écarts totalisent 99,99 % de la
+   largeur de la grille : le rang occupe déjà toute la place. La seule marge de
+   manœuvre est le retrait de 3,20 % que .home laisse de chaque côté, d'où un
+   plafond de 100 / 93,60 = 1,0684. Au-delà, le rang déborderait du panneau.
+   L'agrandissement possible est donc modeste — mais il est juste, là où
+   l'ancien était spectaculaire et faux. */
 
 .thumb{
   position:relative;
@@ -1079,8 +1088,20 @@ body:has(.gallery-wrap) .brand .sub{
   /* Sport et Studio ont été refabriquées depuis les originaux de 1_home, ceux
      de la maquette : leur cadrage se retrouve désormais sans forcer.
      Sport ne demande plus rien — « cover » calé en haut suffit. */
+  /* SPORT — même correction qu'en téléphone. Sur la maquette tablette le gris
+     uni descend jusqu'à la ligne 104 d'une carte de 589, ce qui laisse 20 px
+     sous le « p » de Sport. Le fichier n'a que 42 lignes de gris sur 631 ; une
+     fois posé à la largeur de la carte elles n'en couvrent que 41,8, et
+     l'étiquette — dont l'encre va de 47 à 90 px — tombait donc entièrement sur
+     les lettres au trait. C'est exactement ce que signale la cliente.
+     Il n'y a pas de matière à découvrir au-dessus : l'original fourni n'a pas
+     plus de gris que le fichier du site. On descend donc la photo de 62,2 px,
+     soit 10,56 % de la hauteur de la carte, et on donne au cadre la couleur
+     exacte de ce gris, 224-224-224, relevée identique dans les deux. La
+     jonction est invisible et le total des gris fait bien 104 px. */
+  .card--sport .thumb{ background:#e0e0e0; }
   .card--sport .thumb img,.card--sport .thumb video{
-    object-position:50% 0%; transform:none; }
+    object-position:50% 0%; transform:none; top:10.56%; }
   .card--food .thumb img,.card--food .thumb video{
     object-position:50% 0%; transform:scale(-1.12, 1.12); transform-origin:50% 0%; }
   .card--motion .thumb img,.card--motion .thumb video{
@@ -1188,12 +1209,18 @@ body:has(.gallery-wrap) .brand .sub{
     font-size:clamp(8.3px, 2.308vw, 9.6px);
     line-height:1.35;
   }
-  /* La dernière ligne avait été retirée sur téléphone, puis rétablie : la
-     maquette téléphone comporte bien SIX lignes de paragraphe — mesurées une à
-     une, corps 18,3 à 21,5 px pour une image de 1080 — et la sixième est
-     « Je vous accompagne de l'idée à la post-production. » Elle reste donc
-     visible sur tous les formats. Le JS reprend le calcul avec cette ligne en
-     plus et redistribue les blancs en conséquence. */
+  /* Dernière ligne du paragraphe : retirée sur TÉLÉPHONE uniquement.
+     La maquette téléphone la contient — six lignes mesurées une à une, corps
+     18,3 à 21,5 px pour une image de 1080 — mais sur un appareil réel elle
+     coûte une ligne de trop : le panneau dépassait la hauteur d'écran, la page
+     redevenait défilable, et sur iOS chaque défilement fait apparaître ou
+     disparaître les barres de Safari. La hauteur de fenêtre change alors, la
+     mise en page est recalculée, et l'on voit la page « descendre » toute
+     seule — c'est le bug filmé par la cliente.
+     Le saut de ligne qui précède la phrase est DANS le span : sans cela il
+     resterait une ligne vide sous le paragraphe.
+     Tablette et bureau la conservent : ils ont la place. */
+  .intro-fin{ display:none; }
   .site-nav{ display:none; }
   .site-nav.open{ display:flex; position:fixed; inset:0; z-index:300; background:var(--cream); flex-direction:column; justify-content:center; padding:40px 30px; }
   /* Menu en Jumper Thin, avant comme après ouverture (retour cliente).
