@@ -279,10 +279,19 @@ body.home-page{
   margin-top:auto;                   /* pousse la rangée tout en bas, SOUS le bloc titre (plus de chevauchement) */
   display:flex;
   gap:1.07%;                         /* écart maquette, en % du rang : il suit l'homothétie */
-  width:var(--rang-w);               /* c'est LA largeur du rang qui porte l'homothétie */
-  margin-left:auto; margin-right:auto;
   align-items:flex-end;              /* les BAS des images s'alignent sur le cadre */
   justify-content:center;
+}
+/* La largeur du rang ne vaut QUE pour le grand écran. --rang-w est une notion
+   de la mise en page bureau : 93,60 % du panneau, réduits par le JS quand la
+   fenêtre est trop basse. Posée sans borne, elle s'appliquait aussi au
+   téléphone et à la tablette, dont les retraits de panneau sont différents —
+   sur téléphone la grille se retrouvait 2,23 vw trop large, elle débordait de
+   son conteneur, la page devenait défilable, et les images les plus étroites
+   ne couvraient plus tout à fait leur carte : l'arrondi de droite réapparaissait
+   sous l'image sur Fashion, Food et Studio. */
+@media(min-width:951px){
+  .grid{ width:var(--rang-w); margin-left:auto; margin-right:auto; }
 }
 .card{
   position:relative;
