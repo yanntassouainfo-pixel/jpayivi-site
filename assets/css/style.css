@@ -863,13 +863,6 @@ body:has(.gallery-wrap) .brand .sub{
   }
   .md-row > *{ width:72% !important; }
 
-  /* ---- Réseaux Sociaux ---- */
-  .rs-row{
-    flex-direction:column; align-items:center;
-    gap:clamp(11px, 1.90vw, 18px) !important;
-    width:auto !important;
-  }
-  .rs-row > *{ width:72% !important; }
 
   /* ---- Studio ---- */
   .masonry{ position:static; padding-bottom:0;
@@ -1765,6 +1758,26 @@ body:has(.gallery-wrap) .brand .sub{
      Seul l'habillage du bandeau est resserré. */
   .rs-band{ gap:2%; }
   .rs-band::before{ left:1.5%; } .rs-band::after{ right:1.5%; }
+}
+
+/* ---- Réseaux Sociaux en tablette : la grille se dépile ----
+   CE BLOC DOIT RESTER ICI, APRÈS .rs-row. La règle de base pose
+   align-items:flex-start ; à spécificité égale, c'est l'ordre du fichier qui
+   tranche. Placées plus haut avec les autres pages, ces lignes voyaient leur
+   align-items:center écrasé : la direction en colonne s'appliquait bien, mais
+   tous les médias restaient collés à gauche. Le bandeau du haut, lui, n'est pas
+   une .rs-row et n'était donc pas concerné — ce que la cliente a vu
+   exactement.
+   Les largeurs, elles, portaient un !important et passaient déjà. */
+@media(max-width:950px) and (min-width:601px){
+  .rs-row{
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:clamp(11px, 1.90vw, 18px) !important;
+    width:auto !important;
+  }
+  .rs-row > *{ width:72% !important; margin-left:auto; margin-right:auto; }
 }
 
 /* ---- Mobile : une colonne, le bandeau devient une pile ---- */
