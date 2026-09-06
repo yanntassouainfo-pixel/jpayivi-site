@@ -123,6 +123,12 @@ body.home-page{
   min-height:100vh;
 }
 .home{
+  /* Largeur du RANG d'images : 93,60 % du panneau, le retrait de 3,20 % de
+     chaque côté étant relevé sur la maquette. C'est la valeur de référence ;
+     le JS la remplace par une valeur plus petite quand la fenêtre est trop
+     basse. Tout le rang en découle — largeurs des cartes et écart en % de
+     cette boîte, hauteurs des vignettes en multiples de cette longueur. */
+  --rang-w:calc(var(--panel-w) * .9360);
   position:relative;               /* ancre la grille en bas */
   min-height:var(--panel-h);       /* hauteur du panneau crème = référence des proportions */
   background:var(--cream);
@@ -272,7 +278,9 @@ body.home-page{
 .grid{
   margin-top:auto;                   /* pousse la rangée tout en bas, SOUS le bloc titre (plus de chevauchement) */
   display:flex;
-  gap:calc(1.07% * var(--card-k, 1));   /* écart maquette, suivant l'homothétie */
+  gap:1.07%;                         /* écart maquette, en % du rang : il suit l'homothétie */
+  width:var(--rang-w);               /* c'est LA largeur du rang qui porte l'homothétie */
+  margin-left:auto; margin-right:auto;
   align-items:flex-end;              /* les BAS des images s'alignent sur le cadre */
   justify-content:center;
 }
@@ -287,9 +295,9 @@ body.home-page{
    multipliées par --card-k. Ce facteur unique s'applique AUSSI aux hauteurs et
    à l'écart : le rang d'images se réduit et s'agrandit donc en homothétie, il
    ne se déforme jamais. Voir le commentaire sous les hauteurs. */
-.card--sport,.card--studio{ width:calc(17.02% * var(--card-k, 1)); }
-.card--food,.card--motion{ width:calc(19.15% * var(--card-k, 1)); }
-.card--fashion{ width:calc(23.37% * var(--card-k, 1)); }
+.card--sport,.card--studio{ width:17.02%; }
+.card--food,.card--motion{ width:19.15%; }
+.card--fashion{ width:23.37%; }
 /* Le label fait partie du flux : il compte dans la hauteur de la rangée,
    il ne peut donc plus venir chevaucher le bloc titre. */
 .card .label{
@@ -305,10 +313,10 @@ body.home-page{
    les vignettes deviendraient carrées. On verrouille donc leur FORME, relevée au
    pixel : Sport/Studio 558x589, Food/Motion 628x713, Fashion 766x849. */
 .card--sport  .thumb,
-.card--studio .thumb{ height:calc(var(--panel-w) * .16816 * var(--card-k, 1)); }
+.card--studio .thumb{ height:calc(var(--rang-w) * .17966); }
 .card--food   .thumb,
-.card--motion .thumb{ height:calc(var(--panel-w) * .20350 * var(--card-k, 1)); }
-.card--fashion .thumb{ height:calc(var(--panel-w) * .24244 * var(--card-k, 1)); }
+.card--motion .thumb{ height:calc(var(--rang-w) * .21741); }
+.card--fashion .thumb{ height:calc(var(--rang-w) * .25902); }
 /* --card-k : UN SEUL facteur, appliqué aux largeurs, aux hauteurs et à l'écart.
    Le rang d'images grandit et rétrécit donc en homothétie stricte — un carré
    reste carré, aucune image n'est recadrée, seule sa taille change.

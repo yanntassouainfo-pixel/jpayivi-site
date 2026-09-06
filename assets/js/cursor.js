@@ -500,7 +500,7 @@
   function place() {
     if (window.innerWidth <= 600) {          /* téléphone : trois écarts égaux */
       home.style.removeProperty('--hero-gap');
-      home.style.removeProperty('--card-k');
+      home.style.removeProperty('--rang-w');
       oublieTablette();
       placeMobile();
       return;
@@ -514,7 +514,7 @@
     document.documentElement.classList.remove('page-figee');
     if (window.innerWidth <= 950) {          /* tablette : mise en page dédiée */
       home.style.removeProperty('--hero-gap');
-      home.style.removeProperty('--card-k');
+      home.style.removeProperty('--rang-w');
       placeTablette();
       return;
     }
@@ -527,7 +527,7 @@
 
     /* ---- Un seul facteur, homothétique ----
        Le rang d'images se réduit et s'agrandit en gardant ses proportions :
-       --card-k multiplie les largeurs, les hauteurs et l'écart à la fois. Un
+       une seule longueur commande les largeurs, les hauteurs et l'écart. Un
        carré reste carré et aucune image n'est recadrée — c'est la demande du
        client, qui voyait les vignettes s'étirer en rétrécissant sa fenêtre.
 
@@ -545,16 +545,30 @@
        référence tant qu'il tient sous le bloc titre ; il ne rétrécit qu'au
        dernier moment, juste assez pour ne pas le pousser, avec 3 % de garde.
        Plancher à 0,45 : en dessous les étiquettes deviendraient illisibles, on
-       préfère alors laisser le blanc se réduire. */
+       préfère alors laisser le blanc se réduire.
+
+       CE QU'ON PUBLIE : une LONGUEUR, pas un facteur. La largeur du rang, en
+       pixels. Le CSS en tire tout le reste — largeurs des cartes et écart en
+       pourcentage de cette boîte, hauteurs des vignettes en multiples de cette
+       longueur. Aucune multiplication d'un pourcentage par une variable
+       n'intervient plus nulle part.
+       C'est ce qui manquait sur Safari : `width:calc(17.02% * var(--k))` y était
+       ignoré, la déclaration tombait, et les cartes reprenaient leur largeur
+       automatique — l'homothétie ne s'appliquait donc pas, alors qu'elle
+       fonctionnait sur Chrome. Une longueur unique supprime le problème à la
+       racine plutôt que de le contourner. */
     var K_MIN = 0.45;
     var big = grid.querySelector('.card--fashion .thumb');
-    home.style.setProperty('--card-k', '1');
-    if (big && big.offsetHeight > 0) {
+    home.style.removeProperty('--rang-w');
+    var rangNaturel = home.clientWidth
+                    - parseFloat(cs.paddingLeft  || 0)
+                    - parseFloat(cs.paddingRight || 0);
+    if (big && big.offsetHeight > 0 && rangNaturel > 0) {
       var horsImage = grid.offsetHeight - big.offsetHeight;   /* étiquette + écart */
       var reste     = dispo - top.offsetHeight - hero.offsetHeight;
       var k = (reste - horsImage - dispo * 0.03) / big.offsetHeight;
       k = Math.max(K_MIN, Math.min(1, k));
-      home.style.setProperty('--card-k', k.toFixed(4));
+      home.style.setProperty('--rang-w', (rangNaturel * k).toFixed(2) + 'px');
     }
 
     var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight;
