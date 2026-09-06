@@ -251,11 +251,15 @@
      réglage attendait 120 ms d'immobilité : la mise en page ne suivait pas le
      bord de la fenêtre et se remettait en place d'un coup, ce que la cliente
      voyait comme un saut. Ces mesures sont légères, les enchaîner ne coûte rien. */
-  var enAttente = false;
+  var enAttente = false, minuteur = null;
   window.addEventListener('resize', function () {
-    if (enAttente) return;
-    enAttente = true;
-    requestAnimationFrame(function () { enAttente = false; place(); });
+    if (!enAttente) {
+      enAttente = true;
+      requestAnimationFrame(function () { enAttente = false; place(); });
+    }
+    /* Passe finale sur mise en page stabilisée — voir la note de l'accueil. */
+    clearTimeout(minuteur);
+    minuteur = setTimeout(place, 150);
   });
   place();
   requestAnimationFrame(place);
@@ -518,12 +522,32 @@
       placeTablette();
       return;
     }
+    /* ---- TOUTES LES REMISES À ZÉRO D'ABORD, TOUTES LES MESURES ENSUITE ----
+       Ce bloc alternait écritures et lectures : on posait une variable, on
+       mesurait, on en posait une autre, on remesurait. Chaque lecture qui suit
+       une écriture oblige le navigateur à recalculer la mise en page sur-le-
+       champ. Chrome renvoie alors des valeurs justes ; Safari, pendant qu'on
+       fait glisser le bord de la fenêtre, peut renvoyer celles de l'état
+       précédent — et la mise en page se fige sur un calcul faux jusqu'au
+       rechargement. C'est ce que voyait la cliente.
+       On remet donc tout à zéro, PUIS on mesure d'un seul tenant, PUIS on
+       écrit. Une seule bascule lecture/écriture au lieu de quatre. */
     oublieTablette();
     home.style.setProperty('--hero-gap', '0px');
+    home.style.removeProperty('--rang-w');
+
     var cs = getComputedStyle(home);
+    var big = grid.querySelector('.card--fashion .thumb');
     var dispo = home.clientHeight
               - parseFloat(cs.paddingTop || 0)
               - parseFloat(cs.paddingBottom || 0);
+    var rangNaturel = home.clientWidth
+                    - parseFloat(cs.paddingLeft  || 0)
+                    - parseFloat(cs.paddingRight || 0);
+    var hTop   = top.offsetHeight;
+    var hHero  = hero.offsetHeight;
+    var hGrid  = grid.offsetHeight;
+    var hImage = big ? big.offsetHeight : 0;
 
     /* ---- Un seul facteur, homothétique ----
        Le rang d'images se réduit et s'agrandit en gardant ses proportions :
@@ -557,21 +581,20 @@
        automatique — l'homothétie ne s'appliquait donc pas, alors qu'elle
        fonctionnait sur Chrome. Une longueur unique supprime le problème à la
        racine plutôt que de le contourner. */
-    var K_MIN = 0.45;
-    var big = grid.querySelector('.card--fashion .thumb');
-    home.style.removeProperty('--rang-w');
-    var rangNaturel = home.clientWidth
-                    - parseFloat(cs.paddingLeft  || 0)
-                    - parseFloat(cs.paddingRight || 0);
-    if (big && big.offsetHeight > 0 && rangNaturel > 0) {
-      var horsImage = grid.offsetHeight - big.offsetHeight;   /* étiquette + écart */
-      var reste     = dispo - top.offsetHeight - hero.offsetHeight;
-      var k = (reste - horsImage - dispo * 0.03) / big.offsetHeight;
+    var K_MIN = 0.45, k = 1;
+    if (hImage > 0 && rangNaturel > 0) {
+      var horsImage = hGrid - hImage;              /* étiquette + écart */
+      var reste     = dispo - hTop - hHero;
+      k = (reste - horsImage - dispo * 0.03) / hImage;
       k = Math.max(K_MIN, Math.min(1, k));
       home.style.setProperty('--rang-w', (rangNaturel * k).toFixed(2) + 'px');
     }
 
-    var libre = dispo - top.offsetHeight - hero.offsetHeight - grid.offsetHeight;
+    /* La hauteur du rang après mise à l'échelle se DÉDUIT des mesures déjà
+       prises : hGrid vaut la hauteur à l'échelle 1, l'image en occupe hImage,
+       le reste ne bouge pas. Inutile de remesurer le DOM, donc inutile de
+       provoquer un second recalcul. */
+    var libre = dispo - hTop - hHero - ((hGrid - hImage) + hImage * k);
     var gap = Math.max(0, Math.round(libre * PART_HAUT));
     home.style.setProperty('--hero-gap', gap + 'px');
   }
@@ -579,11 +602,20 @@
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
   window.addEventListener('load', place);
   /* Recalcul immédiat, sans délai d'attente — voir la note du bloc précédent. */
-  var enAttente = false;
+  /* Une passe par image pour que la mise en page suive le bord de la fenêtre,
+     ET une passe FINALE une fois le glissement terminé. Cette dernière est le
+     filet : si une mesure prise en plein glissement a été faussée — Safari peut
+     renvoyer l'état précédent — le calcul est refait proprement 150 ms après le
+     dernier événement, sur une mise en page stabilisée. La cliente n'a donc plus
+     besoin de recharger pour retrouver le bon rendu. */
+  var enAttente = false, minuteur = null;
   window.addEventListener('resize', function () {
-    if (enAttente) return;
-    enAttente = true;
-    requestAnimationFrame(function () { enAttente = false; place(); });
+    if (!enAttente) {
+      enAttente = true;
+      requestAnimationFrame(function () { enAttente = false; place(); });
+    }
+    clearTimeout(minuteur);
+    minuteur = setTimeout(place, 150);
   });
   place();
   requestAnimationFrame(place);
