@@ -759,10 +759,21 @@ body:has(.gallery-wrap) .brand .sub{
   .reel--large .reel-item--flush{ margin-bottom:4px; }
   .reel--large .reel-duo--portrait,
   .reel--large .reel-tri--portrait,
-  .reel--large .reel-duo--tomatoo{ flex-direction:column; gap:12px; }
+  .reel--large .reel-duo--tomatoo{ flex-direction:column; align-items:center; gap:12px; }
   .reel--large .reel-duo--portrait > .reel-media,
   .reel--large .reel-tri--portrait > .reel-media,
   .reel--large .reel-duo--tomatoo > .reel-media{ flex:0 0 auto; width:100%; aspect-ratio:auto; }
+  /* Les deux photos TOMATOO portent chacune leur largeur propre, via :first-child
+     et :last-child. Ce sélecteur est PLUS FORT que la règle ci-dessus, qui les
+     met pourtant à 100 % : elle était donc ignorée, et les tomates restaient à
+     46 et 39 % — plus étroites que la vidéo Miznon au-dessus, et calées à
+     gauche, l'alignement de base étant flex-start.
+     On répète donc la mise à pleine largeur avec la même spécificité, et on
+     centre le groupe. Les deux photos prennent alors la largeur des contenus
+     qui les précèdent. */
+  .reel--large .reel-duo--tomatoo > .reel-media:first-child,
+  .reel--large .reel-duo--tomatoo > .reel-media:last-child{
+    flex:0 0 auto; width:100%; aspect-ratio:auto; }
   .reel--large .reel-duo--tomatoo > .reel-media > *,
   .reel--large .reel-duo--portrait .reel-media > *,
   .reel--large .reel-tri--portrait .reel-media > *{ position:static; height:auto; }
