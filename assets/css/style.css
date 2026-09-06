@@ -589,7 +589,7 @@ body:has(.gallery-wrap) .brand .sub{
    Format 4096 x 2160 = 1,8963, celui du film : aucun recadrage. */
 .reel-media--afflelou{
   position:relative;
-  aspect-ratio:4096 / 2160;
+  height:0; padding-top:52.7344%;
   overflow:hidden;
 }
 .reel-media--afflelou > video{
@@ -602,7 +602,7 @@ body:has(.gallery-wrap) .brand .sub{
 /* Sport — grilles triptyque / duo (carrés) */
 .reel-tri{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
 .reel-duo{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.reel-tri .reel-media,.reel-duo .reel-media{ aspect-ratio:1/1; }
+.reel-tri .reel-media,.reel-duo .reel-media{ height:0; padding-top:100.0000%; }
 .reel-tri .reel-media video,.reel-tri .reel-media img,
 .reel-duo .reel-media video,.reel-duo .reel-media img{ width:100%; height:100%; object-fit:cover; }
 @media(max-width:600px){ .reel-tri,.reel-duo{ grid-template-columns:1fr; } }
@@ -621,7 +621,7 @@ body:has(.gallery-wrap) .brand .sub{
 /* Bloc 7 — Processus créatif : 77,28 % de la colonne, centré */
 .md-col .reel-item--narrow .reel-media{ width:77.28%; margin:0 auto; }
 /* Bloc 11 — Website : la maquette le recadre en 1,535 (la vidéo est en 16:9) */
-.reel-item--crop154 .reel-media{ aspect-ratio:1535 / 1000; position:relative; overflow:hidden; }
+.reel-item--crop154 .reel-media{ height:0; padding-top:65.1466%; position:relative; overflow:hidden; }
 .reel-item--crop154 .reel-media > video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
 
 /* Grille large du bas — pourcentages relevés sur la maquette */
@@ -633,22 +633,22 @@ body:has(.gallery-wrap) .brand .sub{
 .md-row .reel-media > img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
 
 .md-row--a{ justify-content:space-between; align-items:flex-start; }
-.md-row--a > *:first-child{ width:40.51%; aspect-ratio:649 / 886; }
-.md-row--a > *:last-child { width:55.56%; aspect-ratio:890 / 886; }
+.md-row--a > *:first-child{ width:40.51%; height:0; padding-top:136.5177%; }
+.md-row--a > *:last-child { width:55.56%; height:0; padding-top:99.5506%; }
 
 .md-row--b{ justify-content:space-between; align-items:center; }
-.md-row--b > *:first-child{ width:54.12%; aspect-ratio:16 / 9; }
-.md-row--b > *:last-child { width:41.64%; aspect-ratio:2 / 1; }
+.md-row--b > *:first-child{ width:54.12%; height:0; padding-top:56.2500%; }
+.md-row--b > *:last-child { width:41.64%; height:0; padding-top:50.0000%; }
 
 /* 2000 x 640 = le format exact de l'animation fournie : aucun recadrage.
    (La maquette donnait 1602 x 514, soit 3,117 contre 3,125 — écart invisible.) */
-.md-row--c > *{ width:100%; aspect-ratio:2000 / 640; }
+.md-row--c > *{ width:100%; height:0; padding-top:32.0000%; }
 
 .md-row--d{ justify-content:space-between; align-items:flex-start; }
-.md-row--d > *:first-child{ width:38.39%; aspect-ratio:1 / 1; }
+.md-row--d > *:first-child{ width:38.39%; height:0; padding-top:100.0000%; }
 /* 3/2 = le format exact de l'animation fournie (1620 x 1080), aucun recadrage.
    La maquette donnait 919 x 614, soit 1,4967 contre 1,5 — 0,2 % d'écart. */
-.md-row--d > *:last-child { width:57.37%; aspect-ratio:3 / 2; }
+.md-row--d > *:last-child { width:57.37%; height:0; padding-top:66.6667%; }
 
 @media(max-width:950px){
   /* .md-col garde ses 70,41 % en tablette : c'est la largeur commune du site,
@@ -665,8 +665,8 @@ body:has(.gallery-wrap) .brand .sub{
 }
 
 /* Food — variantes portrait (cocktails 4:5, triptyque 2:3) */
-.reel-duo--portrait .reel-media{ aspect-ratio:4/5; }
-.reel-tri--portrait .reel-media{ aspect-ratio:2/3; }
+.reel-duo--portrait .reel-media{ height:0; padding-top:125.0000%; }
+.reel-tri--portrait .reel-media{ height:0; padding-top:150.0000%; }
 
 /* ------------------------------------------------------------------
    PAGE FOOD — proportions relevées au pixel sur site_ordi_food_int.png
@@ -690,7 +690,7 @@ body:has(.gallery-wrap) .brand .sub{
   display:flex; justify-content:center; gap:6.09%;
 }
 .reel--large .reel-duo--portrait > .reel-media{
-  flex:0 0 auto; width:32.51%; aspect-ratio:1073 / 1384;
+  flex:0 0 auto; width:32.51%; height:0; padding-top:128.9842%;
 }
 
 /* B2 — bandeau GEORGIA : 50,59 %, centré, image entière (choix client) */
@@ -712,11 +712,11 @@ body:has(.gallery-wrap) .brand .sub{
    six restantes sur elles : flex:0 0 auto, puis width. Le résultat calculé est
    identique, mais la hauteur est correctement recalculée à chaque
    redimensionnement, sur Safari comme ailleurs. */
-.reel--large .reel-tri--portrait > .reel-media{ flex:0 0 auto; width:32.96%; aspect-ratio:2/3; }
+.reel--large .reel-tri--portrait > .reel-media{ flex:0 0 auto; width:32.96%; height:0; padding-top:150.0000%; }
 
 /* B7 — MIZNON : 70,86 %, centré */
 .reel--large .reel-item--miznon .reel-media{
-  width:70.86%; margin:0 auto; aspect-ratio:16/9;
+  width:70.86%; margin:0 auto; height:0; padding-top:56.2500%;
 }
 
 /* B8 — TOMATOO : ensemble 58,16 %, les deux photos à leur cadrage d'origine */
@@ -724,8 +724,8 @@ body:has(.gallery-wrap) .brand .sub{
   display:flex; justify-content:center; align-items:flex-start; gap:0.42%;
 }
 /* ratios repris tels quels sur la maquette : les deux photos ont exactement la même hauteur */
-.reel--large .reel-duo--tomatoo > .reel-media:first-child{ flex:0 0 auto; width:31.35%; aspect-ratio:1035 / 1083; }
-.reel--large .reel-duo--tomatoo > .reel-media:last-child { flex:0 0 auto; width:26.38%; aspect-ratio: 871 / 1083; }
+.reel--large .reel-duo--tomatoo > .reel-media:first-child{ flex:0 0 auto; width:31.35%; height:0; padding-top:104.6377%; }
+.reel--large .reel-duo--tomatoo > .reel-media:last-child { flex:0 0 auto; width:26.38%; height:0; padding-top:124.3398%; }
 
 /* Recadrage propre dans tous les cadres à ratio imposé */
 .reel--large .reel-media{ position:relative; overflow:hidden; }
@@ -753,7 +753,7 @@ body:has(.gallery-wrap) .brand .sub{
   .reel--large .reel-duo--tomatoo{ flex-direction:column; gap:12px; }
   .reel--large .reel-duo--portrait > .reel-media,
   .reel--large .reel-tri--portrait > .reel-media,
-  .reel--large .reel-duo--tomatoo > .reel-media{ flex:0 0 auto; width:100%; aspect-ratio:auto; }
+  .reel--large .reel-duo--tomatoo > .reel-media{ flex:0 0 auto; width:100%; padding-top:0; height:auto; }
   .reel--large .reel-duo--tomatoo > .reel-media > *,
   .reel--large .reel-duo--portrait .reel-media > *,
   .reel--large .reel-tri--portrait .reel-media > *{ position:static; height:auto; }
@@ -768,17 +768,17 @@ body:has(.gallery-wrap) .brand .sub{
 
 /* blocs simples : 52,4 % de la largeur, centrés */
 .reel--xl .reel-item--solo .reel-media{
-  width:52.4%; margin:0 auto; aspect-ratio:16/9;
+  width:52.4%; margin:0 auto; height:0; padding-top:56.2500%;
 }
-.reel--xl .reel-item--32 .reel-media{ aspect-ratio:3/2; }   /* Bleu & Ocre */
+.reel--xl .reel-item--32 .reel-media{ height:0; padding-top:66.6667%; }   /* Bleu & Ocre */
 
 /* triptyque : 3 carrés sur toute la largeur */
 .reel--xl .reel-tri{ display:flex; gap:5.75%; justify-content:center; }
-.reel--xl .reel-tri .reel-media{ flex:0 0 auto; width:29.5%; aspect-ratio:1/1; }
+.reel--xl .reel-tri .reel-media{ flex:0 0 auto; width:29.5%; height:0; padding-top:100.0000%; }
 
 /* duo : 2 carrés, ensemble centré (65,4 %) */
 .reel--xl .reel-duo{ display:flex; gap:6.6%; justify-content:center; }
-.reel--xl .reel-duo .reel-media{ flex:0 0 auto; width:29.4%; aspect-ratio:1/1; }
+.reel--xl .reel-duo .reel-media{ flex:0 0 auto; width:29.4%; height:0; padding-top:100.0000%; }
 
 /* recadrage propre dans les cadres à ratio imposé */
 .reel--xl .reel-media{ position:relative; overflow:hidden; }
@@ -874,7 +874,6 @@ body:has(.gallery-wrap) .brand .sub{
   .reel--large .reel-duo--portrait > .reel-media,
   .reel--large .reel-tri--portrait > .reel-media,
   .reel--large .reel-duo--tomatoo > .reel-media{ flex:0 0 auto; width:72%; }
-  .reel--large .reel-duo--tomatoo > .reel-media{ aspect-ratio:auto; }
 
   /* ---- Motion design : les quatre rangées appariées du bas ---- */
   .md-row{
@@ -1713,12 +1712,12 @@ body:has(.gallery-wrap) .brand .sub{
 }
 
 /* Ratios natifs des médias (hauteur / largeur) */
-.rs-row--duoA .rs-media{ aspect-ratio:1080 / 1518; }      /* 1.406 */
+.rs-row--duoA .rs-media{ height:0; padding-top:140.5556%; }      /* 1.406 */
 .rs-row--duoB .rs-media,
 .rs-row--solo .rs-media,
-.rs-row--trio .rs-media{ aspect-ratio:1080 / 1920; }      /* 9:16  */
-.rs-row--obs .rs-media{ aspect-ratio:680 / 998; }         /* carte L'OBS incluse */
-.rs-row--wide .rs-media{ aspect-ratio:16 / 9; }
+.rs-row--trio .rs-media{ height:0; padding-top:177.7778%; }      /* 9:16  */
+.rs-row--obs .rs-media{ height:0; padding-top:146.7647%; }         /* carte L'OBS incluse */
+.rs-row--wide .rs-media{ height:0; padding-top:56.2500%; }
 
 /* R1 — bandeau « Les Recettes ASMR » : le visuel Behance d'origine, tel quel */
 .rs-band{
@@ -1804,7 +1803,7 @@ body:has(.gallery-wrap) .brand .sub{
 @media(max-width:600px){
   .rs{ --v1:26px; --v2:26px; --v3:26px; --v4:24px; --v5:26px; --v6:28px; padding-bottom:60px; }
   .rs-band{
-    aspect-ratio:auto; flex-direction:column; gap:18px;
+    padding-top:0; height:auto; flex-direction:column; gap:18px;
     padding:26px 16%;
   }
   .rs-band::before{ left:2%; width:11%; }
