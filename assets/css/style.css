@@ -690,7 +690,7 @@ body:has(.gallery-wrap) .brand .sub{
   display:flex; justify-content:center; gap:6.09%;
 }
 .reel--large .reel-duo--portrait > .reel-media{
-  flex:0 0 32.51%; aspect-ratio:1073 / 1384;
+  flex:0 0 auto; width:32.51%; aspect-ratio:1073 / 1384;
 }
 
 /* B2 — bandeau GEORGIA : 50,59 %, centré, image entière (choix client) */
@@ -700,7 +700,19 @@ body:has(.gallery-wrap) .brand .sub{
 .reel--large .reel-tri--portrait{
   display:flex; justify-content:center; gap:0.45%;
 }
-.reel--large .reel-tri--portrait > .reel-media{ flex:0 0 32.96%; aspect-ratio:2/3; }
+/* POURQUOI width ET NON flex-basis, sur toutes les boîtes à aspect-ratio.
+   Ces cadres tirent leur HAUTEUR d'un aspect-ratio, et leur LARGEUR était
+   donnée par un flex-basis en pourcentage. WebKit ne réinvalide pas la hauteur
+   de ces boîtes quand on redimensionne la fenêtre : la largeur suivait, la
+   hauteur restait celle de la mise en page précédente, et les carrés
+   devenaient des rectangles verticaux. Un rechargement à la même largeur
+   rendait le bon rendu — c'est exactement ce qu'a observé la cliente.
+   Les dix autres boîtes à aspect-ratio du site tiraient déjà leur largeur d'un
+   width en pourcentage, et ne présentaient pas le défaut. On aligne donc les
+   six restantes sur elles : flex:0 0 auto, puis width. Le résultat calculé est
+   identique, mais la hauteur est correctement recalculée à chaque
+   redimensionnement, sur Safari comme ailleurs. */
+.reel--large .reel-tri--portrait > .reel-media{ flex:0 0 auto; width:32.96%; aspect-ratio:2/3; }
 
 /* B7 — MIZNON : 70,86 %, centré */
 .reel--large .reel-item--miznon .reel-media{
@@ -712,8 +724,8 @@ body:has(.gallery-wrap) .brand .sub{
   display:flex; justify-content:center; align-items:flex-start; gap:0.42%;
 }
 /* ratios repris tels quels sur la maquette : les deux photos ont exactement la même hauteur */
-.reel--large .reel-duo--tomatoo > .reel-media:first-child{ flex:0 0 31.35%; aspect-ratio:1035 / 1083; }
-.reel--large .reel-duo--tomatoo > .reel-media:last-child { flex:0 0 26.38%; aspect-ratio: 871 / 1083; }
+.reel--large .reel-duo--tomatoo > .reel-media:first-child{ flex:0 0 auto; width:31.35%; aspect-ratio:1035 / 1083; }
+.reel--large .reel-duo--tomatoo > .reel-media:last-child { flex:0 0 auto; width:26.38%; aspect-ratio: 871 / 1083; }
 
 /* Recadrage propre dans tous les cadres à ratio imposé */
 .reel--large .reel-media{ position:relative; overflow:hidden; }
@@ -728,9 +740,9 @@ body:has(.gallery-wrap) .brand .sub{
   .reel--large .reel-item--banner .reel-media,
   .reel--large .reel-item--miznon .reel-media{ width:100%; }
   .reel--large .reel-duo--portrait{ gap:3%; }
-  .reel--large .reel-duo--portrait > .reel-media{ flex:0 0 45%; }
-  .reel--large .reel-duo--tomatoo > .reel-media:first-child{ flex:0 0 46%; }
-  .reel--large .reel-duo--tomatoo > .reel-media:last-child { flex:0 0 39%; }
+  .reel--large .reel-duo--portrait > .reel-media{ flex:0 0 auto; width:45%; }
+  .reel--large .reel-duo--tomatoo > .reel-media:first-child{ flex:0 0 auto; width:46%; }
+  .reel--large .reel-duo--tomatoo > .reel-media:last-child { flex:0 0 auto; width:39%; }
 }
 @media(max-width:600px){
   .reel--large .reel-item{ margin-bottom:26px; }
@@ -762,11 +774,11 @@ body:has(.gallery-wrap) .brand .sub{
 
 /* triptyque : 3 carrés sur toute la largeur */
 .reel--xl .reel-tri{ display:flex; gap:5.75%; justify-content:center; }
-.reel--xl .reel-tri .reel-media{ flex:0 0 29.5%; aspect-ratio:1/1; }
+.reel--xl .reel-tri .reel-media{ flex:0 0 auto; width:29.5%; aspect-ratio:1/1; }
 
 /* duo : 2 carrés, ensemble centré (65,4 %) */
 .reel--xl .reel-duo{ display:flex; gap:6.6%; justify-content:center; }
-.reel--xl .reel-duo .reel-media{ flex:0 0 29.4%; aspect-ratio:1/1; }
+.reel--xl .reel-duo .reel-media{ flex:0 0 auto; width:29.4%; aspect-ratio:1/1; }
 
 /* recadrage propre dans les cadres à ratio imposé */
 .reel--xl .reel-media{ position:relative; overflow:hidden; }
@@ -778,7 +790,7 @@ body:has(.gallery-wrap) .brand .sub{
 
 @media(max-width:950px){
   .reel--xl .reel-item--solo .reel-media{ width:72%; }
-  .reel--xl .reel-duo .reel-media{ flex:0 0 38%; }
+  .reel--xl .reel-duo .reel-media{ flex:0 0 auto; width:38%; }
 }
 
 /* ------------------------------------------------------------------
