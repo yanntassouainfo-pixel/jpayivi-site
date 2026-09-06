@@ -1239,8 +1239,23 @@ body:has(.gallery-wrap) .brand .sub{
 
      overscroll-behavior supprime en plus le rebond élastique d'iOS, qui laisse
      entrevoir le fond de la page même quand il n'y a rien à faire défiler. */
+  /* FIGER LA PAGE — overflow:hidden ne suffit pas sur iOS.
+     Mesure faite sur l'accueil : la hauteur du document vaut bien celle de
+     l'écran, mais le CORPS mesure 874 px pour 812 d'écran, la dernière carte
+     descendant de 62 px sous le bord. C'est voulu — chaque carte cache sous la
+     suivante ce qu'elle doit dévoiler au doigt — et clip-path le masque à
+     l'œil, mais ce dépassement reste défilable : clip-path coupe la peinture,
+     pas la zone de défilement.
+     Sur les moteurs de bureau, overflow:hidden sur html et body suffit à le
+     neutraliser. Safari sur iPhone, lui, continue d'autoriser le geste. Le seul
+     réglage qui l'en empêche vraiment est de sortir le corps du flux :
+     position:fixed avec les quatre bords collés à l'écran. Le corps fait alors
+     exactement la fenêtre, et il n'y a plus rien à faire défiler.
+     La barre de contacts n'en souffre pas : elle est elle-même en position
+     fixe, et un élément fixe se cale sur la fenêtre, pas sur son parent. */
   html.page-figee,
   html.page-figee body.home-page{ overflow:hidden; height:100%; overscroll-behavior:none; }
+  html.page-figee body.home-page{ position:fixed; top:0; right:0; bottom:0; left:0; }
   /* min-height et non height : sur un écran court la page défile au lieu de
      rogner le bas. overflow:visible pour la même raison — c'était « hidden »,
      et le contenu excédentaire disparaissait sans le moindre signe. */
@@ -1596,7 +1611,7 @@ body:has(.gallery-wrap) .brand .sub{
   .card--motion .thumb img,.card--motion .thumb video{
     left:-2.500vw;  top:-20.280vw; width:72.23vw;  height:88.61vw; }
   .card--sport .thumb img,.card--sport .thumb video{
-    left:-8.612vw;  top:0;         width:85.84vw;  height:105.27vw; }
+    left:-2.529vw;  top:0;         width:72.47vw;  height:81.95vw; }
   .card--food .thumb img,.card--food .thumb video{
     left:-2.500vw;  top:-9.166vw;  width:72.23vw;  height:88.61vw; transform:scaleX(-1); }
   .card--studio .thumb img,.card--studio .thumb video{
@@ -1622,8 +1637,21 @@ body:has(.gallery-wrap) .brand .sub{
      du gris de la photo — 224,224,224, relevé aussi bien dans le fichier que
      dans la maquette. La jonction est invisible, l'échelle et le cadrage
      latéral ne bougent pas, et l'étiquette retrouve la marge de la maquette. */
+  /* SPORT — cadrage relevé au trait sur la maquette téléphone.
+     Le F et le K ne doivent pas toucher les bords de la carte : la maquette
+     laisse 33 px à gauche et 39 à droite sur une carte de 728. Dans le fichier,
+     le trait gauche du F est à x=43 et le bord droit du K à x=510. L'échelle
+     est donc (688 − 33) / (510 − 43) = 1,4026, d'où une largeur affichée de
+     558 × 1,4026 = 782,6 px, soit 72,47 vw — contre 85,84 auparavant, ce qui
+     rognait les deux lettres.
+     Le bord gauche se déduit : 33 − 43 × 1,4026 = −27,3 px, soit −2,529 vw.
+     Contrôle sur le K : −27,3 + 510 × 1,4026 = 688,0, la valeur de la maquette.
+     Calage vertical : les 42 lignes de gris uni du fichier occupent 58,9 px à
+     cette échelle ; pour que le motif commence à la ligne 91 comme sur la
+     maquette, le haut de l'image se pose à +32,1 px, soit 2,972 vw. Le cadre
+     porte la couleur exacte de ce gris, la jonction est invisible. */
   .card--sport .thumb{ background:#e0e0e0; }
-  .card--sport .thumb img{ top:2.17vw; }
+  .card--sport .thumb img{ top:2.972vw; }
   .card--studio .thumb img{ height:79.43vw; }   /*  88,89 x 613/686 */
   /* Les deux vidéos de survol viennent EN DERNIER : les règles ci-dessus les
      visent aussi, à spécificité égale, et c'est l'ordre du fichier qui tranche. */
@@ -1633,7 +1661,7 @@ body:has(.gallery-wrap) .brand .sub{
      85,84 de large — elle était donc étirée d'un quart. On lui rend son format
      et on la descend du même 2,17 vw que la photo, pour que le survol ne
      décale pas l'image. */
-  .card--sport   .thumb video{ top:2.17vw;  height:85.84vw;  }
+  .card--sport   .thumb video{ top:2.972vw; height:72.47vw;  }   /* carrée, à la nouvelle échelle */
 
   /* ---- Bandeau de contacts ----
      Relevé sur la maquette : bandeau de 160 px sur une image de 1080, soit
