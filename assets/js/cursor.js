@@ -896,3 +896,69 @@
   });
   schedule();
 })();
+
+/* ============================================================
+   TABLETTE TACTILE — l'animation se découvre au doigt
+   ------------------------------------------------------------
+   Retour client : sur tablette et téléphone l'animation de la carte Sport
+   partait toute seule. On rétablit le principe du survol, transposé au tactile.
+
+   En TÉLÉPHONE il n'y a rien à ajouter : les cartes s'empilent, un appui en
+   ouvre une, et la classe .est-ouverte posée plus haut sert déjà de
+   déclencheur au CSS.
+
+   Entre 601 et 950 px les cartes ne s'empilent pas — aucune ouverture à
+   laquelle s'accrocher. On pose donc .est-touchee au premier appui, et le
+   second appui suit le lien : même grammaire qu'en téléphone, et le lien reste
+   atteignable au doigt.
+
+   Ce bloc ne s'active que sur les appareils SANS survol. À la souris — y
+   compris quand on réduit une fenêtre de bureau à cette largeur — c'est
+   .card:hover qui fait le travail, et le clic ouvre la page du premier coup.
+   ============================================================ */
+(function () {
+  var grille = document.querySelector('.home .grid');
+  if (!grille) return;
+
+  var souris = window.matchMedia('(hover: hover) and (pointer: fine)');
+  function enTablette() {
+    return window.innerWidth > 600 && window.innerWidth <= 950;
+  }
+  function carteDe(cible) {
+    return (cible && cible.closest) ? cible.closest('.card') : null;
+  }
+  function nettoyer(sauf) {
+    var touchees = grille.querySelectorAll('.card.est-touchee');
+    for (var i = 0; i < touchees.length; i++) {
+      if (touchees[i] !== sauf) touchees[i].classList.remove('est-touchee');
+    }
+  }
+
+  grille.addEventListener('click', function (e) {
+    if (!enTablette() || souris.matches) return;
+    /* Activation au clavier (Entrée) : detail vaut 0. On n'impose pas deux
+       frappes à qui navigue sans souris, le lien s'ouvre directement. */
+    if (e.detail === 0) return;
+    var carte = carteDe(e.target);
+    if (!carte) return;
+    /* Déjà découverte : c'est le second appui, on laisse le lien travailler. */
+    if (carte.classList.contains('est-touchee')) return;
+    e.preventDefault();
+    nettoyer(carte);
+    carte.classList.add('est-touchee');
+  });
+
+  /* Un appui ailleurs referme : on ne laisse pas une carte découverte
+     indéfiniment après que l'attention est passée à autre chose. */
+  document.addEventListener('click', function (e) {
+    if (!enTablette()) return;
+    if (carteDe(e.target)) return;
+    nettoyer(null);
+  });
+
+  /* On quitte la largeur tablette : la classe n'a plus de sens, on la retire
+     pour ne pas laisser une animation découverte sur un autre format. */
+  window.addEventListener('resize', function () {
+    if (!enTablette()) nettoyer(null);
+  });
+})();

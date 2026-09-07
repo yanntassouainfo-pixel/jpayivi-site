@@ -113,15 +113,15 @@ a{color:inherit;text-decoration:none;}
 .nav .plus{opacity:.9;}
 .nav .current > a, .nav a.current, .nav .current-menu-item > a{font-weight:700;}
 
-/* ---- Entrée « +Showreel » : téléphone uniquement ----
-   Retirée de la nav de droite sur bureau ET tablette (retour cliente) — la nav
-   de droite est celle des deux formats, le panneau « +Menu » ne prend le relais
-   que sous 600 px, où l'entrée est conservée.
-   La coupure est donc à min-width:601px, et non à 951 : à 950 px la nav est
-   encore affichée en clair, pas repliée.
-   L'accès à la page reste ouvert : bouton « Showreel » de la page About,
-   et modale au clic sur l'accueil. */
-@media(min-width:601px){
+/* ---- Entrée « +Showreel » : retirée du BUREAU seulement ----
+   Deuxième passe du client : elle revient en tablette, elle ne disparaît que
+   sur bureau. La coupure passe donc de 601 à 951 px — 951 étant la largeur à
+   partir de laquelle la grille de l'accueil quitte la présentation tablette.
+   Elle reste visible en tablette (nav de droite) et en téléphone (panneau
+   « +Menu »).
+   Sur bureau, l'accès à la page reste ouvert : bouton « Showreel » de la page
+   About, et modale au clic sur l'accueil. */
+@media(min-width:951px){
   .nav .nav-showreel{ display:none; }
 }
 
@@ -385,16 +385,19 @@ body.home-page{
 .card--fashion .thumb video{ object-position:50% 0%; }
 .thumb .gif{opacity:0;transition:opacity .35s ease;}
 .card:hover .thumb .gif{opacity:1;}
-/* ---- Sport : animation permanente sur tablette et téléphone ----
-   Le survol n'existe pas au doigt : sans cette règle la carte Sport resterait
-   fixe sur les deux formats tactiles. On la découvre donc en permanence.
-   Elle ne peut pas décaler l'image : sport_hover.mp4 a été recadré sur la
-   FENÊTRE EXACTE de sport.jpg — même rapport 0,884, mêmes 41 lignes de gris
-   uni en haut. Photo et animation se superposent au pixel, dans les trois
-   formats. */
-@media(max-width:950px){
-  .card--sport .thumb .gif{ opacity:1; }
-}
+/* ---- Découverte de l'animation au doigt ----
+   Retour client : sur tablette et téléphone l'animation partait toute seule.
+   On rétablit le principe du survol, transposé au tactile — le doigt remplace
+   le curseur, et cela vaut pour les CINQ cartes, comme à la souris.
+   TÉLÉPHONE : les cartes s'empilent et un appui en ouvre une ; le dévoilement
+   s'accroche à cette ouverture, déjà en place (.est-ouverte).
+   TABLETTE : elles ne s'empilent pas, il n'y a rien à quoi s'accrocher. Un
+   premier appui pose .est-touchee, un second suit le lien — même grammaire.
+   Les deux classes sont posées par cursor.js, uniquement sur les appareils
+   sans survol : à la souris, c'est .card:hover qui continue de faire le
+   travail, à toutes les largeurs. */
+.card.est-ouverte .thumb .gif,
+.card.est-touchee .thumb .gif{ opacity:1; }
 /* Mouvement réduit demandé par le système : on rend la photo fixe. */
 @media(prefers-reduced-motion:reduce){
   .thumb .gif{ display:none; }
@@ -1248,10 +1251,10 @@ body:has(.gallery-wrap) .brand .sub{
      exacte de ce gris, 224-224-224, relevée identique dans les deux. La
      jonction est invisible et le total des gris fait bien 104 px.
 
-     GRIS INVENTÉ RETIRÉ : l'animation couvre désormais toute la vignette en
-     tablette, et elle porte son propre gris, pris dans le GIF. Le fond posé au
-     CSS n'a donc plus lieu d'être ici — seule la PHOTO garde son décalage de
-     10,56 %, sous l'animation, pour le cas où celle-ci ne se chargerait pas. */
+     Le fond a été retiré un temps, l'animation couvrant alors toute la vignette
+     en permanence. Elle est repassée au doigt (retour client) : la PHOTO est de
+     nouveau ce qu'on voit par défaut, et le fond redevient indispensable. */
+  .card--sport .thumb{ background:#e0e0e0; }
   .card--sport .thumb img,.card--sport .thumb video{
     object-position:50% 0%; transform:none; top:10.56%; }
   /* L'animation, elle, part du haut du cadre : son gris cuit tombe pile sur les
@@ -1713,9 +1716,9 @@ body:has(.gallery-wrap) .brand .sub{
      cette échelle ; pour que le motif commence à la ligne 91 comme sur la
      maquette, le haut de l'image se pose à +32,1 px, soit 2,972 vw. Le cadre
      porte la couleur exacte de ce gris, la jonction est invisible. */
-  /* GRIS INVENTÉ RETIRÉ, même raison qu'en tablette : l'animation couvre toute
-     la vignette et apporte son propre gris. Seule la PHOTO garde le décalage,
-     dessous, comme filet de sécurité. */
+  /* Fond rétabli, même raison qu'en tablette : l'animation ne se découvre plus
+     qu'au doigt, la photo est donc de nouveau ce qu'on voit par défaut. */
+  .card--sport .thumb{ background:#e0e0e0; }
   .card--sport .thumb img{ top:2.972vw; }
   .card--studio .thumb img{ height:79.43vw; }   /*  88,89 x 613/686 */
   /* Les deux vidéos de survol viennent EN DERNIER : les règles ci-dessus les
