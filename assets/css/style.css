@@ -385,6 +385,20 @@ body.home-page{
 .card--fashion .thumb video{ object-position:50% 0%; }
 .thumb .gif{opacity:0;transition:opacity .35s ease;}
 .card:hover .thumb .gif{opacity:1;}
+/* ---- Sport : animation permanente sur tablette et téléphone ----
+   Le survol n'existe pas au doigt : sans cette règle la carte Sport resterait
+   fixe sur les deux formats tactiles. On la découvre donc en permanence.
+   Elle ne peut pas décaler l'image : sport_hover.mp4 a été recadré sur la
+   FENÊTRE EXACTE de sport.jpg — même rapport 0,884, mêmes 41 lignes de gris
+   uni en haut. Photo et animation se superposent au pixel, dans les trois
+   formats. */
+@media(max-width:950px){
+  .card--sport .thumb .gif{ opacity:1; }
+}
+/* Mouvement réduit demandé par le système : on rend la photo fixe. */
+@media(prefers-reduced-motion:reduce){
+  .thumb .gif{ display:none; }
+}
 .card:hover .label{font-weight:400;}   /* survol = Jumper Regular */
 
 /* ============================================================
@@ -1687,11 +1701,17 @@ body:has(.gallery-wrap) .brand .sub{
      visent aussi, à spécificité égale, et c'est l'ordre du fichier qui tranche. */
   .card--fashion .thumb video{ top:-15.11vw; height:112.18vw; }
   .card--motion  .thumb video{ top:0;        height:72.23vw;  }
-  /* Sport : la vidéo est carrée (900 x 900) et héritait de 105,27 vw pour
-     85,84 de large — elle était donc étirée d'un quart. On lui rend son format
-     et on la descend du même 2,17 vw que la photo, pour que le survol ne
-     décale pas l'image. */
-  .card--sport   .thumb video{ top:2.972vw; height:72.47vw;  }   /* carrée, à la nouvelle échelle */
+  /* Sport : la vidéo n'est plus carrée. Elle a été refabriquée depuis le GIF
+     fourni par le client (1080 x 1500), recadrée sur la fenêtre exacte de
+     sport.jpg — retrouvée par corrélation croisée normalisée : x=67,8 y=427,1
+     sur 945,8 x 1069,5, corrélation 0,979, et les 41 lignes de gris uni du
+     haut tombent au même endroit dans les deux fichiers.
+     Son rapport est donc celui de la photo (796/900 = 0,884 contre 558/631 =
+     0,884). Elle n'a plus besoin d'une hauteur à elle : elle hérite des
+     81,95 vw de la règle commune, et seul le calage vertical de 2,972 vw est
+     répété. Photo et animation se superposent au pixel — le F et le K gardent
+     exactement les positions relevées sur la maquette. */
+  .card--sport   .thumb video{ top:2.972vw; }
 
   /* ---- Bandeau de contacts ----
      Relevé sur la maquette : bandeau de 160 px sur une image de 1080, soit
