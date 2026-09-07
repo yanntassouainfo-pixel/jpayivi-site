@@ -113,6 +113,18 @@ a{color:inherit;text-decoration:none;}
 .nav .plus{opacity:.9;}
 .nav .current > a, .nav a.current, .nav .current-menu-item > a{font-weight:700;}
 
+/* ---- Entrée « +Showreel » : téléphone uniquement ----
+   Retirée de la nav de droite sur bureau ET tablette (retour cliente) — la nav
+   de droite est celle des deux formats, le panneau « +Menu » ne prend le relais
+   que sous 600 px, où l'entrée est conservée.
+   La coupure est donc à min-width:601px, et non à 951 : à 950 px la nav est
+   encore affichée en clair, pas repliée.
+   L'accès à la page reste ouvert : bouton « Showreel » de la page About,
+   et modale au clic sur l'accueil. */
+@media(min-width:601px){
+  .nav .nav-showreel{ display:none; }
+}
+
 /* ============================================================
    PAGE D'ACCUEIL  (+ cadre gris foncé)
    ============================================================ */
