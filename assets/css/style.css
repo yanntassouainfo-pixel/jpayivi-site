@@ -1059,6 +1059,16 @@ body:has(.gallery-wrap) .brand .sub{
    centrage par défaut. */
 .card--sport  .thumb img,.card--sport  .thumb video,
 .card--studio .thumb img,.card--studio .thumb video{ object-position:50% 0%; }
+/* SPORT — l'animation porte 9,080 % de gris VRAI en haut de son fichier, pris
+   dans le GIF du client, là où la photo n'en avait pas et où le CSS en posait
+   d'inventé. Sur bureau la photo se cale en haut du cadre ; pour que le survol
+   ne la décale pas, il faut masquer ce gris.
+   La boîte fait 17,02 % de large pour 17,966 % de haut, soit un rapport de
+   0,9473 ; le fichier, lui, vaut 0,80404. La source est donc plus haute que la
+   boîte : « cover » la cale en largeur et laisse déborder 0,03202 R en hauteur.
+   Le gris cuit occupe 0,01922 R de ce débordement : il faut en masquer
+   0,01922 / 0,03202 = 60,03 % par le haut. */
+.card--sport .thumb video{ object-position:50% 60.03%; }
 
 /* ---------- Éléments responsive (base) ---------- */
 .c-item{ display:block; }                 /* contacts empilés (bureau) */
@@ -1236,10 +1246,19 @@ body:has(.gallery-wrap) .brand .sub{
      plus de gris que le fichier du site. On descend donc la photo de 62,2 px,
      soit 10,56 % de la hauteur de la carte, et on donne au cadre la couleur
      exacte de ce gris, 224-224-224, relevée identique dans les deux. La
-     jonction est invisible et le total des gris fait bien 104 px. */
-  .card--sport .thumb{ background:#e0e0e0; }
+     jonction est invisible et le total des gris fait bien 104 px.
+
+     GRIS INVENTÉ RETIRÉ : l'animation couvre désormais toute la vignette en
+     tablette, et elle porte son propre gris, pris dans le GIF. Le fond posé au
+     CSS n'a donc plus lieu d'être ici — seule la PHOTO garde son décalage de
+     10,56 %, sous l'animation, pour le cas où celle-ci ne se chargerait pas. */
   .card--sport .thumb img,.card--sport .thumb video{
     object-position:50% 0%; transform:none; top:10.56%; }
+  /* L'animation, elle, part du haut du cadre : son gris cuit tombe pile sur les
+     10,56 %. Mesure : vignette de 194 x 206 px à 768 px de fenêtre, échelle
+     194/796 = 0,24372 ; les 89,9 px de gris du fichier s'affichent donc sur
+     21,91 px, contre 21,75 attendus — 0,16 px d'écart. */
+  .card--sport .thumb video{ top:0; }
   .card--food .thumb img,.card--food .thumb video{
     object-position:50% 0%; transform:scale(-1.12, 1.12); transform-origin:50% 0%; }
   .card--motion .thumb img,.card--motion .thumb video{
@@ -1694,24 +1713,27 @@ body:has(.gallery-wrap) .brand .sub{
      cette échelle ; pour que le motif commence à la ligne 91 comme sur la
      maquette, le haut de l'image se pose à +32,1 px, soit 2,972 vw. Le cadre
      porte la couleur exacte de ce gris, la jonction est invisible. */
-  .card--sport .thumb{ background:#e0e0e0; }
+  /* GRIS INVENTÉ RETIRÉ, même raison qu'en tablette : l'animation couvre toute
+     la vignette et apporte son propre gris. Seule la PHOTO garde le décalage,
+     dessous, comme filet de sécurité. */
   .card--sport .thumb img{ top:2.972vw; }
   .card--studio .thumb img{ height:79.43vw; }   /*  88,89 x 613/686 */
   /* Les deux vidéos de survol viennent EN DERNIER : les règles ci-dessus les
      visent aussi, à spécificité égale, et c'est l'ordre du fichier qui tranche. */
   .card--fashion .thumb video{ top:-15.11vw; height:112.18vw; }
   .card--motion  .thumb video{ top:0;        height:72.23vw;  }
-  /* Sport : la vidéo n'est plus carrée. Elle a été refabriquée depuis le GIF
-     fourni par le client (1080 x 1500), recadrée sur la fenêtre exacte de
-     sport.jpg — retrouvée par corrélation croisée normalisée : x=67,8 y=427,1
-     sur 945,8 x 1069,5, corrélation 0,979, et les 41 lignes de gris uni du
-     haut tombent au même endroit dans les deux fichiers.
-     Son rapport est donc celui de la photo (796/900 = 0,884 contre 558/631 =
-     0,884). Elle n'a plus besoin d'une hauteur à elle : elle hérite des
-     81,95 vw de la règle commune, et seul le calage vertical de 2,972 vw est
-     répété. Photo et animation se superposent au pixel — le F et le K gardent
-     exactement les positions relevées sur la maquette. */
-  .card--sport   .thumb video{ top:2.972vw; }
+  /* Sport : l'animation vient du GIF du client (1080 x 1500). Sa fenêtre est
+     celle de sport.jpg — retrouvée par corrélation croisée normalisée, 0,979 —
+     PROLONGÉE VERS LE HAUT de 106,8 px pour y prendre du gris réel : x=68
+     y=320, 946 x 1176, encodée en 796 x 990. Le gris cuit vaut 9,080 % de la
+     hauteur du fichier, et il remplace celui que le CSS inventait.
+     Le fichier ne fait donc plus 0,884 mais 0,80404 : il lui faut sa propre
+     hauteur, 72,47 / 0,80404 = 90,132 vw, où le gris occupe 8,184 vw.
+     Pour que la photo tombe toujours à 2,972 vw, l'animation démarre 8,184 vw
+     plus haut : 2,972 − 8,184 = −5,212 vw. Contrôle sur le bas : −5,212 +
+     90,132 = 84,920 vw, contre 2,972 + 81,95 = 84,922 pour la photo — deux
+     millièmes de vw. Le F et le K ne bougent pas d'un pixel. */
+  .card--sport   .thumb video{ top:-5.212vw; height:90.132vw; }
 
   /* ---- Bandeau de contacts ----
      Relevé sur la maquette : bandeau de 160 px sur une image de 1080, soit
