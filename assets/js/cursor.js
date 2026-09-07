@@ -16,8 +16,13 @@
      .menu-toggle est le bouton « +Menu », qui devient « +Fermer » une fois la
      liste ouverte : c'est le même élément, il suffit donc de le citer une fois.
      .site-nav couvre le panneau déroulé lui-même, au cas où le survol tombe
-     entre deux entrées de la liste plutôt que sur .nav. */
-  var NORMAL = '.nav, .site-nav, .menu-toggle, .grid, .contact';
+     entre deux entrées de la liste plutôt que sur .nav.
+     .intro, c'est le paragraphe de présentation : la pastille venait s'y poser
+     et masquait le texte que le visiteur est en train de lire. Elle disparaît
+     donc au-dessus de lui, et le clic n'y ouvre plus le showreel — autant que
+     l'invitation et l'action restent cohérentes. Le bloc titre, lui, la garde :
+     c'est là que la pastille prend tout son sens. */
+  var NORMAL = '.nav, .site-nav, .menu-toggle, .grid, .contact, .intro';
 
   window.addEventListener('mousemove', function (e) {
     tx = e.clientX; ty = e.clientY;
@@ -86,7 +91,7 @@
     if (window.innerWidth <= 950) return;
     if (e.target.closest('.reel-modal')) return;
     // on ignore tout élément interactif / média / menus / contacts
-    if (e.target.closest('a, button, input, textarea, select, video, img, .nav, .grid, .contact, .pastille-cursor')) return;
+    if (e.target.closest('a, button, input, textarea, select, video, img, .nav, .grid, .contact, .intro, .pastille-cursor')) return;
     // uniquement dans la zone d'accueil (comme la pastille)
     if (!e.target.closest('.home')) return;
     openReel();

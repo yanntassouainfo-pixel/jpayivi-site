@@ -1003,6 +1003,7 @@ body:has(.gallery-wrap) .brand .sub{
   html.has-pastille .nav, html.has-pastille .nav *,
   html.has-pastille .site-nav, html.has-pastille .site-nav *,
   html.has-pastille .menu-toggle,
+  html.has-pastille .intro, html.has-pastille .intro *,
   html.has-pastille .grid, html.has-pastille .grid *,
   html.has-pastille .contact, html.has-pastille .contact *{cursor:auto !important;}
   /* Les éléments cliquables de ces zones -> main */
