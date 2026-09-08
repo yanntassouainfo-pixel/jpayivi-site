@@ -1,0 +1,96 @@
+# ============================================================
+#  jpayivi.com — configuration Apache (hébergement mutualisé OVH)
+#  À placer à la RACINE du site, à côté de index.html.
+#
+#  ATTENTION, ORDRE DES OPÉRATIONS :
+#  1. Activer d'abord le certificat SSL dans l'espace client OVH
+#     (Hébergements > votre hébergement > Multisite > SSL), et attendre
+#     qu'il soit délivré — comptez jusqu'à 24 h.
+#  2. Vérifier À LA MAIN que https://votre-domaine répond correctement.
+#  3. SEULEMENT ENSUITE, téléverser ce fichier.
+#  Forcer la redirection avant que le certificat existe transforme
+#  l'avertissement « site non sécurisé » en page d'erreur complète.
+# ============================================================
+
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# ------------------------------------------------------------
+#  1. HTTPS forcé
+#  Sur le mutualisé OVH, le déchiffrement se fait en amont : la variable
+#  %{HTTPS} n'est pas toujours renseignée jusqu'à Apache. On teste donc
+#  AUSSI l'en-tête X-Forwarded-Proto, que le frontal ajoute. Les deux
+#  conditions doivent être vraies pour que la redirection s'applique.
+# ------------------------------------------------------------
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# ------------------------------------------------------------
+#  2. Adresses sans .html          ← BLOC FACULTATIF
+#  Purement cosmétique : une adresse en .html n'a rien d'anormal ni de
+#  pénalisant pour un site statique. Si tu n'en veux pas, supprime ce
+#  bloc, le reste du fichier fonctionne seul.
+#  Les liens internes des pages restent en .html — c'est volontaire, la
+#  copie GitHub Pages en dépend. La règle 2a les redirige, la 2b sert le
+#  fichier. Les deux adresses marchent, une seule s'affiche.
+# ------------------------------------------------------------
+
+# 2a. /index.html et /nom.html renvoient vers la forme courte (301)
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+RewriteRule ^ / [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 2b. /nom sert nom.html, sans changer l'adresse affichée
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
+
+</IfModule>
+
+# ------------------------------------------------------------
+#  3. Types MIME
+#  Certains mutualisés ne servent pas le WebP ni le MP4 correctement.
+# ------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType image/webp   .webp
+  AddType video/mp4    .mp4
+  AddType font/woff2   .woff2
+  AddType font/otf     .otf
+  AddType font/ttf     .ttf
+</IfModule>
+
+# ------------------------------------------------------------
+#  4. Compression
+#  Ni les JPEG, ni les MP4, ni les WebP : ils sont déjà compressés,
+#  les repasser à gzip coûte du calcul pour rien.
+# ------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript
+  AddOutputFilterByType DEFLATE image/svg+xml application/json
+</IfModule>
+
+# ------------------------------------------------------------
+#  5. Cache navigateur
+#  Les feuilles et scripts portent une empreinte dans leur adresse
+#  (style.css?v=863e4f07) : un an de cache est sans risque, l'empreinte
+#  change à chaque livraison. Les pages HTML, elles, ne sont pas mises
+#  en cache — sinon une correction ne se verrait pas.
+# ------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css              "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/jpeg            "access plus 6 months"
+  ExpiresByType image/webp            "access plus 6 months"
+  ExpiresByType image/svg+xml         "access plus 6 months"
+  ExpiresByType video/mp4             "access plus 6 months"
+  ExpiresByType font/woff2            "access plus 1 year"
+  ExpiresByType font/otf              "access plus 1 year"
+  ExpiresByType text/html             "access plus 0 seconds"
+</IfModule>
