@@ -437,7 +437,17 @@ body.home-page{
   font-family:"Jumper",sans-serif;
   font-weight:900;font-style:normal;   /* droit comme le PSD */
   line-height:1;
-  color:rgba(24,24,24,.22);            /* JP AYIVI pâle (ghost) */
+  /* JP AYIVI pâle (ghost). COULEUR OPAQUE, et non rgba : en Jumper Black sans
+     interlettrage, le Y et le I se chevauchent, et deux glyphes translucides
+     superposés cumulent leur alpha — 1 − (1 − 0,22)² = 0,392 au lieu de 0,22.
+     La zone commune paraissait donc presque deux fois plus dense. Retour
+     client.
+     #CBCBC2 est l'exact équivalent solide de rgba(24,24,24,.22) rendu sur le
+     crème #FEFEF2 : 0,22 x 24 + 0,78 x 254 = 203,4 et 0,22 x 24 + 0,78 x 242 =
+     194,0, soit rgb(203,203,194). L'aspect ne change donc pas sur fond uni,
+     seule la surdensité disparaît. C'est déjà la couleur qu'emploie l'état
+     estompé du logo, quelques lignes plus haut. */
+  color:#CBCBC2;
 }
 /* 2,175 vw = les 486 px de large de « JP AYIVI » sur la maquette (9,47 % de la page).
    Pas d'interlettrage : la maquette n'en a pas. */
