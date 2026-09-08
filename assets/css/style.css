@@ -580,26 +580,11 @@ body:has(.gallery-wrap) .brand .sub{
 .reel-item{ margin-bottom:clamp(16px, 2.54vw, 56px); }
 .reel-media{ background:#e9e9dd; overflow:hidden; }
 .reel-media video,.reel-media img{ width:100%; display:block; }
-/* ---- ASMR : image entière, à la largeur de la galerie Réseaux Sociaux ----
-   L'image n'est ni recadrée ni retouchée : ses marges noires font partie du
-   dessin, la maquette PSD les porte aussi (bloc 4957 x 2788, rapport 1,7780,
-   contre 1,7766 pour le fichier). Seule sa LARGEUR change.
-   Sur téléphone, les deux galeries n'ont pas la même largeur, et c'est ce qui
-   faisait paraître le bandeau petit et entouré de vide :
-     .gallery-wrap  padding 0 var(--pad)  ->  375 − 40 = 335 px
-     .rs            aucun retrait latéral ->  335 px   (Réseaux Sociaux)
-     .reel          padding 0 var(--pad)  ->  335 − 40 = 295 px   (Food)
-   Le bandeau perdait donc 40 px, 13,6 % de sa largeur. On annule ce second
-   retrait pour ce seul bloc, par une marge négative de var(--pad) de chaque
-   côté : il retrouve les 335 px de la galerie Réseaux Sociaux.
-   Rien à faire au-dessus de 600 px : .reel n'y a pas de retrait latéral, les
-   deux galeries y sont déjà à la même largeur. */
-@media(max-width:600px){
-  .reel--large .reel-item--asmr{
-    margin-left:calc(var(--pad) * -1);
-    margin-right:calc(var(--pad) * -1);
-  }
-}
+/* ---- ASMR sur la page FOOD : bloc rendu à la largeur commune ----
+   Une marge négative l'avait élargi aux 335 px de la galerie Réseaux Sociaux.
+   C'était une erreur de ma part : le bandeau signalé par le client est celui
+   de la page RÉSEAUX SOCIAUX (.rs-band), pas celui-ci. Ce bloc reprend donc la
+   largeur de tous ses voisins sur Food. */
 .reel-caption{
   text-align:center;
   margin-top:clamp(10px, 1.61vw, 36px);
@@ -1907,8 +1892,8 @@ body:has(.gallery-wrap) .brand .sub{
      tablette : tout y est exprimé en pourcentage de la colonne, la réduction est
      donc homothétique et la page garde exactement ses proportions.
      Seul l'habillage du bandeau est resserré. */
-  .rs-band{ gap:2%; }
-  .rs-band::before{ left:1.5%; } .rs-band::after{ right:1.5%; }
+  /* Le bandeau n'a plus rien à resserrer : une seule image, pas de conteneur
+     flex, et les ::before / ::after sont sans content. Lignes retirées. */
 }
 
 /* ---- Réseaux Sociaux en tablette : la grille se dépile ----
@@ -1934,13 +1919,21 @@ body:has(.gallery-wrap) .brand .sub{
 /* ---- Mobile : une colonne, le bandeau devient une pile ---- */
 @media(max-width:600px){
   .rs{ --v1:26px; --v2:26px; --v3:26px; --v4:24px; --v5:26px; --v6:28px; padding-bottom:60px; }
-  .rs-band{
-    aspect-ratio:auto; flex-direction:column; gap:18px;
-    padding:26px 16%;
-  }
-  .rs-band::before{ left:2%; width:11%; }
-  .rs-band::after { right:2%; width:11%; }
-  .rs-post--bandsm,.rs-post--bandcard{ width:100%; }
+  /* ---- Bandeau ASMR : retrait supprimé ----
+     Il portait padding:26px 16% sur fond noir. À l'époque, .rs-band était un
+     conteneur flex qui empilait plusieurs vignettes (.rs-post--bandsm,
+     .rs-post--bandcard) et ce retrait leur servait d'habillage. Le bandeau
+     n'est plus qu'une IMAGE unique : le retrait ne fait qu'ajouter un cadre
+     noir autour d'elle, et lui coûte 32 % de sa largeur.
+     Mesure sur le site en ligne, fenêtre de 375 px : bandeau 335 px, image
+     228 px seulement — 53,6 px de noir de chaque côté et 26 px en haut comme
+     en bas. Retour client, à juste titre.
+     Les trois autres déclarations partaient avec : .rs-band n'a pas de
+     display:flex, donc flex-direction et gap n'avaient aucun effet, et
+     aspect-ratio:auto est déjà la valeur par défaut.
+     Les ::before et ::after n'ont jamais eu de content — vérifié dans le
+     navigateur, ils rendent « none ». Ils décoraient l'ancienne construction.
+     .rs-post--bandsm et .rs-post--bandcard n'existent dans aucune page. */
   /* Téléphone : les rangées reprennent toute la largeur — le rétrécissement à
      70,41 %, qui vaut du bureau à la tablette, n'a plus de sens sur une colonne
      unique. */
