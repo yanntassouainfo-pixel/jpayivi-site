@@ -580,13 +580,26 @@ body:has(.gallery-wrap) .brand .sub{
 .reel-item{ margin-bottom:clamp(16px, 2.54vw, 56px); }
 .reel-media{ background:#e9e9dd; overflow:hidden; }
 .reel-media video,.reel-media img{ width:100%; display:block; }
-/* ---- ASMR : image entière, sur les trois formats ----
-   Un recadrage de 112 % avait été posé sur téléphone pour retirer les 10,7 %
-   de noir vide à droite. Décision client : on montre le fichier ENTIER partout,
-   marges noires comprises — elles font partie du dessin, la maquette PSD les
-   porte aussi (4957 x 2788, rapport 1,7780, contre 1,7766 pour le fichier).
-   Le bandeau se comporte donc comme les autres blocs : largeur 100 %, aucune
-   règle particulière. */
+/* ---- ASMR : image entière, à la largeur de la galerie Réseaux Sociaux ----
+   L'image n'est ni recadrée ni retouchée : ses marges noires font partie du
+   dessin, la maquette PSD les porte aussi (bloc 4957 x 2788, rapport 1,7780,
+   contre 1,7766 pour le fichier). Seule sa LARGEUR change.
+   Sur téléphone, les deux galeries n'ont pas la même largeur, et c'est ce qui
+   faisait paraître le bandeau petit et entouré de vide :
+     .gallery-wrap  padding 0 var(--pad)  ->  375 − 40 = 335 px
+     .rs            aucun retrait latéral ->  335 px   (Réseaux Sociaux)
+     .reel          padding 0 var(--pad)  ->  335 − 40 = 295 px   (Food)
+   Le bandeau perdait donc 40 px, 13,6 % de sa largeur. On annule ce second
+   retrait pour ce seul bloc, par une marge négative de var(--pad) de chaque
+   côté : il retrouve les 335 px de la galerie Réseaux Sociaux.
+   Rien à faire au-dessus de 600 px : .reel n'y a pas de retrait latéral, les
+   deux galeries y sont déjà à la même largeur. */
+@media(max-width:600px){
+  .reel--large .reel-item--asmr{
+    margin-left:calc(var(--pad) * -1);
+    margin-right:calc(var(--pad) * -1);
+  }
+}
 .reel-caption{
   text-align:center;
   margin-top:clamp(10px, 1.61vw, 36px);
