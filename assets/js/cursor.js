@@ -213,6 +213,17 @@
      POUR AJUSTER : une seule valeur, ci-dessous. */
   var DEGAGEMENT = 0.05;                    /* 5 % de la hauteur de fenêtre */
 
+  /* Retrait à gauche du bloc titre, en part de la largeur utile de la galerie.
+     Relevé sur le premier bloc de la page Food — la référence donnée par le
+     client — à 1024, 1440 et 1920 px : 14,446 % chaque fois, à la troisième
+     décimale. La même valeur est appliquée aux neuf pages pour que le titre ne
+     saute pas d'une rubrique à l'autre.
+     ECART_LOGO : la respiration minimale entre le bord droit du logo et le
+     début du titre, quand la fenêtre est trop étroite pour que les 14,446 %
+     suffisent à dégager le logo. */
+  var RETRAIT_TITRE = 0.14446;
+  var ECART_LOGO    = 0.02;
+
   function degagement() {
     return window.innerHeight * DEGAGEMENT;
   }
@@ -249,34 +260,43 @@
     var title = wrap.querySelector('.page-head') || wrap.querySelector('.page-title');
     if (title && getComputedStyle(title).position !== 'static') title = null;
     if (title) {
-      /* ---- Calage à gauche sur le média le plus à gauche ----
-         Choix client, d'après sa maquette : le bloc démarre là où démarre la
-         première image. Il n'existe pas UN bord gauche des médias — relevé à
-         1440 px, le bord de la galerie est à 122, et les médias démarrent à
-         122 sur Studio, Sport, Food et le bandeau des Réseaux, mais à 299 sur
-         Fashion, Événement, Communication, Motion et Showreel, dont la colonne
-         vaut 70,41 % de la galerie et se trouve centrée. En téléphone l'écart
-         change encore : .reel ajoute son propre retrait de 20 px que .masonry
-         et .rs n'ont pas.
-         Cinq structures de galerie et deux points de rupture : une règle CSS
-         figée par page serait fausse au premier changement de largeur. On
-         mesure donc, à chaque mise en page.
-         Le retrait est remis à zéro AVANT la mesure, sinon il s'ajouterait à
-         lui-même à chaque redimensionnement. */
+      /* ---- Calage à gauche : LE MÊME retrait sur les neuf pages ----
+         Choix client : « au même endroit que Food, jamais en dessous du logo ».
+         Le retrait du premier bloc de Food a été relevé sur le site à trois
+         largeurs — 1024, 1440 et 1920 px — et il vaut chaque fois 14,446 % de
+         la largeur de la galerie, à la troisième décimale. C'est donc une
+         proportion pure, et non une valeur à remesurer page par page.
+         On l'applique telle quelle partout, au lieu de suivre le premier bloc
+         de chaque page : celui-ci démarre à 295 sur Food mais à 407 sur Sport
+         et à 122 sur Studio et Réseaux, ce qui ferait sauter le titre d'une
+         rubrique à l'autre.
+
+         GARDE-FOU DU LOGO. À 1440 px le logo s'arrête à 237 et le titre part à
+         295 : il est au clair. Mais le logo a une taille plancher, il occupe
+         donc une part croissante de la largeur quand la fenêtre rétrécit — à
+         1024 px il va jusqu'à 220 alors que les 14,446 % placeraient le titre
+         à 210, c'est-à-dire dans sa colonne. On prend donc le plus grand des
+         deux : la proportion, ou le bord droit du logo augmenté d'un écart.
+
+         SOUS 600 px, ni l'un ni l'autre : la colonne est étroite, un titre
+         rentré s'y lirait comme une erreur. Il se cale au bord du contenu. */
       title.style.marginLeft = '';
-      var medias = wrap.querySelectorAll(
-        '.reel-media, .rs-band, .rs-media, .masonry .item, .showreel-stage video'
-      );
-      var bordGauche = Infinity;
-      for (var m = 0; m < medias.length; m++) {
-        var boite = medias[m].getBoundingClientRect();
-        if (boite.width > 0 && boite.left < bordGauche) bordGauche = boite.left;
+      var cw = wrap.getBoundingClientRect();
+      var interieur = cw.left + (parseFloat(getComputedStyle(wrap).paddingLeft) || 0);
+      var utile = cw.width
+                - (parseFloat(getComputedStyle(wrap).paddingLeft) || 0)
+                - (parseFloat(getComputedStyle(wrap).paddingRight) || 0);
+      var retrait = 0;
+      if (window.innerWidth > 600) {
+        retrait = utile * RETRAIT_TITRE;
+        if (brand) {
+          var lg = brand.getBoundingClientRect();
+          if (lg.width > 0) {
+            retrait = Math.max(retrait, lg.right - interieur + utile * ECART_LOGO);
+          }
+        }
       }
-      if (bordGauche !== Infinity) {
-        var cw = wrap.getBoundingClientRect();
-        var interieur = cw.left + (parseFloat(getComputedStyle(wrap).paddingLeft) || 0);
-        title.style.marginLeft = Math.max(0, Math.round(bordGauche - interieur)) + 'px';
-      }
+      title.style.marginLeft = Math.max(0, Math.round(retrait)) + 'px';
 
       /* La hauteur se lit APRÈS le retrait : décalé, le bloc dispose de moins
          de largeur et le H2 peut passer sur deux lignes. C'est cette hauteur-là
