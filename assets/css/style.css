@@ -554,11 +554,51 @@ body:has(.gallery-wrap) .brand .name{
 body:has(.gallery-wrap) .brand .sub{
   font-size:calc(1.5771 * var(--nav-base));
 }
-.page-title{                            /* titre petit, aligné à gauche de la colonne de contenu */
+/* Titre de page, CENTRÉ sur les trois formats (choix client).
+   Le centrage n'a qu'une seule lecture possible ici, vérification faite : à
+   1440 px la galerie va de 122 à 1318, axe à 720 ; les médias vont de 122 à
+   1318 sur Sport, Studio et Réseaux, et de 299 à 1141 sur Fashion, Événement,
+   Communication, Motion et Showreel — colonne plus étroite, mais centrée, donc
+   axe à 720 elle aussi. Galerie, médias et fenêtre partagent le même axe : le
+   text-align suffit, aucun calcul n'est nécessaire.
+   La hauteur du titre reste mesurée par cursor.js et retranchée de
+   --gallery-top, pour que la galerie démarre toujours au même pixel. */
+/* ============================================================
+   EN-TÊTE DE PAGE — H1 court + H2 descriptif
+   ------------------------------------------------------------
+   D'après la maquette fournie par le client (page Food) : le nom de la
+   rubrique en gros, la phrase qui la qualifie juste en dessous, plus petite
+   et plus légère, le tout calé à gauche sur le BORD GAUCHE DES MÉDIAS.
+   H1 = le libellé du menu, H2 = la phrase. C'est aussi la bonne hiérarchie
+   pour les moteurs : le H1 nomme, le H2 qualifie, et les mots que les gens
+   tapent restent dans la page.
+   Le retrait à gauche n'est PAS écrit ici : il change d'une page à l'autre —
+   relevé à 1440 px, les médias démarrent à 122 sur Studio, Sport, Food et
+   Réseaux, et à 299 sur Fashion, Événement, Communication, Motion et Showreel,
+   dont la colonne vaut 70,41 % de la galerie. cursor.js le mesure et le pose.
+   ============================================================ */
+.page-head{
+  margin:0 0 clamp(18px, 1.9vw, 34px);
+}
+.page-title{
   font-family:"Jumper",sans-serif;
   font-weight:900; font-style:italic;
-  font-size:clamp(22px,2.4vw,38px);
-  margin:0 0 20px;
+  font-size:clamp(22px, 2.4vw, 38px);
+  line-height:1.08;
+  margin:0;
+  text-align:left;
+}
+/* 0,55 du H1 : rapport relevé sur la maquette entre « Food » et « Films
+   culinaires et cocktails ». Même famille, même italique, graisse Regular —
+   la phrase accompagne le titre, elle ne lui dispute pas la place. */
+.page-sub{
+  font-family:"Jumper",sans-serif;
+  font-weight:400; font-style:italic;
+  font-size:clamp(13px, 1.32vw, 21px);
+  line-height:1.2;
+  margin:.18em 0 0;
+  text-align:left;
+  color:var(--ink);
 }
 /* Relevé au pixel sur site_ordi_studio_int.png (page 2258 px, contenu 1422 px) :
    colonne gauche 771 px = 54,22 % · colonne droite 642 px = 45,15 %

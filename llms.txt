@@ -1,0 +1,39 @@
+# JP AYIVI — Créateur d'images
+
+> Réalisateur et directeur artistique. Réalisation, montage, motion design et
+> photographie studio pour les marques, les entreprises et les institutions.
+> Approche hybride entre image réelle, design graphique et narration visuelle.
+> Site : https://ayivijp.com — langue : français.
+
+## Ce que fait JP AYIVI
+
+Il conçoit et réalise des contenus vidéos : films commerciaux, communication
+interne et externe, contenus pour les réseaux sociaux, captation
+événementielle, contenus studio et motion design. Il accompagne les projets
+de l'idée à la post-production, avec un équipement professionnel complet et
+la maîtrise de toute la chaîne de production.
+
+## Les pages du site
+
+- [Accueil](https://ayivijp.com/) : présentation et accès aux cinq univers.
+- [Showreel](https://ayivijp.com/showreel) : la bande démo, réalisation et montage.
+- [Sport](https://ayivijp.com/sport) : films de sport — tennis, basket, films de terrain.
+- [Food](https://ayivijp.com/food) : films culinaires, cocktails, contenus restaurant.
+- [Fashion](https://ayivijp.com/fashion) : films de mode et campagnes textiles.
+- [Motion design](https://ayivijp.com/motion) : habillages, génériques, films d'animation.
+- [Studio](https://ayivijp.com/studio) : photo studio, natures mortes, packshots produits.
+- [Événementiel](https://ayivijp.com/evenementiel) : captations et films d'événements.
+- [Communication](https://ayivijp.com/communication) : films de marque, com interne et externe.
+- [Réseaux Sociaux](https://ayivijp.com/reseaux) : contenus courts et formats verticaux.
+- [About](https://ayivijp.com/about) : parcours, approche et contacts.
+
+## Contact
+
+- Courriel : ayivijp@gmail.com
+- Téléphone : 06 51 56 75 88
+- Instagram : https://instagram.com/ocrefilms (@ocrefilms)
+
+## Notes
+
+Site statique en HTML. Tout le contenu textuel est présent dans le code source
+et ne dépend pas de JavaScript pour s'afficher.

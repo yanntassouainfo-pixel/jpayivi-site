@@ -242,10 +242,64 @@
     var maquette = window.innerWidth * 0.0888;
     var top = Math.max(maquette, bottom) + degagement();
 
-    var title = wrap.querySelector('.page-title');
+    /* L'en-tête de page : .page-head contient le H1 et le H2. On continue de
+       tolérer un .page-title seul, au cas où une page n'aurait pas encore été
+       convertie. Un bloc sorti du flux — s'il était masqué un jour — ne prend
+       aucune place : on l'ignore alors complètement. */
+    var title = wrap.querySelector('.page-head') || wrap.querySelector('.page-title');
+    if (title && getComputedStyle(title).position !== 'static') title = null;
     if (title) {
+      /* ---- Calage à gauche sur le média le plus à gauche ----
+         Choix client, d'après sa maquette : le bloc démarre là où démarre la
+         première image. Il n'existe pas UN bord gauche des médias — relevé à
+         1440 px, le bord de la galerie est à 122, et les médias démarrent à
+         122 sur Studio, Sport, Food et le bandeau des Réseaux, mais à 299 sur
+         Fashion, Événement, Communication, Motion et Showreel, dont la colonne
+         vaut 70,41 % de la galerie et se trouve centrée. En téléphone l'écart
+         change encore : .reel ajoute son propre retrait de 20 px que .masonry
+         et .rs n'ont pas.
+         Cinq structures de galerie et deux points de rupture : une règle CSS
+         figée par page serait fausse au premier changement de largeur. On
+         mesure donc, à chaque mise en page.
+         Le retrait est remis à zéro AVANT la mesure, sinon il s'ajouterait à
+         lui-même à chaque redimensionnement. */
+      title.style.marginLeft = '';
+      var medias = wrap.querySelectorAll(
+        '.reel-media, .rs-band, .rs-media, .masonry .item, .showreel-stage video'
+      );
+      var bordGauche = Infinity;
+      for (var m = 0; m < medias.length; m++) {
+        var boite = medias[m].getBoundingClientRect();
+        if (boite.width > 0 && boite.left < bordGauche) bordGauche = boite.left;
+      }
+      if (bordGauche !== Infinity) {
+        var cw = wrap.getBoundingClientRect();
+        var interieur = cw.left + (parseFloat(getComputedStyle(wrap).paddingLeft) || 0);
+        title.style.marginLeft = Math.max(0, Math.round(bordGauche - interieur)) + 'px';
+      }
+
+      /* La hauteur se lit APRÈS le retrait : décalé, le bloc dispose de moins
+         de largeur et le H2 peut passer sur deux lignes. C'est cette hauteur-là
+         qu'il faut retrancher de --gallery-top. */
       var cs = getComputedStyle(title);
       top -= title.offsetHeight + (parseFloat(cs.marginBottom) || 0);
+
+      /* ---- Plancher : le titre ne doit JAMAIS passer sous le menu ----
+         Retour client. --gallery-top est le retrait au-dessus du PREMIER
+         enfant de .gallery-wrap, c'est-à-dire le titre lui-même. On lui
+         retranche la hauteur du titre pour que la GALERIE démarre à
+         l'endroit prévu — mais rien n'empêchait le résultat de remonter
+         au-dessus du menu.
+         C'est ce qui arrive dès que le titre devient haut : sur une fenêtre
+         étroite il passe sur deux lignes, la soustraction mord davantage, et
+         l'ancien plancher de 24 px le laissait glisser derrière la nav, qui
+         compte sept entrées empilées sur les pages intérieures.
+         Le plancher devient donc le bas du menu plus le dégagement — la règle
+         que la maquette applique déjà à tout ce qui vient sous « +About ».
+         Quand il mord, c'est la galerie qui descend de la hauteur du titre,
+         et non le titre qui disparaît. */
+      var plancher = Math.round(bottom + degagement());
+      if (top < plancher) top = plancher;
     }
     document.documentElement.style.setProperty('--gallery-top', Math.max(24, Math.round(top)) + 'px');
   }

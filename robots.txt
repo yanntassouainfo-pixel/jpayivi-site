@@ -1,0 +1,26 @@
+# ayivijp.com — JP AYIVI, créateur d'images
+# Site statique, onze pages, aucune zone privée : tout est ouvert.
+
+User-agent: *
+Allow: /
+
+# Robots des assistants conversationnels. Ils sont déjà couverts par la règle
+# générale ci-dessus ; on les nomme explicitement pour que l'autorisation soit
+# lisible et ne disparaisse pas par accident si une règle plus stricte est
+# ajoutée un jour.
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+Sitemap: https://ayivijp.com/sitemap.xml
