@@ -580,25 +580,48 @@ body:has(.gallery-wrap) .brand .sub{
 .page-head{
   margin:0 0 clamp(18px, 1.9vw, 34px);
 }
+/* ---- Corps relevés sur la capture Food du client ----
+   Plutôt que d'estimer à l'œil, les largeurs des trois mots ont été relevées
+   sur sa capture — « JP AYIVI » 245 px, « Food » 172, la phrase 398 — puis
+   l'échelle résolue avec les vraies polices : à corps égal, « JP AYIVI » en
+   Black mesure 4,350 unités, « Food » en Black Italic 2,715, la phrase en
+   Light Italic 14,780. D'où corps Food / corps logo = 1,125, et comme le logo
+   vaut 3,4383 corps de menu, le H1 vaut 3,867 corps de menu. Même calcul pour
+   la phrase : 1,644.
+   Le H1 grossit donc d'un tiers (2,883 auparavant), le H2 ne bouge presque pas
+   (1,583) — ce qui correspond au retour : seul le H1 était en cause.
+   On repart de --nav-base, comme le logo, pour que les deux restent en
+   proportion à toutes les largeurs.
+
+   Le min() est un garde-fou de débordement, pas une intention de design :
+   « Réseaux Sociaux » est le plus long des neuf titres et mesure 9,87 corps de
+   large. À 3,867 x 12 = 46,4 px il réclame 458 px, alors que la colonne n'en
+   offre que 335 sur un téléphone de 375 — il passerait sur deux lignes. Les
+   plafonds en vw ramènent le corps juste sous la largeur disponible, retrait
+   de gauche déduit. */
 .page-title{
   font-family:"Jumper",sans-serif;
   font-weight:900; font-style:italic;
-  font-size:clamp(22px, 2.4vw, 38px);
-  line-height:1.08;
+  font-size:min(calc(3.867 * var(--nav-base)), 5.8vw);
+  line-height:1.06;
   margin:0;
   text-align:left;
 }
-/* 0,55 du H1 : rapport relevé sur la maquette entre « Food » et « Films
-   culinaires et cocktails ». Même famille, même italique, graisse Regular —
-   la phrase accompagne le titre, elle ne lui dispute pas la place. */
+/* Light Italic (retour client). La graisse 300 est bien celle du fichier
+   JumperPERSONALUSEONLY-LightItalic.ttf, déclaré en tête de cette feuille. */
 .page-sub{
   font-family:"Jumper",sans-serif;
-  font-weight:400; font-style:italic;
-  font-size:clamp(13px, 1.32vw, 21px);
-  line-height:1.2;
-  margin:.18em 0 0;
+  font-weight:300; font-style:italic;
+  font-size:calc(1.644 * var(--nav-base));
+  line-height:1.22;
+  margin:.1em 0 0;
   text-align:left;
   color:var(--ink);
+}
+/* Téléphone : pas de retrait à gauche, toute la colonne est disponible — le
+   plafond peut donc être plus généreux qu'au-dessus de 600 px. */
+@media(max-width:600px){
+  .page-title{ font-size:min(calc(3.867 * var(--nav-base)), 9vw); }
 }
 /* Relevé au pixel sur site_ordi_studio_int.png (page 2258 px, contenu 1422 px) :
    colonne gauche 771 px = 54,22 % · colonne droite 642 px = 45,15 %

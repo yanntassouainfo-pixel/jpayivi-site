@@ -221,6 +221,10 @@
      ECART_LOGO : la respiration minimale entre le bord droit du logo et le
      début du titre, quand la fenêtre est trop étroite pour que les 14,446 %
      suffisent à dégager le logo. */
+  /* Un demi-centimetre, demande par le client pour l'ecart entre le bas du
+     menu et le haut du bloc titre. Le CSS compte 96 points par pouce :
+     0,5 cm = 0,5 x 96 / 2,54 = 18,90 px. */
+  var ECART_TITRE   = 18.90;
   var RETRAIT_TITRE = 0.14446;
   var ECART_LOGO    = 0.02;
 
@@ -298,28 +302,20 @@
       }
       title.style.marginLeft = Math.max(0, Math.round(retrait)) + 'px';
 
-      /* La hauteur se lit APRÈS le retrait : décalé, le bloc dispose de moins
-         de largeur et le H2 peut passer sur deux lignes. C'est cette hauteur-là
-         qu'il faut retrancher de --gallery-top. */
-      var cs = getComputedStyle(title);
-      top -= title.offsetHeight + (parseFloat(cs.marginBottom) || 0);
+      /* ---- Le bloc remonte juste sous le menu ----
+         Retour client : « il y a trop d'espace entre le bas du menu et le bloc,
+         on peut juste avoir un demi-centimètre entre le bas de About et le haut
+         de Food ». Mesuré avant correction : 45 px à 1440 px de large, soit le
+         dégagement de 5 % de la hauteur de fenêtre que la maquette applique à
+         tout ce qui passe sous le menu.
+         Le bloc titre y échappe désormais : son haut se pose à un demi-
+         centimètre sous le menu, et la galerie suit naturellement en dessous.
+         Il n'y a donc plus de hauteur à retrancher ni de plancher à imposer —
+         cette formule EST le plancher.
+         Un demi-centimètre vaut 18,9 px : le CSS compte 96 points par pouce,
+         quel que soit l'écran réel. */
+      top = bottom + ECART_TITRE;
 
-      /* ---- Plancher : le titre ne doit JAMAIS passer sous le menu ----
-         Retour client. --gallery-top est le retrait au-dessus du PREMIER
-         enfant de .gallery-wrap, c'est-à-dire le titre lui-même. On lui
-         retranche la hauteur du titre pour que la GALERIE démarre à
-         l'endroit prévu — mais rien n'empêchait le résultat de remonter
-         au-dessus du menu.
-         C'est ce qui arrive dès que le titre devient haut : sur une fenêtre
-         étroite il passe sur deux lignes, la soustraction mord davantage, et
-         l'ancien plancher de 24 px le laissait glisser derrière la nav, qui
-         compte sept entrées empilées sur les pages intérieures.
-         Le plancher devient donc le bas du menu plus le dégagement — la règle
-         que la maquette applique déjà à tout ce qui vient sous « +About ».
-         Quand il mord, c'est la galerie qui descend de la hauteur du titre,
-         et non le titre qui disparaît. */
-      var plancher = Math.round(bottom + degagement());
-      if (top < plancher) top = plancher;
     }
     document.documentElement.style.setProperty('--gallery-top', Math.max(24, Math.round(top)) + 'px');
   }
